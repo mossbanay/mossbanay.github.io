@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Moss Banay</title>
-    <link>http://leaen.github.io/</link>
+    <link>leaen.github.io/</link>
     <description>Recent content on Moss Banay</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 18 Jan 2018 00:26:01 +1100</lastBuildDate>
     
-	<atom:link href="http://leaen.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="leaen.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Math Syllabus 2017-2018</title>
-      <link>http://leaen.github.io/post/math-syllabus/</link>
+      <link>leaen.github.io/post/math-syllabus/</link>
       <pubDate>Thu, 18 Jan 2018 00:26:01 +1100</pubDate>
       
-      <guid>http://leaen.github.io/post/math-syllabus/</guid>
+      <guid>leaen.github.io/post/math-syllabus/</guid>
       <description>What is this page? Over the summer break between 2017 and 2018 I&amp;rsquo;ve done my best to collate a lot of resources that have been floating around my laptop, desktop and phone and give a structure to my personal study.
 As part of that, I also want to make a reasonable attempt to pin down the areas that I want to learn about the most (since unfortunately I won&amp;rsquo;t be able to look at everything these holidays).</description>
     </item>
     
     <item>
       <title>test</title>
-      <link>http://leaen.github.io/post/test/</link>
+      <link>leaen.github.io/post/test/</link>
       <pubDate>Thu, 18 Jan 2018 00:09:33 +1100</pubDate>
       
-      <guid>http://leaen.github.io/post/test/</guid>
+      <guid>leaen.github.io/post/test/</guid>
       <description>Loreum ipsum dolor situm
 One Two Three Four Five one two three four $ \lambda $ ( \lambda )
 $$ \sum_{i=0}^n $$
@@ -35,10 +35,10 @@ import math def foo(x): print(x) math.sin(foo(x))     one two three     one two 
     
     <item>
       <title>Arbitrage in sports betting</title>
-      <link>http://leaen.github.io/post/arbitrage-in-sports-betting/</link>
+      <link>leaen.github.io/post/arbitrage-in-sports-betting/</link>
       <pubDate>Sat, 09 Dec 2017 13:46:03 +1100</pubDate>
       
-      <guid>http://leaen.github.io/post/arbitrage-in-sports-betting/</guid>
+      <guid>leaen.github.io/post/arbitrage-in-sports-betting/</guid>
       <description>Sports Betting Because sport is great to watch and gambling is a thrill, the industry of sport betting is huge and there is no shortage of bookmakers looking to get punters on board. While some may lean toward taking other statistical approaches and creating quantitative models similar to those used within bookmakers to produce odds, others like myself prefer to play the somewhat safer and more passive role of arbitrageur.</description>
     </item>
     

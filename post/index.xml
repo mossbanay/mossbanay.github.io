@@ -22,18 +22,6 @@ As part of that, I also want to make a reasonable attempt to pin down the areas 
     </item>
     
     <item>
-      <title>test</title>
-      <link>//leaen.github.io/post/test/</link>
-      <pubDate>Thu, 18 Jan 2018 00:09:33 +1100</pubDate>
-      
-      <guid>//leaen.github.io/post/test/</guid>
-      <description>Loreum ipsum dolor situm
-One Two Three Four Five one two three four $ \lambda $ ( \lambda )
-$$ \sum_{i=0}^n $$
-import math def foo(x): print(x) math.sin(foo(x))     one two three     one two three       col 1 col 2     foo bar   baz [qux]    $$ I(\theta) = \mathbb{E} \left [\left (\frac{\partial}{\partial \theta} log f(X; \theta) \right )^2 | \theta \right ] $$</description>
-    </item>
-    
-    <item>
       <title>Arbitrage in sports betting</title>
       <link>//leaen.github.io/post/arbitrage-in-sports-betting/</link>
       <pubDate>Sat, 09 Dec 2017 13:46:03 +1100</pubDate>

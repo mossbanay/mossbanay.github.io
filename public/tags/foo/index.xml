@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Foo on Moss&#39; Blog</title>
+    <link>http://banay.me/tags/foo/</link>
+    <description>Recent content in Foo on Moss&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Aug 2018 20:24:00 +1000</lastBuildDate>
+    
+	<atom:link href="http://banay.me/tags/foo/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Draft post</title>
+      <link>http://banay.me/post/future-post/</link>
+      <pubDate>Wed, 08 Aug 2018 20:24:00 +1000</pubDate>
+      
+      <guid>http://banay.me/post/future-post/</guid>
+      <description>This post is exported to Markdown, but Hugo will not publish it unless you use its -D switch. It is categorized emacs (inherited), and tagged foo and bar.</description>
+    </item>
+    
+    <item>
+      <title>Draft post</title>
+      <link>http://banay.me/posts/future-post/</link>
+      <pubDate>Wed, 08 Aug 2018 20:24:00 +1000</pubDate>
+      
+      <guid>http://banay.me/posts/future-post/</guid>
+      <description>This post is exported to Markdown, but Hugo will not publish it unless you use its -D switch. It is categorized emacs (inherited), and tagged foo and bar.</description>
+    </item>
+    
+  </channel>
+</rss>

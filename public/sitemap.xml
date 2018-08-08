@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://banay.me/post/parameter-estimation/</loc>
+    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/post/the-second-post/</loc>
+    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/posts/the-second-post/</loc>
+    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/post/future-post/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/posts/future-post/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/post/my-first-post/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/posts/my-first-post/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/math/math/</loc>
+    <lastmod>2018-08-08T20:18:32+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/posts/math/</loc>
+    <lastmod>2018-08-08T20:16:49+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/bar/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/computer-sc/</loc>
+    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/categories/emacs/</loc>
+    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/post/finished-post/</loc>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/posts/finished-post/</loc>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/foo/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/hugo/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/math/</loc>
+    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/math/</loc>
+    <lastmod>2018-08-08T20:18:32+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/</loc>
+    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/org/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/post/</loc>
+    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/posts/</loc>
+    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/</loc>
+    <lastmod>2018-08-08T20:24:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/test/</loc>
+    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

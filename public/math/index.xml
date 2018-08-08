@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Maths on Moss&#39; Blog</title>
+    <link>http://banay.me/math/</link>
+    <description>Recent content in Maths on Moss&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Aug 2018 20:18:32 +1000</lastBuildDate>
+    
+	<atom:link href="http://banay.me/math/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>math subsite1 math subsite2</title>
+      <link>http://banay.me/math/math/</link>
+      <pubDate>Wed, 08 Aug 2018 20:18:32 +1000</pubDate>
+      
+      <guid>http://banay.me/math/math/</guid>
+      <description>The first post Topic 1 blah blah blah, one two three four
+Topic 2 I make some other insightful comments here
+The second post Stunning dramatic topic more content in here
+\[ \sum_{i=1}^n 2 \pi \theta (2^i)^3 \]</description>
+    </item>
+    
+  </channel>
+</rss>

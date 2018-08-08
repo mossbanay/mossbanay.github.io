@@ -3,13 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://banay.me/post/parameter-estimation/</loc>
-    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+    <loc>http://banay.me/post/the-second-post/</loc>
+    <lastmod>2018-08-08T21:12:00+10:00</lastmod>
   </url>
   
   <url>
-    <loc>http://banay.me/post/the-second-post/</loc>
-    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
+    <loc>http://banay.me/post/parameter-estimation/</loc>
+    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
   </url>
   
   <url>
@@ -59,12 +59,6 @@
   </url>
   
   <url>
-    <loc>http://banay.me/tags/computer-sc/</loc>
-    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://banay.me/categories/emacs/</loc>
     <lastmod>2018-08-08T21:00:00+10:00</lastmod>
     <priority>0</priority>
@@ -90,12 +84,6 @@
   </url>
   
   <url>
-    <loc>http://banay.me/tags/math/</loc>
-    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://banay.me/math/</loc>
     <lastmod>2018-08-08T20:18:32+10:00</lastmod>
     <priority>0</priority>
@@ -103,7 +91,7 @@
   
   <url>
     <loc>http://banay.me/</loc>
-    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+    <lastmod>2018-08-08T21:12:00+10:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -114,7 +102,7 @@
   
   <url>
     <loc>http://banay.me/post/</loc>
-    <lastmod>2018-08-08T21:00:00+10:00</lastmod>
+    <lastmod>2018-08-08T21:12:00+10:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -127,12 +115,6 @@
   <url>
     <loc>http://banay.me/tags/</loc>
     <lastmod>2018-08-08T20:24:00+10:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://banay.me/tags/test/</loc>
-    <lastmod>2018-08-08T20:25:00+10:00</lastmod>
     <priority>0</priority>
   </url>
   

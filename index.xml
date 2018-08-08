@@ -6,10 +6,19 @@
     <description>Recent content on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Aug 2018 21:00:00 +1000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Aug 2018 21:12:00 +1000</lastBuildDate>
     
 	<atom:link href="http://banay.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>aho-corasick</title>
+      <link>http://banay.me/post/the-second-post/</link>
+      <pubDate>Wed, 08 Aug 2018 21:12:00 +1000</pubDate>
+      
+      <guid>http://banay.me/post/the-second-post/</guid>
+      <description>from collections import deque class AhoCorasick: def __init__(self, keywords): self.state = 0 self.goto = [{}] self.fail = [{}] self.output = [set()] self.built = False self.keywords = keywords self.num_nodes = 1 def build(self): # We begin by building the goto function for keyword in self.keywords: cur_node = 0 for letter in keyword: # If a path exists for this part of the word, continue along it if letter in self.goto[cur_node]: cur_node = self.</description>
+    </item>
     
     <item>
       <title>Week 3 Lecture - Parameter Estimation</title>
@@ -21,16 +30,6 @@
 \[ p(\bf{y} | \theta) \]
 For independent draws, this is simply an evaluation of the joint distribution
 \[ p(\textbf{y} | \theta) = \prod_{i=1}^n p(y_i | \theta) \]</description>
-    </item>
-    
-    <item>
-      <title>The second post</title>
-      <link>http://banay.me/post/the-second-post/</link>
-      <pubDate>Wed, 08 Aug 2018 20:25:00 +1000</pubDate>
-      
-      <guid>http://banay.me/post/the-second-post/</guid>
-      <description>Stunning dramatic topic more content in here, suppose we have some vector \(\textbf{y}\) that holds the samples from our distribution
-\[ \sum_{i=1}^n 2 \pi \theta (2^i)^3 \]</description>
     </item>
     
     <item>

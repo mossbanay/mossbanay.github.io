@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Fast keyword matching with the Aho-Corasick algorithm | Moss&#39; Blog
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="http://banay.me/post/aho-corasick/"/>
+
+  
+  <link rel="stylesheet" href="/css/sanitize.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/highlight_monokai.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  
+  <link href="http://banay.me/index.xml" rel="alternate" type="application/rss+xml" title="Moss&#39; Blog" />
+  <link href="http://banay.me/index.xml" rel="feed" type="application/rss+xml" title="Moss&#39; Blog" />
+
+  
+  
+    <script type="text/javascript">var switchTo5x=true;</script>
+    <script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+    <script type="text/javascript">stLight.options({publisher: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX', doNotHash: true, doNotCopy: true, hashAddressBar: false});</script>
+  
+
+
+</head>
+
+
+
+<body>
+<div class="container">
+
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="http://banay.me/">Moss&#39; Blog</a></h1>
+        <h2>CS, Finance, Math</h2>
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          <li><a href="http://banay.me/index.xml" type="application/rss+xml" target="_blank">RSS</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Fast keyword matching with the Aho-Corasick algorithm</h1>
+      <div class="meta">
+        Aug 22, 2018 &nbsp;
+        
+          #<a href="/tags/string-algorithms">string-algorithms</a>&nbsp;
+        
+          #<a href="/tags/computer-science">computer-science</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this post we&rsquo;ll look at the problem of <em>keyword matching</em> including a number of approaches, applications and the Aho-Corasick algorithm.</p>
+
+<h2 id="statement-of-problem">Statement of problem</h2>
+
+<p>To begin, let&rsquo;s define the keyword searching problem.</p>
+
+<p>Given a list of strings \(K = [s_1, \ldots, s_n]\) (called <em>keywords</em>) and a (usually) much longer string \(C\) (called the <em>corpus</em>) count the number of times each keyword appears in the corpus.</p>
+
+<p>Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</p>
+
+<p>For example suppose we had \(K = [ \text{&ldquo;he&rdquo;}, \text{&ldquo;she&rdquo;}, \text{&ldquo;his&rdquo;}, \text{&ldquo;hers&rdquo;} ]\) and \(C = \text{&ldquo;ushers&rdquo;}\). The output of the algorithm should show that \(\text{&ldquo;he&rdquo;}\) occurs once, \(\text{&ldquo;she&rdquo;}\) occurs once, \(\text{&ldquo;hers&rdquo;}\) occurs once and \(\text{&ldquo;his&rdquo;}\) occurs zero times.</p>
+
+<h2 id="naïve-approaches">Naïve approaches</h2>
+
+<p>The most straightforward solution to this problem would be a brute force search overall all the keywords. For each keyword \(s_i\), we check if the substring of \(C\) starting at index \(j\) matches \(s_i\). It takes \(O(|s_i|)\) time to determine if each substring of \(C\) is equal to \(s_i\), and assuming keywords can be approximately as large as the corpus in the worst case (that is \(|s_i| \approx m\)), the overall cost of counting the number of times \(s_i\) appears in \(C\) is \(O(m^2)\). Since we repeat this search for each of the \(n\) keywords, this solution runs in \(O(n m^2)\) overall.</p>
+
+<p>We can quickly improve upon this by using the <a href="https://en.wikipedia.org/wiki/Knuth–Morris–Pratt%5Falgorithm">Knuth–Morris–Pratt algorithm</a> for much faster string matching per keyword. KMP simplifies the counting of each keyword to be \(O(m)\) by taking advantage of the fact that if a string has partially been matched, we may not need to check all possible starting indicies in \(C\). This reduces the total cost to \(O(nm)\) overall, already significantly than the most naïve approach.</p>
+
+<p>If we think through this final solution, we should note that we can likely improve the speed of our solution by leveraging the fact that keywords often share a prefix or a suffix. For example, in the original example above, \(\text{&ldquo;he&rdquo;}\) and \(\text{&ldquo;she&rdquo;}\) share a suffix, \(\text{&ldquo;he&rdquo;}\) and \(\text{&ldquo;hers&rdquo;}\) share a prefix. Often pattern of prefix and suffix repetition occurs in practical applications since large lists of keywords that are in a language typically share linguistic roots.</p>
+
+<h2 id="revisiting-tries">Revisiting tries</h2>
+
+<p>A <a href="https://en.wikipedia.org/wiki/Trie">trie</a> is a popular search tree data structure used for auto-complete and substring search among other applications. Given a set of strings (possibly keywords or suffixes of a string) the tree is grown by adding edges down from node to node where edges represent letters in each of the strings being added.</p>
+
+
+<figure>
+    
+        <img src="./images/aho-random-trie.png" />
+    
+    
+</figure>
+
+
+<p>For each string we start at the top of the trie and continue either following if a node exists for the edge corresponding to the current letter or adding new nodes until each of the strings is exhausted. Searching a new string for one of the keywords is now trivial, we follow the nodes down the trie node by node using the characters in the corpus string to navigate. While at first this may seem like this is an answer to our problem, this will only find keywords that <em>begin at the start of the corpus</em>. For example we would find &ldquo;race&rdquo; in &ldquo;racecar&rdquo;, but we would not find &ldquo;car&rdquo;.</p>
+
+<h2 id="the-aho-corasick-algorithm">The Aho-Corasick algorithm</h2>
+
+<p>Building on the structure of a trie, the Aho-Corasick algorithm defines three key functions</p>
+
+<ul>
+<li>The <code>goto</code> function that determines given a current node and an input letter what node to proceed to</li>
+<li>The <code>fail</code> function that determines given a current node where to proceed if goto fails</li>
+<li>The <code>output</code> function that determines the keywords that end at a given node</li>
+</ul>
+
+<p>What is essentially formed by the algorithm is a <a href="https://en.wikipedia.org/wiki/Finite-state%5Fmachine">finite state machine</a>. Given the three functions, we complete the following steps from starting at the root node to scan a corpus for keywords. Let the current state be denoted as \(s\),</p>
+
+<ol>
+<li>Read in a new character \(a\) from the string if the corpus has not been exhausted</li>
+<li>Compute <code>goto(s, a)</code></li>
+<li>If <code>goto(s, a)</code> failed, then set \(s\) to <code>fail(s)</code> then return to step 2</li>
+<li>Set \(s\) to the value of <code>goto(s,a)</code></li>
+<li>If <code>output(s)</code> is non-empty, record the new keywords we have found</li>
+<li>If the corpus has not been exhausted, return to step 1</li>
+</ol>
+
+<p>At the conclusion of this procedure we are left with a record of each of the (possibly overlapping) keywords that were found in the corpus as well as the locations at which each keyword ended. Aho-Corasick performs best in the case that we have fixed set of keywords that we search on multiple long strings of text. If we want to add, remove or change keywords we are required to rebuild the state machine from scratch.</p>
+
+<h2 id="building-the-functions">Building the functions</h2>
+
+<p>Initially, we generate a trie to form the basis of our state machine. The trie gives transitions between states for the available letters but does not guarantee there is an explicit transition from every state for each letter. For example in the above trie there is no transition from the &ldquo;to&rdquo; node for the letter e. In the terminology we used in the previous section, we have only defined the <code>goto</code> function and are now left to define the <code>fail</code> function.</p>
+
+<p>Suppose we were searching for the keywords \(\text{&ldquo;hers&rdquo;}\) and \(\text{&ldquo;shes&rdquo;}\). The trie we have constructed will look something like this</p>
+
+
+<figure>
+    
+        <img src="./images/aho-trie-example.png" />
+    
+    
+</figure>
+
+
+<p>To consider what the transitions will look like for the <code>fail</code> function, suppose we have already read in &ldquo;she&rdquo; into our state machine, at which point we will be at state 7. If we read in an &ldquo;s&rdquo; the <code>goto</code> function correctly describes we should transition to state 8. However if we read in an &ldquo;e&rdquo; next, where should we transition? An obvious answer may be that we should return to the root, node 0, but this is not always the case. Suppose the next character read in was &ldquo;r&rdquo;. Instead, we would like to transition to state 3. Why is this? Well the last 4 characters we read in at this point are &ldquo;sher&rdquo;, and state 3 is the node we reach from tracing our &ldquo;her&rdquo;. However, since we already specify the transition from state 2 to state 3 (&ldquo;he&rdquo; \(\rightarrow\) &ldquo;her&rdquo;) we really are wanting <code>fail</code> to transition us from state 7 to state 2.</p>
+
+<p>This is since state 2 corresponds to the <em>longest proper suffix</em> of the pattern from state 0 to state 7 that exists in our graph. We are only throwing away the &ldquo;s&rdquo; out of the letters we have read in so far. Throwing away the <em>smallest</em> prefix possible ensures that we do not miss any keywords. If instead of reading in an &ldquo;r&rdquo; next we had read in a &ldquo;h&rdquo; to get &ldquo;sheh&rdquo;, we would fail from state 7 to state 2, then fail again from state 2 to state 1 and finally from state 1 to state 0 since none of states 7, 2 or 1 specify a <code>goto</code> transition with &ldquo;h&rdquo;. At that point once we have &ldquo;fallen back&rdquo; to state 0, we move forward and consume the &ldquo;h&rdquo; and move to state 1.</p>
+
+<p>We can construct the <code>fail</code> function iteratively using breadth first search to construct <code>fail</code> fully for each node starting at the children of the root and moving down the tree. The output function is also constructed in a similar way since each keyword may appear more than one nodes output set. For example, as we have seen &ldquo;he&rdquo; is a proper suffix of &ldquo;she&rdquo;, therefore if we reach state 7, not only have we read in &ldquo;she&rdquo; but also &ldquo;he&rdquo;!</p>
+
+<p>After completing all fail transitions, we arrive at the following state machine</p>
+
+
+<figure>
+    
+        <img src="./images/aho-state-machine.png" />
+    
+    
+</figure>
+
+
+<p>which we could use to count the frequency of the strings \(\text{&ldquo;hers&rdquo;}\) and \(\text{&ldquo;shes&rdquo;}\) in strings.</p>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>You can find an example implementation <a href="https://github.com/leaen/aho-corasick/">here</a> in Python with some tests. We represent the <code>goto</code> function as a list of <code>defaultdict</code> objects. In this representation <code>goto(s,a)</code> is computed by <code>self.goto[s][a]</code>. The <code>fail</code> function is represented as a list and <code>fail(s)</code> is simply the entry <code>self.fail[s]</code>. Finally the <code>output</code> function is represented as a list of <code>set</code> objects where as expected <code>self.output[s]</code> will return the set of keywords that end at a particular node.</p>
+
+<h2 id="applications">Applications</h2>
+
+<p>Fast keyword matching has a number of very practical use cases beyond Computer Science textbooks.</p>
+
+<p>Last month Lewis Van Winkle discussed F5Bot, a free service that emails users when selected keywords are mentioned on Reddit or Hacker News, in a blog post <a href="https://intoli.com/blog/f5bot/">here</a>. With the Aho-Corasick algorithm, F5Bot is able to scan through all posts and comments on Reddit and Hacker News in real-time while running on a (tiny VPS). At peak rates, Lewis notes this reaches approximately 50 posts per second scanning approximately 5000 keywords.</p>
+
+<p>Another popular example is the scanning of news articles for references to companies by hedge funds and quantitative trading firms. The most public example of this is known as the <em>Hathaway Effect</em>, coined by Dan Mirvish <a href="https://www.huffingtonpost.com/dan-mirvish/the-hathaway-effect-how-a%5Fb%5F830041.html">here</a> published in the Huffington Post. The article documents the tendency for news articles relating to Anne Hathaway to be correlated with positive returns in <code>$BRK.A</code>. The most popular explanation for this effect is hedge fund bots scanning through news articles mistaking the actress for news about Berkshire-Hathaway. The Aho-Corasick would be a very attractive algorithm to use in this circumstance since we have a relatively fixed set of keywords (names of SP500 companies) and multiple long strings (news articles) as mentioned earlier.</p>
+
+<h2 id="references">References</h2>
+
+<p>Alfred V. Aho and Margaret J. Corasick. 1975. Efficient string matching: an aid to bibliographic search. <strong>Commun. ACM</strong> 18, 6 (June 1975), 333-340. DOI=<a href="http://dx.doi.org/10.1145/360825.360855">http://dx.doi.org/10.1145/360825.360855</a></p>
+
+      
+      
+      
+        <div id="share-this" class="col span_10">
+          <span class='st_twitter_large' displayText='Tweet'></span>
+          <span class='st_facebook_large' displayText='Facebook'></span>
+          <span class='st_googleplus_large' displayText='Google +'></span>
+          <span class='st_pocket_large' displayText='Pocket'></span>
+          <span class='st_sharethis_large' displayText='ShareThis'></span>
+          <span class='st_email_large' displayText='Email'></span>  
+        </div>
+      
+    </article>
+    
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+      <span class="previous">&larr; <a href="http://banay.me/post/regular-expressions/" rel="prev">Week 3 Lecture 1 - Regular expressions</a></span>
+    
+    
+  </nav>
+
+
+  
+  <footer role="contentinfo">
+    <div style="text-align:center;">
+      
+      
+    </div>
+  </footer>
+
+
+</div>
+
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-XXXXXXXX-X', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+
+</body>
+</html>
+

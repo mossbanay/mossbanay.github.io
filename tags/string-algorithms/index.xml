@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>String Algorithms on Moss&#39; Blog</title>
+    <link>http://banay.me/tags/string-algorithms/</link>
+    <description>Recent content in String Algorithms on Moss&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
+    
+	<atom:link href="http://banay.me/tags/string-algorithms/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fast keyword matching with the Aho-Corasick algorithm</title>
+      <link>http://banay.me/post/aho-corasick/</link>
+      <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
+      
+      <guid>http://banay.me/post/aho-corasick/</guid>
+      <description>Introduction In this post we&amp;rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
+Statement of problem To begin, let&amp;rsquo;s define the keyword searching problem.
+Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
+Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
+    </item>
+    
+  </channel>
+</rss>

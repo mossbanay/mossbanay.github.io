@@ -6,10 +6,22 @@
     <description>Recent content in Posts on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 08 Aug 2018 21:33:00 +1000</lastBuildDate>
+    <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
     
 	<atom:link href="http://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Fast keyword matching with the Aho-Corasick algorithm</title>
+      <link>http://banay.me/post/aho-corasick/</link>
+      <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
+      
+      <guid>http://banay.me/post/aho-corasick/</guid>
+      <description>Introduction In this post we&amp;rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
+Statement of problem To begin, let&amp;rsquo;s define the keyword searching problem.
+Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
+Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
+    </item>
     
     <item>
       <title>Week 3 Lecture 1 - Regular expressions</title>
@@ -23,15 +35,6 @@ Infinite and finite languages It&amp;rsquo;s straightforward to show that all la
     </item>
     
     <item>
-      <title>aho-corasick</title>
-      <link>http://banay.me/post/the-second-post/</link>
-      <pubDate>Wed, 08 Aug 2018 21:12:00 +1000</pubDate>
-      
-      <guid>http://banay.me/post/the-second-post/</guid>
-      <description>from collections import deque class AhoCorasick: def __init__(self, keywords): self.state = 0 self.goto = [{}] self.fail = [{}] self.output = [set()] self.built = False self.keywords = keywords self.num_nodes = 1 def build(self): # We begin by building the goto function for keyword in self.keywords: cur_node = 0 for letter in keyword: # If a path exists for this part of the word, continue along it if letter in self.goto[cur_node]: cur_node = self.</description>
-    </item>
-    
-    <item>
       <title>Week 3 Lecture - Parameter Estimation</title>
       <link>http://banay.me/post/parameter-estimation/</link>
       <pubDate>Wed, 08 Aug 2018 21:00:00 +1000</pubDate>
@@ -41,35 +44,6 @@ Infinite and finite languages It&amp;rsquo;s straightforward to show that all la
 \[ p(\bf{y} | \theta) \]
 For independent draws, this is simply an evaluation of the joint distribution
 \[ p(\textbf{y} | \theta) = \prod_{i=1}^n p(y_i | \theta) \]</description>
-    </item>
-    
-    <item>
-      <title>Draft post</title>
-      <link>http://banay.me/post/future-post/</link>
-      <pubDate>Wed, 08 Aug 2018 20:24:00 +1000</pubDate>
-      
-      <guid>http://banay.me/post/future-post/</guid>
-      <description>This post is exported to Markdown, but Hugo will not publish it unless you use its -D switch. It is categorized emacs (inherited), and tagged foo and bar.</description>
-    </item>
-    
-    <item>
-      <title>The first post</title>
-      <link>http://banay.me/post/my-first-post/</link>
-      <pubDate>Wed, 08 Aug 2018 20:24:00 +1000</pubDate>
-      
-      <guid>http://banay.me/post/my-first-post/</guid>
-      <description> Topic 1 blah blah blah, one two three four
-Topic 2 I make some other insightful comments here
-print(&#39;hello&#39;) for i in range(10): print(i)  </description>
-    </item>
-    
-    <item>
-      <title>Finished post</title>
-      <link>http://banay.me/post/finished-post/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>http://banay.me/post/finished-post/</guid>
-      <description>This is the finalized post, categorized emacs (inherited), and tagged org (inherited) and hugo.</description>
     </item>
     
   </channel>

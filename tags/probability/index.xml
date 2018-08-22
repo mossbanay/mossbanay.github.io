@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Probability on Moss&#39; Blog</title>
+    <link>http://banay.me/tags/probability/</link>
+    <description>Recent content in Probability on Moss&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 08 Aug 2018 21:00:00 +1000</lastBuildDate>
+    
+	<atom:link href="http://banay.me/tags/probability/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Week 3 Lecture - Parameter Estimation</title>
+      <link>http://banay.me/post/parameter-estimation/</link>
+      <pubDate>Wed, 08 Aug 2018 21:00:00 +1000</pubDate>
+      
+      <guid>http://banay.me/post/parameter-estimation/</guid>
+      <description>Maximum likelihood Suppose we have some sample \(y\) drawn from a parametric distribution and we wish to estimate the unknown parameterisation \(\theta\). Fisher&amp;rsquo;s MLE proposes we look at the probability of drawing our sample from the distribution conditional on some parametrisation. We call this the likelihood function and write it as
+\[ p(\bf{y} | \theta) \]
+For independent draws, this is simply an evaluation of the joint distribution
+\[ p(\textbf{y} | \theta) = \prod_{i=1}^n p(y_i | \theta) \]</description>
+    </item>
+    
+  </channel>
+</rss>

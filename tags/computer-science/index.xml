@@ -23,16 +23,5 @@ Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usua
 Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
     </item>
     
-    <item>
-      <title>Week 3 Lecture 1 - Regular expressions</title>
-      <link>http://banay.me/post/regular-expressions/</link>
-      <pubDate>Wed, 08 Aug 2018 21:33:00 +1000</pubDate>
-      
-      <guid>http://banay.me/post/regular-expressions/</guid>
-      <description>Groupings Suppose we have the disjunction of a number of regular expressions, and we wish to further match another disjunction of other regular expressions. We can write this by grouping the disjunctions within brackets, then concatenating the &amp;ldquo;grouped&amp;rdquo; disjunctions.
-\[ (ab \cup ba)(e \cup g) \Rightarrow { abe, abg, bae, bag } \]
-Infinite and finite languages It&amp;rsquo;s straightforward to show that all languages with a finite number of words are representable as regular expressions since the disjunction of all words in the language is a valid and finite regular expression that captures the language.</description>
-    </item>
-    
   </channel>
 </rss>

@@ -6,10 +6,23 @@
     <description>Recent content on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
+    <lastBuildDate>Mon, 22 Oct 2018 16:27:00 +1100</lastBuildDate>
     
 	<atom:link href="http://banay.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Exam questions for FIT2086</title>
+      <link>http://banay.me/uni/fit2086-review/</link>
+      <pubDate>Mon, 22 Oct 2018 16:27:00 +1100</pubDate>
+      
+      <guid>http://banay.me/uni/fit2086-review/</guid>
+      <description>Lecture 1  Define the following terms:
+ A population A sample A model     What is inference?
+ Lecture 2  What is variance in the context of a random variable?
+ Lecture 3  Briefly explain what maximum likelihood works is and a reason why it may be so effective
+   Suppose we have an unbiased estimator \(\hat{\theta}\) of a parameter \(\theta\) with variance \(2.</description>
+    </item>
     
     <item>
       <title>Fast keyword matching with the Aho-Corasick algorithm</title>

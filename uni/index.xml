@@ -6,10 +6,22 @@
     <description>Recent content in Unis on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 22 Oct 2018 16:27:00 +1100</lastBuildDate>
+    <lastBuildDate>Tue, 23 Oct 2018 10:31:00 +1100</lastBuildDate>
     
 	<atom:link href="http://banay.me/uni/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Exam questions for FIT2014</title>
+      <link>http://banay.me/uni/fit2014-review/</link>
+      <pubDate>Tue, 23 Oct 2018 10:31:00 +1100</pubDate>
+      
+      <guid>http://banay.me/uni/fit2014-review/</guid>
+      <description>Week 5 Lecture 1  Are regular languages are closed under symmetric difference (i.e. a string \(s\) is in exactly one of \(L_1\) and \(L_2\), denoted \(L_1 \Delta L_2\)).
+   Are regular languages are closed under superset?
+   Show that the language \(L = {a^n b^n}\) is non-regular.
+ Week 5 Lecture 2  Find a context free grammar for all strings that correctly match ( [ and { brackets.</description>
+    </item>
     
     <item>
       <title>Exam questions for FIT2086</title>

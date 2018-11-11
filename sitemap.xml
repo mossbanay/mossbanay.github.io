@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://banay.me/post/hyperparameter-t-test/</loc>
+    <lastmod>2018-11-11T19:14:00+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://banay.me/uni/fit2014-review/</loc>
     <lastmod>2018-10-23T10:31:00+11:00</lastmod>
   </url>
@@ -29,14 +34,26 @@
   </url>
   
   <url>
+    <loc>http://banay.me/tags/machine-learning/</loc>
+    <lastmod>2018-11-11T19:14:00+11:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>http://banay.me/</loc>
-    <lastmod>2018-10-23T10:31:00+11:00</lastmod>
+    <lastmod>2018-11-11T19:14:00+11:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://banay.me/post/</loc>
-    <lastmod>2018-08-22T19:20:00+10:00</lastmod>
+    <lastmod>2018-11-11T19:14:00+11:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/statistics/</loc>
+    <lastmod>2018-11-11T19:14:00+11:00</lastmod>
     <priority>0</priority>
   </url>
   

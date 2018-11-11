@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Moss&#39; Blog</title>
-    <link>http://banay.me/post/</link>
-    <description>Recent content in Posts on Moss&#39; Blog</description>
+    <title>Machine Learning on Moss&#39; Blog</title>
+    <link>http://banay.me/tags/machine-learning/</link>
+    <description>Recent content in Machine Learning on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 Nov 2018 19:14:00 +1100</lastBuildDate>
     
-	<atom:link href="http://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://banay.me/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,18 +18,6 @@
       
       <guid>http://banay.me/post/hyperparameter-t-test/</guid>
       <description>Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.</description>
-    </item>
-    
-    <item>
-      <title>Fast keyword matching with the Aho-Corasick algorithm</title>
-      <link>http://banay.me/post/aho-corasick/</link>
-      <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
-      
-      <guid>http://banay.me/post/aho-corasick/</guid>
-      <description>Introduction In this post we&amp;rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
-Statement of problem To begin, let&amp;rsquo;s define the keyword searching problem.
-Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
-Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
     </item>
     
   </channel>

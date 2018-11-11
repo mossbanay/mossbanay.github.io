@@ -143,7 +143,7 @@ tree_gs.fit(X_train, y_train)
 
 <h2 id="using-t-tests">Using T-tests</h2>
 
-<p>When using $k$-fold cross-validation we get an average over \(k\) scores from different training and test sets. We can think of the average as a draw from some distribution of test scores conditional on the model that we fit to the training data. Among all models we generally want to pick the model that has the distribution of test scores with the highest possible mean. If we assume that the distribution of test scores for a model are normally distributed with some unknown variance, we can use hypothesis testing to compare the draws from different distributions to see if there is a meaningful increase in the performance when moving from one model to another.</p>
+<p>When using $k$-fold cross-validation we get an average over \(k\) scores from different training and test sets. We can think of the average as a draw from some distribution of test scores conditional on the model that we fit to the training data. Among all models we generally want to pick the model that has the distribution of test scores with the highest possible mean. If we assume that the distribution of average test score for a model are normally distributed (by <a href="https://en.wikipedia.org/wiki/Central%5Flimit%5Ftheorem">CLT</a>) with some unknown variance, we can use hypothesis testing to compare the draws from different distributions to see if there is a meaningful increase in the performance when moving from one model to another.</p>
 
 <p>Concretely, suppose we have two models \(\mathcal{M}_A\) and \(\mathcal{M}_B\). \(\mathcal{M}_A\) is a model we use as a benchmark and \(\mathcal{M}_B\) is a model we hope outperforms the benchmark. Assume that the average test score for \(\mathcal{M}_A\) and \(\mathcal{M}_B\) are distributed as \(\mathcal{N}(\mu_A, \sigma^2_A)\) and \(\mathcal{N}(\mu_B, \sigma^2_B)\) respectively. Then we are interested in testing the hypotheses</p>
 
@@ -183,6 +183,10 @@ benchmark_draws = generate_cv_draws(benchmark_model, X_train, y_train, k)
 
     return t_stats
 </code></pre>
+
+<blockquote>
+<p>It&rsquo;s important to note that we are conducting a paired T-test here, since we are looking at the mean difference between the average test scores.</p>
+</blockquote>
 
 <pre><code class="language-python">models = [DecisionTreeRegressor(max_depth=max_depth)
           for max_depth in tree_params['max_depth']]

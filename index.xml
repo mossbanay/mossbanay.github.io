@@ -21,31 +21,6 @@
     </item>
     
     <item>
-      <title>Exam questions for FIT2014</title>
-      <link>http://banay.me/uni/fit2014-review/</link>
-      <pubDate>Tue, 23 Oct 2018 10:31:00 +1100</pubDate>
-      
-      <guid>http://banay.me/uni/fit2014-review/</guid>
-      <description>Week 5 Lecture 1  Are regular languages are closed under symmetric difference (i.e. a string \(s\) is in exactly one of \(L_1\) and \(L_2\), denoted \(L_1 \Delta L_2\)).
-   Are regular languages are closed under superset?
-   Show that the language \(L = {a^n b^n}\) is non-regular.
- Week 5 Lecture 2  Find a context free grammar for all strings that correctly match ( [ and { brackets.</description>
-    </item>
-    
-    <item>
-      <title>Exam questions for FIT2086</title>
-      <link>http://banay.me/uni/fit2086-review/</link>
-      <pubDate>Mon, 22 Oct 2018 16:27:00 +1100</pubDate>
-      
-      <guid>http://banay.me/uni/fit2086-review/</guid>
-      <description>Lecture 1  Define the following terms:
- A population A sample A model     What is inference?
- Lecture 2  What is variance in the context of a random variable?
- Lecture 3  Briefly explain what maximum likelihood works is and a reason why it may be so effective
-   Suppose we have an unbiased estimator \(\hat{\theta}\) of a parameter \(\theta\) with variance \(2.</description>
-    </item>
-    
-    <item>
       <title>Fast keyword matching with the Aho-Corasick algorithm</title>
       <link>http://banay.me/post/aho-corasick/</link>
       <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>

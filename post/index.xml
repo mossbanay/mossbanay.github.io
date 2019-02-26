@@ -6,10 +6,29 @@
     <description>Recent content in Posts on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
+    <lastBuildDate>Tue, 26 Feb 2019 11:48:00 +1100</lastBuildDate>
     
 	<atom:link href="http://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Auto-regressive time series in R</title>
+      <link>http://banay.me/post/auto-regressive-time-series-in-r/</link>
+      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      
+      <guid>http://banay.me/post/auto-regressive-time-series-in-r/</guid>
+      <description>Introduction In this post we&amp;rsquo;ll go over auto-regressive time series. What they are, what they look like and some properties they exhibit. Throughout the post we&amp;rsquo;ll use small snippets of R to plot processes and visualisations.
+What are autoregressive time series? An auto-regressive time series is a stochastic process in which future values are modelled by a linear combination of some number of previous values of the same process. In other words, a series which is regressed on itself in order to find coefficients that relate its past values to its future values.</description>
+    </item>
+    
+    <item>
+      <title>Hyperparameter selection with T-tests</title>
+      <link>http://banay.me/post/hyperparameter-t-test/</link>
+      <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
+      
+      <guid>http://banay.me/post/hyperparameter-t-test/</guid>
+      <description>Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.</description>
+    </item>
     
     <item>
       <title>Fast keyword matching with the Aho-Corasick algorithm</title>

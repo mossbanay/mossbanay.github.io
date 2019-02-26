@@ -6,10 +6,20 @@
     <description>Recent content on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 11 Nov 2018 19:14:00 +1100</lastBuildDate>
+    <lastBuildDate>Tue, 26 Feb 2019 11:48:00 +1100</lastBuildDate>
     
 	<atom:link href="http://banay.me/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Auto-regressive time series in R</title>
+      <link>http://banay.me/post/ar-one-model/</link>
+      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      
+      <guid>http://banay.me/post/ar-one-model/</guid>
+      <description>Introduction In this post we&amp;rsquo;ll go over auto-regressive time series. What they are, what they look like, the properties they exhibit and some popular extensions. Throughout the post we&amp;rsquo;ll use small snippets of R to plot and fit various processes and models.
+What are autoregressive time series? An auto-regressive time series is a stochastic process in which future values are modelled by a linear combination of some number of previous values of the same process.</description>
+    </item>
     
     <item>
       <title>Hyperparameter selection with T-tests</title>

@@ -87,7 +87,7 @@
 
 <p>\[ S_t = \beta_0 + \sum_{k=1}^n \beta_k S_{t-k} + \varepsilon_t \]</p>
 
-<p>where \(\varepsilon_i \sim \text{i.i.d. } \mathcal{N}(\mu, \sigma^2)\) is a random disturbance or error. The coefficients \(\beta_0, \, \ldots, \, \beta_n\) express the relationship between future values and lags. Since this is the typical setup for linear regression, under relatively weak assumptions we can make an unbiased estimate of the future values of the process. The most important of these assumptions is that the lags are <em>strictly exogenous</em>, meaning that the expectation of the error at each time is equal to zero conditional on <em>all lags</em>. Concretely,</p>
+<p>where \(\varepsilon_t \sim \text{i.i.d. } \mathcal{N}(\mu, \sigma^2)\) is a random disturbance or error. The coefficients \(\beta_0, \, \ldots, \, \beta_n\) express the relationship between future values and lags. Since this is the typical setup for linear regression, under relatively weak assumptions we can make an unbiased estimate of the future values of the process. The most important of these assumptions is that the lags are <em>strictly exogenous</em>, meaning that the expectation of the error at each time is equal to zero conditional on <em>all lags</em>. Concretely,</p>
 
 <p>\[ \mathbb{E}[\varepsilon_t | S_j] = 0, \, \forall j \in 1, \, \ldots, \, t \]</p>
 

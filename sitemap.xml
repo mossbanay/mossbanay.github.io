@@ -8,6 +8,16 @@
   </url>
   
   <url>
+    <loc>http://banay.me/post/auto-regressive-models-in-r/</loc>
+    <lastmod>2019-02-26T11:48:00+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/post/auto-regressive-time-series-in-r/</loc>
+    <lastmod>2019-02-26T11:48:00+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://banay.me/post/hyperparameter-t-test/</loc>
     <lastmod>2018-11-11T19:14:00+11:00</lastmod>
   </url>

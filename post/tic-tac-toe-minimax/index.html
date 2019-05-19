@@ -208,7 +208,7 @@ class TicTacToeNode:
         if self.board[0][0] == self.board[1][1] == self.board[2][2] != &quot; &quot;:
             return self.board[1][1]
 
-        if self.board[2][0] == self.board[1][1] == self.board[2][0] != &quot; &quot;:
+        if self.board[2][0] == self.board[1][1] == self.board[0][2] != &quot; &quot;:
             return self.board[1][1]
 
         # Check for draw

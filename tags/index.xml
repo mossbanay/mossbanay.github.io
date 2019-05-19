@@ -6,33 +6,24 @@
     <description>Recent content in Tags on Moss&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
+    <lastBuildDate>Sun, 19 May 2019 14:36:00 +1000</lastBuildDate>
     
 	<atom:link href="http://banay.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Computer Science</title>
-      <link>http://banay.me/tags/computer-science/</link>
-      <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
+      <title>games</title>
+      <link>http://banay.me/tags/games/</link>
+      <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
       
-      <guid>http://banay.me/tags/computer-science/</guid>
+      <guid>http://banay.me/tags/games/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Econometrics</title>
-      <link>http://banay.me/tags/econometrics/</link>
-      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
-      
-      <guid>http://banay.me/tags/econometrics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machine Learning</title>
+      <title>machine-learning</title>
       <link>http://banay.me/tags/machine-learning/</link>
-      <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
+      <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
       
       <guid>http://banay.me/tags/machine-learning/</guid>
       <description></description>
@@ -48,7 +39,25 @@
     </item>
     
     <item>
-      <title>Statistics</title>
+      <title>econometrics</title>
+      <link>http://banay.me/tags/econometrics/</link>
+      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      
+      <guid>http://banay.me/tags/econometrics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>time-series</title>
+      <link>http://banay.me/tags/time-series/</link>
+      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      
+      <guid>http://banay.me/tags/time-series/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>statistics</title>
       <link>http://banay.me/tags/statistics/</link>
       <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
       
@@ -57,20 +66,20 @@
     </item>
     
     <item>
-      <title>String Algorithms</title>
-      <link>http://banay.me/tags/string-algorithms/</link>
+      <title>computer-science</title>
+      <link>http://banay.me/tags/computer-science/</link>
       <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
       
-      <guid>http://banay.me/tags/string-algorithms/</guid>
+      <guid>http://banay.me/tags/computer-science/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Time Series</title>
-      <link>http://banay.me/tags/time-series/</link>
-      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      <title>string-algorithms</title>
+      <link>http://banay.me/tags/string-algorithms/</link>
+      <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
       
-      <guid>http://banay.me/tags/time-series/</guid>
+      <guid>http://banay.me/tags/string-algorithms/</guid>
       <description></description>
     </item>
     

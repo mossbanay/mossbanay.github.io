@@ -1,0 +1,382 @@
+
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+  
+  <meta charset="UTF-8">
+  <title>
+    Playing Tic-tac-toe with minimax in Python | Moss&#39; Blog
+  </title>
+
+
+  
+  <meta name="viewport" content="width=device-width,user-scalable=no,maximum-scale=1,initial-scale=1">
+
+  
+  <link rel="canonical" href="http://banay.me/post/tic-tac-toe-minimax/"/>
+
+  
+  <link rel="stylesheet" href="/css/sanitize.css">
+  <link rel="stylesheet" href="/css/responsive.css">
+  <link rel="stylesheet" href="/css/highlight_monokai.css">
+  <link rel="stylesheet" href="/css/theme.css">
+  <link rel="stylesheet" href="/css/custom.css">
+  
+  
+  <link href="http://banay.me/index.xml" rel="alternate" type="application/rss+xml" title="Moss&#39; Blog" />
+  <link href="http://banay.me/index.xml" rel="feed" type="application/rss+xml" title="Moss&#39; Blog" />
+
+  
+  
+
+
+</head>
+
+
+
+<body>
+<div class="container">
+
+  
+  <header role="banner">
+    <div class="row gutters">
+      <div id="site-title" class="col span_6">
+        <h1><a href="http://banay.me/">Moss&#39; Blog</a></h1>
+        
+      </div>
+      <div id="social" class="col span_6">
+        <ul>
+          
+          
+          
+          <li><a href="http://banay.me/index.xml" type="application/rss+xml" target="_blank">RSS</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+
+  
+  <main id="single" role="main">
+    <div class="article-header">
+      <h1>Playing Tic-tac-toe with minimax in Python</h1>
+      <div class="meta">
+        May 19, 2019 &nbsp;
+        
+          #<a href="/tags/machine-learning">machine-learning</a>&nbsp;
+        
+          #<a href="/tags/games">games</a>&nbsp;
+        
+      </div>
+    </div>
+    <article>
+      
+
+<h2 id="introduction">Introduction</h2>
+
+<p>In this article we will explain the minimax algorithm. We&rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.</p>
+
+<h2 id="game-trees">Game trees</h2>
+
+<p>For games with perfect information, we can model the entire play-space using a directed graph called <em>game tree</em>. A game tree simply illustrates all possible ways in which a game may play out. Each node described a particular state in the game, and it has one child node for each possible action that might occur from that state. To generate a game tree, we need only the rules of the game as inputs.</p>
+
+<p>Let&rsquo;s use the game of tic-tac-toe as an example. We have two players O and X. For the sake of explanation let us say that player O goes first. The initial state of the game then looks like this.</p>
+
+<figure>
+    <img src="./images/game_tree_example.png"/> 
+</figure>
+
+
+<p>The children of each node represent all the possible actions that could be taken from that state. So for this node, all the possible actions correspond to Player O placing an O in one of the nine squares. We draw these states one level below the <em>root node</em> of the game tree and draw arrows representing a state transition between them.</p>
+
+<figure>
+    <img src="./images/game_tree_first_level.png"/> 
+</figure>
+
+
+<p>This repeats all the way down the tree until we reach a <em>leaf node</em>, that is a state where the game has ended. Later, we will give these leaf nodes values that represent the outcome of the game. Notice that for games in which the player making a decision alternates each turn (like tic-tac-toe) the game tree follows an alternating pattern also. That is to say that the depth of a node in the game tree determines which player makes the action in that state. Here we see for even depths Player O makes the action and for odd depths Player X makes the action.</p>
+
+<p>The above visualisation looks a little cluttered since we explicitly show the state of the board. Often we will instead just write the action along the transition arrow between states.</p>
+
+<figure>
+    <img src="./images/simple_tree.png"/> 
+</figure>
+
+
+<h2 id="mini-max">Mini-max</h2>
+
+<p>We have looked at how to represent games using game trees, but how should we choose the actions that we take in each state? A simple approach would be to search through the tree using a traditional search algorithm (like depth-first search or breadth-first search) to look for a node with the maximum reward for the player (or hero). However, these simple approaches fail to account for modelling the actions of the opponent (or villian).</p>
+
+<p>We should expect our opponent to play rationally as we do, but how can we define a rational action? Well we know by intuition that players are trying to maximise their outcome. If we restrict the games of interest to those that are <em>adverserial</em> (i.e. for which the outcome for one player is the negation of the other) then our opponent (trying to maximise their own reward) inadvertently seeks to minimise our own reward. This allows us to actual construct paths to root states in the game tree.</p>
+
+<p>For example, take the above example. We can draw this as a game tree.</p>
+
+<figure>
+    <img src="./images/GT_I.png"/> 
+</figure>
+
+
+<p>Since we know exactly how the game will play out from each of the Villian nodes, we can just assign an outcome to them.</p>
+
+<figure>
+    <img src="./images/GT_II.png"/> 
+</figure>
+
+
+<p>Now since the Hero is a maximiser of their own reward, the choice here is clear and the Hero should choose to play the action &ldquo;Right&rdquo; which leads to an outcome of (-10, 10).</p>
+
+<figure>
+    <img src="./images/GT_III.png"/> 
+</figure>
+
+
+<p>We can generalise this process as an alternation between <strong>maximising</strong> (turns that the Hero plays) and <strong>minimising</strong> (turns that the Villian plays). Under the assumption that the outcomes for the Hero and Villian are negated, we can simplify the tree to just show the Hero&rsquo;s outcome at the root.</p>
+
+<p>Here&rsquo;s the above game with the simplified tree.</p>
+
+<figure>
+    <img src="./images/GT_IV.png"/> 
+</figure>
+
+
+<p>We call the computed outcome values (shown in blue) at each node the <em>minimax values</em>.</p>
+
+<h2 id="pseudocode">Pseudocode</h2>
+
+<p>We can compute minimax values simply by making a post-order traversal through the tree. At a particular node, we compute the minimax values for each of the children, then take either the max or the min depending on whether we are at a maximising depth or minimising depth.</p>
+
+<pre><code class="language-python">class RootNode:
+    def __init__(self):
+        self.value = 0
+
+    def get_minimax_value(self, maximising = True):
+        return self.value
+
+
+class ChoiceNode:
+    def __init__(self):
+        self.children = []
+
+    def get_minimax_value(self, maximising = True):
+        child_values = [child.get_minimax_value(maximising = not maximising)
+                        for child in self.children]
+
+        if maximising:
+            return max(child_values)
+        else:
+            return min(child_values)
+</code></pre>
+
+<h2 id="tic-tac-toe-in-python">Tic Tac Toe in Python</h2>
+
+<p>We will implement a small tic-tac-toe node that records the current state in the game (i.e. the board position and the player that is next to move).</p>
+
+<pre><code class="language-python">from copy import deepcopy
+
+class TicTacToeNode:
+    def __init__(self, board = None, player = &quot;O&quot;):
+        if board is None:
+            board = [[&quot; &quot; for _ in range(3)] for _ in range(3)]
+        self.board = board
+        self.player = player
+
+    def children(self):
+        if self.winner() is not None:
+            return
+
+        for row_num in range(3):
+            for col_num in range(3):
+                if self.board[row_num][col_num] == &quot; &quot;:
+                    next_board = deepcopy(self.board)
+                    next_board[row_num][col_num] = self.player
+                    next_player = &quot;O&quot; if self.player == &quot;X&quot; else &quot;X&quot;
+                    yield TicTacToeNode(board = next_board, player = next_player)
+
+    def winner(self):
+        # Check for horizontal winners
+        for row_num in range(3):
+            if self.board[row_num][0] == self.board[row_num][1] == self.board[row_num][2] != &quot; &quot;:
+                return self.board[row_num][0]
+
+        # Check for vertical winners
+        for col_num in range(3):
+            if self.board[0][col_num] == self.board[1][col_num] == self.board[2][col_num] != &quot; &quot;:
+                return self.board[0][col_num]
+
+        # Check for diagonal winners
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] != &quot; &quot;:
+            return self.board[1][1]
+
+        if self.board[2][0] == self.board[1][1] == self.board[2][0] != &quot; &quot;:
+            return self.board[1][1]
+
+        # Check for draw
+        if &quot; &quot; not in &quot;&quot;.join([&quot;&quot;.join(row) for row in self.board]):
+            return 'D'
+
+        return None
+
+    def __str__(self):
+        row_strings = [&quot; | &quot;.join(row) for row in self.board]
+        return (&quot;\n&quot; + '-'*9 + &quot;\n&quot;).join(row_strings)
+</code></pre>
+
+<p>Here we also implement a method <code>winner</code> which returns the character of the winning player (or D for a draw) if the game is over. We can apply minimax and search through the child states of the initial game state (i.e. an empty board with player O to move) and evaluate the minimax value.</p>
+
+<pre><code class="language-python">n = TicTacToeNode()
+
+def minimax_value(node):
+    if node.winner() is not None:
+        return 1 if node.winner() == 'O' else 0 if node.winner() == 'D' else -1
+
+    child_values = [minimax_value(child) for child in node.children()]
+
+    assert(len(child_values) &gt; 0)
+
+    if node.player == 'O':
+        return max(child_values)
+    else:
+        return min(child_values)
+
+print(f'Minimax value for empty board is: {minimax_value(n)}')
+print(n)
+
+# Minimax value for empty board is: 0
+#   |   |
+# ---------
+#   |   |
+# ---------
+#   |   |
+
+</code></pre>
+
+<p>Here we can see that for an empty board, optimal play from both sides will lead us to a draw! How about if we play out some moves?</p>
+
+<pre><code class="language-python">n = next(next(TicTacToeNode().children()).children())
+print(f'Minimax value for empty board is: {minimax_value(n)}')
+print(n)
+
+# Minimax value for empty board is: 1
+# O | X |
+# ---------
+#   |   |
+# ---------
+#   |   |
+
+</code></pre>
+
+<p>Now we see that from this state if we play optimally we will always be able to win! Note that in the previous case with the empty board, a minimax value of 0 does not mean that we cannot win, but that we can guarantee a score of <em>at least</em> 0. If the opponent plays sub-optimally (like in the moves shown above) then we may reach a state from which we can always win.</p>
+
+<h2 id="extensions-to-mini-max">Extensions to mini-max</h2>
+
+<p>The most popular extension of mini-max is a method of computing the minimax values faster called <em>alpha-beta pruning</em>. This method takes advantage of the fact that there is no need to traverse some subtrees in the game tree where a better option for a player already exists. For example</p>
+
+<figure>
+    <img src="./images/AB_pruning_I.png"/> 
+</figure>
+
+
+<p>Here we have fully traversed the subtree for when the hero plays &ldquo;Left&rdquo; and arrived at a minimax value of 5. This means that the hero can score at least a 5 when playing this game, and hopes to find a better option when traversing the subtree for the &ldquo;Right&rdquo; action.</p>
+
+<figure>
+    <img src="./images/AB_pruning_II.png"/> 
+</figure>
+
+
+<p>After looking at the path of the hero playing &ldquo;Right&rdquo; and the villian playing &ldquo;Left&rdquo; we find that the outcome was 1. Now we can see that the villian can score 1 and since it acts as a minimiser, the minimax value for that state will be less than or equal to 1. Therefore it is always less than the 5 in the other villian node reached when the hero plays &ldquo;Left&rdquo;. Therefore we do not need to traverse the subtree for when both players play &ldquo;Right&rdquo; since we know the hero will never play &ldquo;Right&rdquo;.</p>
+
+<p>More detail on alpha-beta pruning can be found in the <a href="https://inst.eecs.berkeley.edu/~cs188/fa18/">CS188 slides</a>.</p>
+
+<p>Recall that so far we have restricted our discussion of minimax to games in which the hero and villian are in direct opposition (i.e. the reward for one is the loss for the other). Suppose instead instead that this is not the case, and the opponent&rsquo;s reward may be completely unrelated to the hero&rsquo;s reward. Instead we model the decision of the villian as a discrete probability distribution over the actions avaliable to them in a particular state. Note that for the adverserial games discussed above the discrete probability distribution places all the probability mass on a single option (since we model the villian as playing optimally). In this generalisation called <em>expectimax</em> we choose the option that maximises the <em>expected reward</em> for the hero, rather than the worst reward.</p>
+
+<p>Concretely suppose that the hero has a set of actions available to them \(\mathcal{A}_H = \{a_h^1, \ldots, a_h^k\}\). For each action \(a_h^i\) the hero makes, the villians response is modelled by the random variable \(\mathcal{A}_V^i = \{a_V^{i,1}, \ldots, a_V^{i,n}\}\) and let \(V\) be a function that gives the value of the villians response.</p>
+
+<p>\[ \pi(S) = \underset{a_h^i \in \mathcal{A}_H}{\text{arg max}} \,\, \mathbb{E}[V(\mathcal{A}_V^i)] \]</p>
+
+<p>With an example, suppose we have the following game tree.</p>
+
+<figure>
+    <img src="./images/expectimax_tree.png"/> 
+</figure>
+
+
+<p>The minimax solution to this game is for the hero to play &ldquo;Right&rdquo; with the goal of preventing themselves from scoring the -5, however when we look at the expectations of each move, on average playing &ldquo;Right&rdquo; yields 2.5 (\(1*0.4 + 4*0.6 = 2.8\)) buy playing &ldquo;Left&rdquo; yields 7.5 (\(20*0.5 + (-5)*0.5 = 7.5\)). Therefore the expectimax solution is to play &ldquo;Left&rdquo; in this game. The drawback with this approach is that we require a model of the exact probability distribution of the villians moves in each state.</p>
+
+<h2 id="references">References</h2>
+
+<p>Abbeel, P., Klein, D. (2018). <em>CS 188 - Introduction to Artificial Intelligence</em>. Retreived from <a href="https://inst.eecs.berkeley.edu/~cs188/fa18/">https://inst.eecs.berkeley.edu/~cs188/fa18/</a></p>
+
+      
+      
+      
+    </article>
+    
+
+
+  </main>
+  
+  <nav class="pagination-single">
+    
+    
+      <span class="next"><a href="http://banay.me/post/auto-regressive-time-series-in-r/" rel="next">Auto-regressive time series in R</a> &rarr;</span>
+    
+  </nav>
+
+
+  
+  <footer role="contentinfo">
+    <div style="text-align:center;">
+      
+      
+    </div>
+  </footer>
+
+
+</div>
+
+<script src="/js/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-110997704-1', 'auto');
+	ga('send', 'pageview');
+</script>
+
+<script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+
+</body>
+</html>
+

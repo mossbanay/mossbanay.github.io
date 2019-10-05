@@ -3,9 +3,18 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://banay.me/tags/games/</loc>
+    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/machine-learning/</loc>
+    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://banay.me/</loc>
     <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -16,25 +25,11 @@
   <url>
     <loc>http://banay.me/post/</loc>
     <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>http://banay.me/tags/</loc>
     <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://banay.me/tags/games/</loc>
-    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>http://banay.me/tags/machine-learning/</loc>
-    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -43,21 +38,18 @@
   </url>
   
   <url>
-    <loc>http://banay.me/tags/r/</loc>
+    <loc>http://banay.me/tags/econometrics/</loc>
     <lastmod>2019-02-26T11:48:00+11:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://banay.me/tags/econometrics/</loc>
+    <loc>http://banay.me/tags/r/</loc>
     <lastmod>2019-02-26T11:48:00+11:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>http://banay.me/tags/time-series/</loc>
     <lastmod>2019-02-26T11:48:00+11:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -68,7 +60,11 @@
   <url>
     <loc>http://banay.me/tags/statistics/</loc>
     <lastmod>2018-11-11T19:14:00+11:00</lastmod>
-    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://banay.me/tags/computer-science/</loc>
+    <lastmod>2018-08-22T19:20:00+10:00</lastmod>
   </url>
   
   <url>
@@ -77,20 +73,12 @@
   </url>
   
   <url>
-    <loc>http://banay.me/tags/computer-science/</loc>
-    <lastmod>2018-08-22T19:20:00+10:00</lastmod>
-    <priority>0</priority>
-  </url>
-  
-  <url>
     <loc>http://banay.me/tags/string-algorithms/</loc>
     <lastmod>2018-08-22T19:20:00+10:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>http://banay.me/categories/</loc>
-    <priority>0</priority>
   </url>
   
 </urlset>

@@ -146,124 +146,130 @@
 
 <p>We can compute minimax values simply by making a post-order traversal through the tree. At a particular node, we compute the minimax values for each of the children, then take either the max or the min depending on whether we are at a maximising depth or minimising depth.</p>
 
-<pre><code class="language-python">class RootNode:
-    def __init__(self):
-        self.value = 0
+<pre><code class="language-python">  class RootNode:
+      def __init__(self):
+          self.value = 0
 
-    def get_minimax_value(self, maximising = True):
-        return self.value
+      def get_minimax_value(self, maximising = True):
+          return self.value
 
 
-class ChoiceNode:
-    def __init__(self):
-        self.children = []
+  class ChoiceNode:
+      def __init__(self):
+          self.children = []
 
-    def get_minimax_value(self, maximising = True):
-        child_values = [child.get_minimax_value(maximising = not maximising)
-                        for child in self.children]
+      def get_minimax_value(self, maximising = True):
+          child_values = [child.get_minimax_value(maximising = not maximising)
+                          for child in self.children]
 
-        if maximising:
-            return max(child_values)
-        else:
-            return min(child_values)
+          if maximising:
+              return max(child_values)
+          else:
+              return min(child_values)
 </code></pre>
 
 <h2 id="tic-tac-toe-in-python">Tic Tac Toe in Python</h2>
 
 <p>We will implement a small tic-tac-toe node that records the current state in the game (i.e. the board position and the player that is next to move).</p>
 
-<pre><code class="language-python">from copy import deepcopy
+<pre><code class="language-python">  from copy import deepcopy
 
-class TicTacToeNode:
-    def __init__(self, board = None, player = &quot;O&quot;):
-        if board is None:
-            board = [[&quot; &quot; for _ in range(3)] for _ in range(3)]
-        self.board = board
-        self.player = player
+  class TicTacToeNode:
+      def __init__(self, board = None, player = &quot;O&quot;):
+          if board is None:
+              board = [[&quot; &quot; for _ in range(3)] for _ in range(3)]
+          self.board = board
+          self.player = player
 
-    def children(self):
-        if self.winner() is not None:
-            return
+      def children(self):
+          if self.winner() is not None:
+              return
 
-        for row_num in range(3):
-            for col_num in range(3):
-                if self.board[row_num][col_num] == &quot; &quot;:
-                    next_board = deepcopy(self.board)
-                    next_board[row_num][col_num] = self.player
-                    next_player = &quot;O&quot; if self.player == &quot;X&quot; else &quot;X&quot;
-                    yield TicTacToeNode(board = next_board, player = next_player)
+          for row_num in range(3):
+              for col_num in range(3):
+                  if self.board[row_num][col_num] == &quot; &quot;:
+                      next_board = deepcopy(self.board)
+                      next_board[row_num][col_num] = self.player
+                      next_player = &quot;O&quot; if self.player == &quot;X&quot; else &quot;X&quot;
+                      yield TicTacToeNode(board = next_board, player = next_player)
 
-    def winner(self):
-        # Check for horizontal winners
-        for row_num in range(3):
-            if self.board[row_num][0] == self.board[row_num][1] == self.board[row_num][2] != &quot; &quot;:
-                return self.board[row_num][0]
+      def winner(self):
+          # Check for horizontal winners
+          for row_num in range(3):
+              if self.board[row_num][0] == self.board[row_num][1] == self.board[row_num][2] != &quot; &quot;:
+                  return self.board[row_num][0]
 
-        # Check for vertical winners
-        for col_num in range(3):
-            if self.board[0][col_num] == self.board[1][col_num] == self.board[2][col_num] != &quot; &quot;:
-                return self.board[0][col_num]
+          # Check for vertical winners
+          for col_num in range(3):
+              if self.board[0][col_num] == self.board[1][col_num] == self.board[2][col_num] != &quot; &quot;:
+                  return self.board[0][col_num]
 
-        # Check for diagonal winners
-        if self.board[0][0] == self.board[1][1] == self.board[2][2] != &quot; &quot;:
-            return self.board[1][1]
+          # Check for diagonal winners
+          if self.board[0][0] == self.board[1][1] == self.board[2][2] != &quot; &quot;:
+              return self.board[1][1]
 
-        if self.board[2][0] == self.board[1][1] == self.board[0][2] != &quot; &quot;:
-            return self.board[1][1]
+          if self.board[2][0] == self.board[1][1] == self.board[0][2] != &quot; &quot;:
+              return self.board[1][1]
 
-        # Check for draw
-        if &quot; &quot; not in &quot;&quot;.join([&quot;&quot;.join(row) for row in self.board]):
-            return 'D'
+          # Check for draw
+          if &quot; &quot; not in &quot;&quot;.join([&quot;&quot;.join(row) for row in self.board]):
+              return 'D'
 
-        return None
+          return None
 
-    def __str__(self):
-        row_strings = [&quot; | &quot;.join(row) for row in self.board]
-        return (&quot;\n&quot; + '-'*9 + &quot;\n&quot;).join(row_strings)
+      def __str__(self):
+          row_strings = [&quot; | &quot;.join(row) for row in self.board]
+          return (&quot;\n&quot; + '-'*9 + &quot;\n&quot;).join(row_strings)
+</code></pre>
+
+<pre><code class="language-text">Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+  File &quot;/tmp/babel-O6HO9c/python-PvRVZy&quot;, line 1
+    from copy import deepcopy
+    ^
+IndentationError: unexpected indent
 </code></pre>
 
 <p>Here we also implement a method <code>winner</code> which returns the character of the winning player (or D for a draw) if the game is over. We can apply minimax and search through the child states of the initial game state (i.e. an empty board with player O to move) and evaluate the minimax value.</p>
 
-<pre><code class="language-python">n = TicTacToeNode()
+<pre><code class="language-python">  n = TicTacToeNode()
 
-def minimax_value(node):
-    if node.winner() is not None:
-        return 1 if node.winner() == 'O' else 0 if node.winner() == 'D' else -1
+  def minimax_value(node):
+      if node.winner() is not None:
+          return 1 if node.winner() == 'O' else 0 if node.winner() == 'D' else -1
 
-    child_values = [minimax_value(child) for child in node.children()]
+      child_values = [minimax_value(child) for child in node.children()]
 
-    assert(len(child_values) &gt; 0)
+      assert(len(child_values) &gt; 0)
 
-    if node.player == 'O':
-        return max(child_values)
-    else:
-        return min(child_values)
+      if node.player == 'O':
+          return max(child_values)
+      else:
+          return min(child_values)
 
-print(f'Minimax value for empty board is: {minimax_value(n)}')
-print(n)
+  print(f'Minimax value for empty board is: {minimax_value(n)}')
+  print(n)
 
-# Minimax value for empty board is: 0
-#   |   |
-# ---------
-#   |   |
-# ---------
-#   |   |
-
+  # Minimax value for empty board is: 0
+  #   |   |
+  # ---------
+  #   |   |
+  # ---------
+  #   |   |
 </code></pre>
 
 <p>Here we can see that for an empty board, optimal play from both sides will lead us to a draw! How about if we play out some moves?</p>
 
-<pre><code class="language-python">n = next(next(TicTacToeNode().children()).children())
-print(f'Minimax value for empty board is: {minimax_value(n)}')
-print(n)
+<pre><code class="language-python">  n = next(next(TicTacToeNode().children()).children())
+  print(f'Minimax value for non-empty board is: {minimax_value(n)}')
+  print(n)
 
-# Minimax value for empty board is: 1
-# O | X |
-# ---------
-#   |   |
-# ---------
-#   |   |
-
+  # Minimax value for non-empty board is: 1
+  # O | X |
+  # ---------
+  #   |   |
+  # ---------
+  #   |   |
 </code></pre>
 
 <p>Now we see that from this state if we play optimally we will always be able to win! Note that in the previous case with the empty board, a minimax value of 0 does not mean that we cannot win, but that we can guarantee a score of <em>at least</em> 0. If the opponent plays sub-optimally (like in the moves shown above) then we may reach a state from which we can always win.</p>

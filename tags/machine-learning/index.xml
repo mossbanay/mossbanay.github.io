@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>machine-learning on Moss&#39; Blog</title>
-    <link>http://banay.me/tags/machine-learning/</link>
-    <description>Recent content in machine-learning on Moss&#39; Blog</description>
+    <title>machine-learning on Moss&#39; blog</title>
+    <link>https://banay.me/tags/machine-learning/</link>
+    <description>Recent content in machine-learning on Moss&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>Moss Ebeling</copyright>
     <lastBuildDate>Sun, 19 May 2019 14:36:00 +1000</lastBuildDate>
     
-	<atom:link href="http://banay.me/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://banay.me/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Playing Tic-tac-toe with minimax in Python</title>
-      <link>http://banay.me/post/tic-tac-toe-minimax/</link>
+      <link>https://banay.me/tic-tac-toe-minimax/</link>
       <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
       
-      <guid>http://banay.me/post/tic-tac-toe-minimax/</guid>
+      <guid>https://banay.me/tic-tac-toe-minimax/</guid>
       <description>Introduction In this article we will explain the minimax algorithm. We&amp;rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&amp;rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
 Game trees For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out.</description>
     </item>
     
     <item>
       <title>Hyperparameter selection with T-tests</title>
-      <link>http://banay.me/post/hyperparameter-t-test/</link>
+      <link>https://banay.me/hyperparameter-t-test/</link>
       <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
       
-      <guid>http://banay.me/post/hyperparameter-t-test/</guid>
+      <guid>https://banay.me/hyperparameter-t-test/</guid>
       <description>Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.</description>
     </item>
     

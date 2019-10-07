@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on Moss&#39; Blog</title>
-    <link>http://banay.me/tags/r/</link>
-    <description>Recent content in R on Moss&#39; Blog</description>
+    <title>R on Moss&#39; blog</title>
+    <link>https://banay.me/tags/r/</link>
+    <description>Recent content in R on Moss&#39; blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <copyright>Moss Ebeling</copyright>
     <lastBuildDate>Tue, 26 Feb 2019 11:48:00 +1100</lastBuildDate>
     
-	<atom:link href="http://banay.me/tags/r/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://banay.me/tags/r/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Auto-regressive time series in R</title>
-      <link>http://banay.me/post/auto-regressive-time-series-in-r/</link>
+      <link>https://banay.me/auto-regressive-time-series-in-r/</link>
       <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
       
-      <guid>http://banay.me/post/auto-regressive-time-series-in-r/</guid>
+      <guid>https://banay.me/auto-regressive-time-series-in-r/</guid>
       <description>Introduction In this post we&amp;rsquo;ll go over auto-regressive time series. What they are, what they look like and some properties they exhibit. Throughout the post we&amp;rsquo;ll use small snippets of R to plot processes and visualisations.
 What are autoregressive time series? An auto-regressive time series is a stochastic process in which future values are modelled by a linear combination of some number of previous values of the same process. In other words, a series which is regressed on itself in order to find coefficients that relate its past values to its future values.</description>
     </item>

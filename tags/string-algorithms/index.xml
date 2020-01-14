@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>string-algorithms on Moss&#39; blog</title>
@@ -18,8 +18,8 @@
       <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
       
       <guid>https://banay.me/aho-corasick/</guid>
-      <description>Introduction In this post we&amp;rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
-Statement of problem To begin, let&amp;rsquo;s define the keyword searching problem.
+      <description>Introduction In this post we&#39;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
+Statement of problem To begin, let&#39;s define the keyword searching problem.
 Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
 Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
     </item>

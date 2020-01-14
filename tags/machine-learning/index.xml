@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>machine-learning on Moss&#39; blog</title>
@@ -18,7 +18,7 @@
       <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
       
       <guid>https://banay.me/tic-tac-toe-minimax/</guid>
-      <description>Introduction In this article we will explain the minimax algorithm. We&amp;rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&amp;rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
+      <description>Introduction In this article we will explain the minimax algorithm. We&#39;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&#39;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
 Game trees For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out.</description>
     </item>
     

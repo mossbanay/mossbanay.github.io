@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Auto-regressive time series in R &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction In this post we&rsquo;ll go over auto-regressive time series. What they are, what they look like and some properties they exhibit. Throughout the post we&rsquo;ll use small snippets of R to plot processes and visualisations.
+        <meta name="description" content="Introduction In this post we&#39;ll go over auto-regressive time series. What they are, what they look like and some properties they exhibit. Throughout the post we&#39;ll use small snippets of R to plot processes and visualisations.
 What are autoregressive time series? An auto-regressive time series is a stochastic process in which future values are modelled by a linear combination of some number of previous values of the same process. In other words, a series which is regressed on itself in order to find coefficients that relate its past values to its future values.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.58.3" />
+        <meta name="generator" content="Hugo 0.62.2" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -118,16 +118,11 @@ if (!doNotTrack) {
         <div class="post-content clearfix" itemprop="articleBody">
     
 
-    
-
-<h2 id="introduction">Introduction</h2>
-
-<p>In this post we&rsquo;ll go over auto-regressive time series. What they are, what they
-look like and some properties they exhibit. Throughout the post we&rsquo;ll use small
+    <h2 id="introduction">Introduction</h2>
+<p>In this post we'll go over auto-regressive time series. What they are, what they
+look like and some properties they exhibit. Throughout the post we'll use small
 snippets of R to plot processes and visualisations.</p>
-
 <h2 id="what-are-autoregressive-time-series">What are autoregressive time series?</h2>
-
 <p>An <em>auto-regressive</em> time series is a stochastic process in which future values
 are modelled by a linear combination of some number of previous values of the
 same process. In other words, a series which is regressed on itself in order to
@@ -135,114 +130,84 @@ find coefficients that relate its past values to its future values. The <em>orde
 of an auto-regressive series is the number of lags used in the model. If the
 previous four values of the process are used then we say the process is a fourth
 order auto-regressive process, or \(AR(4)\) for short.</p>
-
 <p>In general, an auto-regressive process using the previous \(n\) lags is denoted as
 an \(AR(n)\) process. The general form of \(S_t\), the value of an \(AR(n)\) process
 at time \(t\), is</p>
-
 <p>\[ S_t = \beta_0 + \sum_{k=1}^n \beta_k S_{t-k} + \varepsilon_t \]</p>
-
 <p>where \(\varepsilon_t \sim \text{i.i.d. } \mathcal{N}(\mu, \sigma^2)\) is a random
-disturbance or error. The coefficients \(\beta_0, \, \ldots, \, \beta_n\) express
+disturbance or error. The coefficients \(\beta_0, , \ldots, , \beta_n\) express
 the relationship between future values and lags. Since this is the typical setup
 for linear regression, under relatively weak assumptions we can make an unbiased
 estimate of the future values of the process. The most important of these
 assumptions is that the lags are <em>strictly exogenous</em>, meaning that the
 expectation of the error at each time is equal to zero conditional on <em>all
 lags</em>. Concretely,</p>
-
-<p>\[ \mathbb{E}[\varepsilon_t | S_j] = 0, \, \forall j \in 1, \, \ldots, \, t \]</p>
-
+<p>\[ \mathbb{E}[\varepsilon_t | S_j] = 0, , \forall j \in 1, , \ldots, , t \]</p>
 <p>This is a stricter assumption than <em>contemporaneous exogeneity</em> in which errors
 have a conditional expectation of zero given just the previous \(n\) lags.</p>
-
 <h2 id="what-do-they-look-like">What do they look like?</h2>
-
 <p>As we will see, auto-regressive processes can fit a variety of cyclic and
-seasonal patterns. We&rsquo;ll implement a function to generate draws from an \(AR(n)\)
+seasonal patterns. We'll implement a function to generate draws from an \(AR(n)\)
 model with a particular set of coefficients in R.</p>
-
-<pre><code class="language-R">ar_n &lt;- function(betas, n_steps) {
-  y &lt;- c(0)
-  for (i in 2:n_steps) {
-    next_y &lt;- rnorm(1)
-    for (j in 1:min(length(betas), length(y))) {
-      next_y &lt;- next_y + (betas[j] * y[length(y)-j+1])
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">ar_n <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">function</span>(betas, n_steps) {
+  y <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0</span>)
+  <span style="color:#a6e22e">for </span>(i in <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span>n_steps) {
+    next_y <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rnorm</span>(<span style="color:#ae81ff">1</span>)
+    <span style="color:#a6e22e">for </span>(j in <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">min</span>(<span style="color:#a6e22e">length</span>(betas), <span style="color:#a6e22e">length</span>(y))) {
+      next_y <span style="color:#f92672">&lt;-</span> next_y <span style="color:#f92672">+</span> (betas[j] <span style="color:#f92672">*</span> y<span style="color:#a6e22e">[length</span>(y)<span style="color:#f92672">-</span>j<span style="color:#ae81ff">+1</span>])
     }
-    y &lt;- c(y, next_y)
+    y <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(y, next_y)
   }
   y
 }
-</code></pre>
-
-<p>A common example of a process is a random walk, in which the current value of
+</code></pre></div><p>A common example of a process is a random walk, in which the current value of
 the process is equal to the previous value plus a random jitter (usually drawn
 from a normal distribution). This can be modelled as an \(AR(1)\) process with
 \(\beta_0 = 0\) and \(\beta_1 = 1\). This gives us the following expression for the
 value at time \(t\)</p>
-
 <p>\[ S_t = S_{t-1} + \varepsilon_t \]</p>
-
 <p>We can also plot a draw from this process using the built-in <code>plot</code>.</p>
-
-<pre><code class="language-R">x &lt;- seq(1, 200)
-plot(x, ar_n(c(1), 200), type='l')
-</code></pre>
-
-<figure>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">200</span>)
+<span style="color:#a6e22e">plot</span>(x, <span style="color:#a6e22e">ar_n</span>(<span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>), <span style="color:#ae81ff">200</span>), type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">l&#39;</span>)
+</code></pre></div><figure>
     <img src="ar_one_random_walk.png"/> 
 </figure>
-
 
 <p>While it may appear that there is trending in the series, there is only
 completely random movement. At any point the process is just as likely to move
 up or down, regardless of its previous trend. That is, it is memoryless. We can
 plot another \(AR(1)\) process with a smaller coefficient, say \(\beta_1 = 0.5\).</p>
-
-<pre><code class="language-R">plot(x, ar_n(c(0.5), 200), type='l')
-</code></pre>
-
-<figure>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">plot</span>(x, <span style="color:#a6e22e">ar_n</span>(<span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0.5</span>), <span style="color:#ae81ff">200</span>), type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">l&#39;</span>)
+</code></pre></div><figure>
     <img src="ar_one_0_5.png"/> 
 </figure>
 
-
-<p>Here in constrast to the random walk the process tends to oscillate around its starting value of 0 and never trend too far in a single direction. We&rsquo;ll look more at this property in detail in the next section.</p>
-
-<p>How about high order auto-regressive processes? Let&rsquo;s try an \(AR(2)\) model.</p>
-
-<pre><code class="language-R">ar_four &lt;- ar_n(c(0.8, -0.8), 200)
-plot(x, ar_four, type='l')
-</code></pre>
-
-<figure>
+<p>Here in constrast to the random walk the process tends to oscillate around its starting value of 0 and never trend too far in a single direction. We'll look more at this property in detail in the next section.</p>
+<p>How about high order auto-regressive processes? Let's try an \(AR(2)\) model.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R">ar_four <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ar_n</span>(<span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0.8</span>, <span style="color:#ae81ff">-0.8</span>), <span style="color:#ae81ff">200</span>)
+<span style="color:#a6e22e">plot</span>(x, ar_four, type<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">l&#39;</span>)
+</code></pre></div><figure>
     <img src="ar_two.png"/> 
 </figure>
 
-
 <p>We can see a very distinct cyclic pattern where the process is very positively correlated with the previous value and very negatively correlated with the value before that. We can illustrate this by plotting a correlogram of a number of lagged values.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#a6e22e">library</span>(corrgram)
+ar_four_lags <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(current <span style="color:#f92672">=</span> ar_four[<span style="color:#f92672">-</span><span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">197</span>, <span style="color:#ae81ff">198</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">200</span>)],
+                           lag1 <span style="color:#f92672">=</span> ar_four[<span style="color:#f92672">-</span><span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">198</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">200</span>)],
+                           lag2 <span style="color:#f92672">=</span> ar_four[<span style="color:#f92672">-</span><span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">200</span>)],
+                           lag3 <span style="color:#f92672">=</span> ar_four[<span style="color:#f92672">-</span><span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">200</span>)],
+                           lag4 <span style="color:#f92672">=</span> ar_four[<span style="color:#f92672">-</span><span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>)])
 
-<pre><code class="language-R">library(corrgram)
-ar_four_lags &lt;- data.frame(current = ar_four[-c(197, 198, 199, 200)],
-                           lag1 = ar_four[-c(1, 198, 199, 200)],
-                           lag2 = ar_four[-c(1, 2, 199, 200)],
-                           lag3 = ar_four[-c(1, 2, 3, 200)],
-                           lag4 = ar_four[-c(1, 2, 3, 4)])
-
-corrgram(ar_four_lags)
-</code></pre>
-
-<figure>
+<span style="color:#a6e22e">corrgram</span>(ar_four_lags)
+</code></pre></div><figure>
     <img src="ar_two_correl.png"/> 
 </figure>
-
 
 <p>We see that adjacent values (e.g. current &amp; lag1 or lag2 &amp; lag3) are highly
 correlated, since \(\beta_1 = 0.8\). The intuition here is that since the weight
 is quite high, the process gets pulled in the same direction as that lag.
 Similarly since \(\beta_2 = -0.8\) there we can see negative correlation between
 lags that are two steps apart.</p>
-
 <p>What may be surprising is the stronger negative correlation for values three
 time steps apart. Without loss of generality, recall that since we are using an
 \(AR(2)\) model, the current value is constructed as a linear combination of lag1
@@ -250,13 +215,10 @@ and lag2, with positive weight on lag1 and a negative weight on lag2. But we can
 see that lag1 is negatively correlated with lag3 and lag2 is strongly positively
 correlated with lag3. Therefore we should indeed expect strong negative
 correlation with lag3.</p>
-
-<p>We see weaker correlation between current and lag2 than lag1 since there&rsquo;s two
+<p>We see weaker correlation between current and lag2 than lag1 since there's two
 random disturbances as opposed to one. This also explains the dropping
 correlation between current and lag4.</p>
-
 <h2 id="stationary-and-non-stationary-processes">Stationary and non-stationary processes</h2>
-
 <p>A stochastic process is said to be <em>stationary</em> when the joint distribution of a
 selection of time indices is time invariant. That is to say given a set of time
 indices \(t_1 &lt; t_2 &lt; \ldots &lt; t_m\), the joint distribution of \((S_{t_1},
@@ -264,36 +226,29 @@ S_{t_2}, \ldots, S_{t_m})\) is identical to \((S_{t_1 + h}, S_{t_2 + h}, \ldots,
 S_{t_m + h})\) for \(h \in Z^+\). Simply, the distribution of values for the
 process does not change over time and is &ldquo;stationary&rdquo;. Alternatively a process
 which is not stationary is <em>non-stationary</em>.</p>
-
 <p>This is a useful albeit strong property to have. It implies that modelling a
 subset of the process is sufficient to be able to use that model to extrapolate
 forward and make convincing forecasts of the process. The first step in
 modelling non-stationary is often to apply transformations to make it stationary
 (differencing, log, etc).</p>
-
 <p>In practice we often work with the weaker property of <em>weak stationarity</em>. For a
 process to be weakly stationary it must have</p>
-
 <ul>
-<li>A constant and finite mean (i.e. $\mathbb{E}[S_t] = &mu;, \, &forall; t $)</li>
-<li>A finite second moment (i.e. $\mathbb{E}[|S_t^2|] &lt; &infin;, \, &forall; t $)</li>
+<li>A constant and finite mean (i.e. $\mathbb{E}[S_t] = μ, \, ∀ t $)</li>
+<li>A finite second moment (i.e. $\mathbb{E}[|S_t^2|] &lt; ∞, \, ∀ t $)</li>
 <li>Time invariant autocorrelation (i.e. the correlation between lags is equal for all lags that are a particular number of time steps apart).</li>
 </ul>
-
 <p>Auto-regressive processes are weakly stationary under some weak restrictions. In
 the examples about we chose very specific values for \(\beta\). Picking random
 values may lead to a non-stationary process. In fact the first example, the
 random walk, is non-stationary since its variance is proportional to time (since
 \(S_t\) is just the sum of \(t\) normally distributed variables) and therefore
 unbounded.</p>
-
 <p>For an \(AR(1)\) model to be weakly stationary we require \(|\beta_1| &lt; 1\). For
 higher order processes the requirement is slightly more complicated. An \(AR(n)\)
 model is stationary if all complex roots of the polynomial \(\Phi(z) = 1 -
 \sum_{i=1}^n \beta_i z^i\) lie outside of the unit circle.</p>
-
 <h2 id="references">References</h2>
-
 <p>Wooldridge, Jeffrey M., 1960-. (2012). Introductory econometrics : a modern approach. Mason, Ohio :South-Western Cengage Learning</p>
 
 </div>

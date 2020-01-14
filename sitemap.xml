@@ -3,32 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://banay.me/nalu/</loc>
+    <lastmod>2020-01-14T17:46:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/machine-learning/</loc>
+    <lastmod>2020-01-14T17:46:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/</loc>
+    <lastmod>2020-01-14T17:46:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/post/</loc>
+    <lastmod>2020-01-14T17:46:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/</loc>
+    <lastmod>2020-01-14T17:46:00+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://banay.me/tags/games/</loc>
     <lastmod>2019-05-19T14:36:00+10:00</lastmod>
   </url>
   
   <url>
-    <loc>https://banay.me/tags/machine-learning/</loc>
-    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://banay.me/</loc>
-    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://banay.me/tic-tac-toe-minimax/</loc>
-    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://banay.me/post/</loc>
-    <lastmod>2019-05-19T14:36:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://banay.me/tags/</loc>
     <lastmod>2019-05-19T14:36:00+10:00</lastmod>
   </url>
   

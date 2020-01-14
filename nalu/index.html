@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Let&#39;s write a Neural Arithmetic Logic Unit &middot; Moss Ebeling</title>
+        <meta name="description" content="Introduction A few months ago I read this paper from DeepMind that addressed a simple choice of architecture to encourage sensible weights in neural networks when solving problems that at the core are simple arithmetic. Despite the continued hype surrounding neural networks and deep learning in general, some simple problems like this are difficult to generalise past the regions used in a training set.
+XOR was a famously difficult problem that stunted developments in perceptrons (the predecessors to what has become neural networks) until Marvin Minsky and Seymour Papert addressed it by applying composition to the model.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.62.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script>
+  (function() {
+      var script = document.createElement('script');
+      window.counter = 'https://banay_me.goatcounter.com/count'
+      script.async = 1;
+      script.src = '//gc.zgo.at/count.js';
+
+      var ins = document.getElementsByTagName('script')[0];
+      ins.parentNode.insertBefore(script, ins)
+  })();
+</script>
+
+
+        
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-110997704-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Let&#39;s write a Neural Arithmetic Logic Unit</h1>
+    
+    <p class="post-date">
+        <span>Published <time datetime="2020-01-14" itemprop="datePublished">Tue, Jan 14, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">[Mossimo Ebeling]</a>
+            </span>
+        </span>
+    </p>
+    
+        <p class="post-reading post-line">
+            <span>Estimated reading time: 12 min</span>
+        </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>A few months ago I read <a href="https://arxiv.org/abs/1808.00508">this paper</a> from DeepMind that addressed a simple choice
+of architecture to encourage sensible weights in neural networks when solving
+problems that at the core are simple arithmetic. Despite the continued hype
+surrounding neural networks and deep learning in general, some simple problems
+like this are difficult to generalise past the regions used in a training set.</p>
+<p>XOR was a famously difficult problem that stunted developments in perceptrons
+(the predecessors to what has become neural networks) until Marvin Minsky and
+Seymour Papert addressed it by applying composition to the model. In a similar
+vein to the NALU paper, the value added is the proposition of a new architecture
+since single-layer perceptrons are inherently linear, there's no way to solve
+XOR without a multiple layers.</p>
+<p>To ensure that we can rely upon neural networks (which are being increasingly
+used in critical applications) to act sensibly in non-trivial difficult
+problems, we should it can be flexible enough to solve a wide array of problems,
+no matter how simple. Additionally, if we know that there is likely a natural
+arithmetic aspect to a problem, it would undoubtedly help to guide the network
+through architecting it in a way that exploits that aspect for early approaches.</p>
+<p>In summary, the direct goals of this article are to:</p>
+<ul>
+<li>Introduce DeepMind's NALU architecture</li>
+<li>Outline an implementation (using PyTorch)</li>
+<li>Address some of the drawbacks of the approach</li>
+</ul>
+<h2 id="neural-accumulator--nac">Neural Accumulator (NAC)</h2>
+<p>Before getting to an architecture that adapts to all four basic arithmetic
+operations, the paper introduces a unit that tackles addition and subtraction.
+The design is very simple and uses a clever trick.</p>
+<p>In a standard linear layer, the output \(y\) is given by the product of the input
+\(x\) with some weight matrix \(\mathbf{W}\).</p>
+<p>\[ y = \mathbf{W} x \]</p>
+<p>In the normal case, we might initialise this matrix \(\mathbf{W}\) with entries that are
+draws from a normal distribution with a sensible variance (see <a href="https://mc.ai/xavier-and-he-normal-he-et-al-initialization/">Xavier and He
+initialisation</a>). Also during the training process, we might use some form of
+regularisation to encourage the weights to stay small and prevent us from
+falling into solutions that fit our data but clearly are not solutions to the
+underlying problem.</p>
+<p>Recall that when we do matrix multiplication, we're taking a linear combination
+of the elements in the input vector with coefficients according to each row in
+\(\mathbf{W}\). If we know that the values in the output vector are just sums or
+differences of elements in the input vector (i.e. if we know the problem is just
+addition or subtraction between elements) then the weights <em>should be</em> 0, 1 or
+-1.</p>
+<p>The simplicity in the design of the NAC is to <em>gently</em> push the weights towards
+just those values. This is done by using two popular activation functions: <code>tanh</code>
+and <code>sigmoid</code>.</p>
+<p>Recall that <code>tanh</code> maps \(\mathbb{R} \to [-1, 1]\) and that <code>sigmoid</code> maps
+\(\mathbb{R} \to [0, 1]\). Further each function saturates at the endpoints,
+meaning that the image of most values in the domain is very close to the edges
+of the codomain. We can visualise this by sampling uniformly between -10 and 10
+(an arbitrary width) and plotting where the final output lies.</p>
+<p><!-- raw HTML omitted --><!-- raw HTML omitted --></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">
+<span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+N_DRAWS <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+RESULTS <span style="color:#f92672">=</span> []
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sigmoid</span>(x):
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span>x))
+
+<span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(N_DRAWS):
+    x1, x2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">2</span>)
+    RESULTS<span style="color:#f92672">.</span>append(sigmoid(x1) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>tanh(x2))
+
+plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">4</span>))
+plt<span style="color:#f92672">.</span>hist(RESULTS, bins<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>)
+
+</code></pre></div><figure>
+    <img src="/nalu/saturation-points-hist.png"/> 
+</figure>
+
+<p>Clearly this pushes the weights towards one of the three values we would expect
+to see in a weight matrix for an addition or subtraction problem.</p>
+<blockquote>
+<p>Notice that there is a slight bias towards an activation of 0 over the
+activation of 1 and -1. We can consider the tanh and the sigmoid as a coin flip.
+To get an activation of 1 or -1 we need the sigmoid output to be 1, therefore
+half the time the activation is 0 while 1 and -1 occur a quarter of the time
+each.</p>
+<p>Although it might not be directly intended, you could consider this a form of
+<a href="https://en.wikipedia.org/wiki/Shrinkage%5F(statistics)">shrinkage</a> and may reduce bias in the model.</p>
+</blockquote>
+<p>To use this observation, we simply apply the same transformations when
+constructing the weight matrix \(\mathbf{W}\). DeepMind choose to structure it in
+this manner.</p>
+<p>\[ \mathbf{W} = \text{tanh}({\mathbf{\hat{W}}}) \odot \text{sigmoid}({\mathbf{\hat{M}}}) \]</p>
+<p>where \(\odot\) is the Hadamard or element-wise product operator. Here
+\(\mathbf{W}\) is the output weight matrix whose elements will be biased towards
+-1, 0 and 1 and \(\mathbf{\hat{W}}, \mathbf{\hat{M}}\) are underlying latent
+matrices. All three matrices have the same shape, \(M \times N\), where \(N\) is the
+input dimension and \(M\) is the output dimension.</p>
+<p>We can apply backpropogation during training as per usual since our
+transformation is differentiable. This also concretely bounds the range of
+values in \(\mathbf{W}\) so we might posit it could stabilise the training process
+also. Otherwise, this is effectively a drop-in replacement for a traditional
+linear layer.</p>
+<h2 id="neural-arithmetic-logic-unit--nalu">Neural Arithmetic Logic Unit (NALU)</h2>
+<p>A useful and simple identity of logs is the following.</p>
+<p>\[ \log (a \times b) = \log a + \log b \]</p>
+<p>Although it was much before my time, this used to be heavily exploited for
+any kind of multiplication and division prior to computers reaching the masses
+by using <a href="https://www.hpmuseum.org/sliderul.htm">slide rules</a>. NALU's exploit this exact same identity. We've established
+a method for addition and subtraction, so now we repeat this process just in the
+log-space.</p>
+<p>We'll call the output of the regular NAC \(a\) and the output of the NAC that
+operates in log-space \(m\). From before, \(a\) is the simple product</p>
+<p>\[ a = \mathbf{W} x \]</p>
+<p>where \(\mathbf{W}\) is the same weight matrix as discussed before. For \(m\), we
+take the log of our input vector, multiply by the weight matrix and take the
+exponent to return to level-space.</p>
+<p>\[ \tilde{m} = \exp ( \mathbf{W} \log (x) ) \]</p>
+<p>One issue we quickly find is that since we have no bounds on the elements of
+\(x\), we can't guarantee they are positive values. Therefore instead of
+\(\tilde{m}\) we use,</p>
+<p>\[ m = \exp ( \mathbf{W} \log (|x| + \epsilon) ) \]</p>
+<p>where \(|x|\) is the vector containing the absolute value of each element of \(x\)
+and \(\epsilon\) is some small value (e.g. 1e-8). We use the common broadcasting
+notation here but mean that \(\epsilon\) is added element-wise to \(|x|\).</p>
+<p>Now we have an output that utilises addition/subtraction \(a\) and one that uses
+multiplication/division \(m\). DeepMind suggest a third output \(g\) that acts as a
+gate to control which of these outputs is used by the layer.</p>
+<p>We use a similar trick to guarantee that the elements of the gate \(g\) are in
+\([0, 1]\).</p>
+<p>\[ g = \sigma (\mathbf{G} x) \]</p>
+<p>Therefore our final output interpolates between \(a\) and \(m\) using \(g\).</p>
+<p>\[ y = g \odot a + (1 - g) \odot m \]</p>
+<blockquote>
+<p>Note that \(g\) is applied element-wise. This means that the final vector output
+from the layer might include some elements that are produced from
+addition/subtraction and some that are produced from multiplication/division.</p>
+</blockquote>
+<h2 id="how-do-we-implement-the-layers">How do we implement the layers?</h2>
+<p>Now that we've established the structure of the network, the implementation is
+relatively straightforward. We'll use PyTorch in this example but TensorFlow or
+any other similar library will work just fine. We'll start with a NAC. First
+let's look at the code and walk through it afterwards.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> torch
+<span style="color:#f92672">import</span> torch.nn <span style="color:#f92672">as</span> nn
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NeuralAccumulator</span>(nn<span style="color:#f92672">.</span>Module):
+    <span style="color:#66d9ef">def</span> __init__(self, input_dim, output_dim):
+        super()<span style="color:#f92672">.</span>__init__()
+
+        self<span style="color:#f92672">.</span>what <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>empty((input_dim, output_dim)))
+        nn<span style="color:#f92672">.</span>init<span style="color:#f92672">.</span>xavier_normal_(self<span style="color:#f92672">.</span>what)
+
+        self<span style="color:#f92672">.</span>mhat <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>empty((input_dim, output_dim)))
+        nn<span style="color:#f92672">.</span>init<span style="color:#f92672">.</span>xavier_normal_(self<span style="color:#f92672">.</span>mhat)
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+        w <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>what<span style="color:#f92672">.</span>sigmoid() <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>mhat<span style="color:#f92672">.</span>tanh()
+        <span style="color:#66d9ef">return</span> x <span style="color:#960050;background-color:#1e0010">@</span> w
+</code></pre></div><p>This is pretty simple. We initialise the matrices \(\mathbf{\hat{W}}\) and
+\(\mathbf{\hat{M}}\) randomly (in this case just by using Xavier initialisation)
+and when evaluating an input we compute the matrix \(\mathbf{W}\) using the
+formula discussed previously and compute the matrix product with the input
+vector \(x\). Note that the <code>@</code> operator in python is syntactic sugar for matrix
+multiplication in common libraries (PyTorch, Numpy, TensorFlow, etc).</p>
+<p>That's really all there is. PyTorch makes it quite easy to compose layers
+together, so we construct the NALU by building on from the NAC.</p>
+<p>In this instance we deviate slightly from the design of the NALU in the original
+paper. Here we'll create two separate NAC's: one for the level space and one for
+the log space. In contrast, the original paper depicts the weights for each
+space as being shared.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NeuralArithmeticLogicUnit</span>(torch<span style="color:#f92672">.</span>nn<span style="color:#f92672">.</span>Module):
+    <span style="color:#66d9ef">def</span> __init__(self, input_dim, output_dim):
+        super()<span style="color:#f92672">.</span>__init__()
+
+        self<span style="color:#f92672">.</span>level_nac <span style="color:#f92672">=</span> NeuralAccumulator(input_dim, output_dim)
+        self<span style="color:#f92672">.</span>log_nac <span style="color:#f92672">=</span> NeuralAccumulator(input_dim, output_dim)
+
+        self<span style="color:#f92672">.</span>G <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Parameter(torch<span style="color:#f92672">.</span>empty((input_dim, output_dim)))
+        nn<span style="color:#f92672">.</span>init<span style="color:#f92672">.</span>xavier_normal_(self<span style="color:#f92672">.</span>G)
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+        a <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>level_nac(x)
+        m <span style="color:#f92672">=</span> (self<span style="color:#f92672">.</span>log_nac((torch<span style="color:#f92672">.</span>abs(x) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1e-7</span>)<span style="color:#f92672">.</span>log()))<span style="color:#f92672">.</span>exp()
+        g <span style="color:#f92672">=</span> x <span style="color:#960050;background-color:#1e0010">@</span> self<span style="color:#f92672">.</span>G
+        <span style="color:#66d9ef">return</span> g <span style="color:#f92672">*</span> a <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> g) <span style="color:#f92672">*</span> m
+</code></pre></div><p>Again this is already very close to just writing the formulas from the previous
+sections. In this case we've chosen to set \(\epsilon=10^{-7}\). This is arbitrary
+and shouldn't matter too much (any sufficiently small number will do just fine).</p>
+<p>One section that should be examined closer is the calculation of the weighted
+product between \(a\) and \(m\).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">        <span style="color:#66d9ef">return</span> g <span style="color:#f92672">*</span> a <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> g) <span style="color:#f92672">*</span> m
+</code></pre></div><p>Suppose the output dimension is 5. Then the shape of \(g\) is <code>torch.Size([5])</code>
+while the shape of \(a\) and \(m\) are <code>torch.Size([?, 5])</code>. Commonly we use <code>?</code> to
+denote the mini-batch dimension. Therefore we cannot take the elementwise
+product since \(g\) doesn't match the shape of either \(a\) nor \(m\). What is
+happening here is we are <em>broadcasting</em> the product across the first dimension.
+That is we take the element-wise product along each step in first dimension.</p>
+<h2 id="mystery-arithmetic-problem">Mystery arithmetic problem</h2>
+<p>To do complete a further investigation, we need a test problem to apply the
+network to. We'll use something similar to one of the examples in the paper
+which we'll call the &ldquo;mystery arithmetic problem&rdquo;.</p>
+<p>In this problem suppose we have \(n\) inputs and \(m\) outputs. Each output is
+randomly associated with two of the inputs and one of the four binary arithmetic
+operators. For example one instance of the problem might be described as the
+following.</p>
+<figure>
+    <img src="/nalu/example-1.png"/> 
+</figure>
+
+<p>While in another randomly generated problem, the solution might look like this.</p>
+<figure>
+    <img src="/nalu/example-2.png"/> 
+</figure>
+
+<p>Given a configuration, we can generate training and test data easily. Here we
+show an example implementation to generate configurations and the solution to an
+input vector given a configuration.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">from</span> enum <span style="color:#f92672">import</span> Enum, auto
+<span style="color:#f92672">from</span> random <span style="color:#f92672">import</span> choice, sample
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Operation</span>(Enum):
+    ADD <span style="color:#f92672">=</span> auto()
+    SUBTRACT <span style="color:#f92672">=</span> auto()
+    MULTIPLY <span style="color:#f92672">=</span> auto()
+    DIVIDE <span style="color:#f92672">=</span> auto()
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_configuration</span>(in_dim, out_dim):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Returns a list of length `out_dim` containing tuples in the form of (i, j, o)</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    where i and j are indices and o is an operation.</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    </span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+    indices <span style="color:#f92672">=</span> range(in_dim)
+    operations <span style="color:#f92672">=</span> [Operation<span style="color:#f92672">.</span>ADD,
+                  Operation<span style="color:#f92672">.</span>SUBTRACT,
+                  Operation<span style="color:#f92672">.</span>MULTIPLY,
+                  Operation<span style="color:#f92672">.</span>DIVIDE]
+
+    configuration <span style="color:#f92672">=</span> []
+
+    <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(out_dim):
+        i, j <span style="color:#f92672">=</span> sample(indices, <span style="color:#ae81ff">2</span>)
+        o <span style="color:#f92672">=</span> choice(operations)
+        configuration<span style="color:#f92672">.</span>append((i, j, o))
+
+    <span style="color:#66d9ef">return</span> configuration
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_minibatch_solution</span>(minibatch, configuration):
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Given a configuration and minibatch (as a (batch_size, in_dim) shaped numpy</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    array) inefficiently computes the solution to the mystery arithmetic problem.</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    </span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+
+    minibatch_solution <span style="color:#f92672">=</span> []
+
+    <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> minibatch:
+        x_soln <span style="color:#f92672">=</span> []
+
+        <span style="color:#66d9ef">for</span> i, j, o <span style="color:#f92672">in</span> configuration:
+            <span style="color:#66d9ef">if</span> o <span style="color:#f92672">==</span> Operation<span style="color:#f92672">.</span>ADD:
+                x_soln<span style="color:#f92672">.</span>append(x[i] <span style="color:#f92672">+</span> x[j])
+            <span style="color:#66d9ef">elif</span> o <span style="color:#f92672">==</span> Operation<span style="color:#f92672">.</span>SUBTRACT:
+                x_soln<span style="color:#f92672">.</span>append(x[i] <span style="color:#f92672">-</span> x[j])
+            <span style="color:#66d9ef">elif</span> o <span style="color:#f92672">==</span> Operation<span style="color:#f92672">.</span>MULTIPLY:
+                x_soln<span style="color:#f92672">.</span>append(x[i] <span style="color:#f92672">*</span> x[j])
+            <span style="color:#66d9ef">elif</span> o <span style="color:#f92672">==</span> Operation<span style="color:#f92672">.</span>DIVIDE:
+                x_soln<span style="color:#f92672">.</span>append(x[i] <span style="color:#f92672">/</span> x[j])
+            <span style="color:#66d9ef">else</span>:
+                <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">TypeError</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Unknown operation {o}</span><span style="color:#e6db74">&#39;</span>)
+
+        minibatch_solution<span style="color:#f92672">.</span>append(x_soln)
+
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>array(minibatch_solution)
+</code></pre></div><p>We can use these to generate a training set by generating a random array
+populated with uniformly distributed random numbers from \([-10, 10]\) and then
+computing the solution for a configuration. The implementation to solve the
+problem using the true configuration is not intended to be at all efficient or
+fast. There is likely a better way to represent the configuration that would
+allow for vectorisation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">in_dimension <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+out_dimension <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+
+training_set_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
+test_set_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
+
+conf <span style="color:#f92672">=</span> generate_configuration(in_dimension, out_dimension)
+
+X_train <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, (training_set_size, in_dimension))
+y_train <span style="color:#f92672">=</span> compute_minibatch_solution(X_train, conf)
+
+X_test <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, (test_set_size, in_dimension))
+y_test <span style="color:#f92672">=</span> compute_minibatch_solution(X_test, conf)
+</code></pre></div><h2 id="performance-evaluation">Performance evaluation</h2>
+<p>Let's compare the performance against a vanilla dense network with ReLU
+activation.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#f92672">as</span> F
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">VanillaNetwork</span>(nn<span style="color:#f92672">.</span>Module):
+    <span style="color:#66d9ef">def</span> __init__(self, input_dim, output_dim):
+        super()<span style="color:#f92672">.</span>__init__()
+        self<span style="color:#f92672">.</span>fc <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(input_dim, output_dim)
+
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+        <span style="color:#66d9ef">return</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc(x))
+</code></pre></div><p>We'll now train using the following methodology:</p>
+<ul>
+<li>1000 epochs</li>
+<li>Adam with a learning rate of 0.01</li>
+<li>MSE loss</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
+<span style="color:#f92672">from</span> torch.optim <span style="color:#f92672">import</span> Adam
+
+X_train <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>tensor(X_train, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32)
+y_train <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>tensor(y_train, dtype<span style="color:#f92672">=</span>torch<span style="color:#f92672">.</span>float32)
+
+networks <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">vanilla</span><span style="color:#e6db74">&#39;</span>: VanillaNetwork(in_dimension, out_dimension),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">nac</span><span style="color:#e6db74">&#39;</span>: NeuralAccumulator(in_dimension, out_dimension),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">nalu</span><span style="color:#e6db74">&#39;</span>: NeuralArithmeticLogicUnit(in_dimension, out_dimension)}
+
+n_epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+lr <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+all_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
+
+<span style="color:#66d9ef">for</span> net_name, net <span style="color:#f92672">in</span> networks<span style="color:#f92672">.</span>items():
+    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Beginning training for {net_name}</span><span style="color:#e6db74">&#39;</span>)
+    optimizer <span style="color:#f92672">=</span> Adam(net<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span>lr)
+    loss_history <span style="color:#f92672">=</span> []
+
+    <span style="color:#75715e"># TODO: Use minibatches during training</span>
+
+    <span style="color:#66d9ef">for</span> n_epoch <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, n_epochs<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>):
+        loss <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>mse_loss(net(X_train), y_train)
+        optimizer<span style="color:#f92672">.</span>zero_grad()
+        loss<span style="color:#f92672">.</span>backward()
+        optimizer<span style="color:#f92672">.</span>step()
+
+        <span style="color:#66d9ef">if</span> n_epoch <span style="color:#f92672">%</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Epoch {n_epoch} MSE = {loss.detach():.4f}</span><span style="color:#e6db74">&#39;</span>)
+        loss_history<span style="color:#f92672">.</span>append(loss<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>item())
+
+    all_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([all_loss, pd<span style="color:#f92672">.</span>DataFrame({net_name: loss_history})], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+
+all_loss[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</code></pre></div><p>And we can look at the results of the training.</p>
+<figure>
+    <img src="./loss-history.png"/> 
+</figure>
+
+<p>We can see that the NALU dominates both the Vanilla and NAC networks, as expected.</p>
+<h2 id="cavets">Cavets</h2>
+<p>When we compute the sum/difference in the log space, we are forced to throw away
+the sign of the elements in the vector in order to take the log. This restricts
+us and we actually cannot learn to solve some problems as a result. For example,
+suppose the system we are trying to fit takes the <strong>product of the first and
+second elements</strong> in a vector. For example,</p>
+<p>\[ x = \begin{bmatrix} 1.5 \\ 2 \\ 2.5 \end{bmatrix} \to 3 \]</p>
+<p>We can model this by taking the sum in the log space. This would be equivalent
+to the following.</p>
+<p>\[ \exp \left ( \begin{bmatrix} 1 &amp; 1 &amp; 0 \end{bmatrix} \cdot \ln(x) \right ) \]</p>
+<p>and indeed this would give the correct result in this case. However, suppose our
+input was instead the following.</p>
+<p>\[ x = \begin{bmatrix} 1.5 \\ -2 \\ 2.5 \end{bmatrix} \to -3 \]</p>
+<p>Since we actually take the absolute value of \(x\), we throw away the signs here
+and cannot compute the correct product.</p>
+<p>We could address this by creating another mechanism in the layer to adjust the
+output based on the signs of the input, but this is not done in the paper.</p>
+<h2 id="references">References</h2>
+<p>Trask, A., Hill, F., Reed, S. E., Rae, J., Dyer, C., &amp; Blunsom, P. (2018).
+Neural arithmetic logic units. In Advances in Neural Information Processing
+Systems (pp. 8035-8044).</p>
+<p>Xavier and He Normal (He-et-al) Initialization, mc.ai retrieved on January
+5th 2020.</p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/machine-learning/">machine-learning</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
+        <script src="https://banay.me/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="../../../../highlight.pack.js"></script>
+        
+        
+        <script src="https://banay.me/js/scripts.js"></script>
+    </body>
+</html>
+

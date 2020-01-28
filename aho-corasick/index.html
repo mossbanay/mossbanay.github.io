@@ -4,13 +4,13 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Fast keyword matching with the Aho-Corasick algorithm &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction In this post we&#39;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
-Statement of problem To begin, let&#39;s define the keyword searching problem.
+        <meta name="description" content="Introduction In this post we&rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
+Statement of problem To begin, let&rsquo;s define the keyword searching problem.
 Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
 Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.62.2" />
+        <meta name="generator" content="Hugo 0.63.1" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -137,9 +137,9 @@ if (!doNotTrack) {
     
 
     <h2 id="introduction">Introduction</h2>
-<p>In this post we'll look at the problem of <em>keyword matching</em> including a number of approaches, applications and the Aho-Corasick algorithm.</p>
+<p>In this post we&rsquo;ll look at the problem of <em>keyword matching</em> including a number of approaches, applications and the Aho-Corasick algorithm.</p>
 <h2 id="statement-of-problem">Statement of problem</h2>
-<p>To begin, let's define the keyword searching problem.</p>
+<p>To begin, let&rsquo;s define the keyword searching problem.</p>
 <p>Given a list of strings \(K = [s_1, \ldots, s_n]\) (called <em>keywords</em>) and a (usually) much longer string \(C\) (called the <em>corpus</em>) count the number of times each keyword appears in the corpus.</p>
 <p>Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</p>
 <p>For example suppose we had \(K = [ \text{&ldquo;he&rdquo;}, \text{&ldquo;she&rdquo;}, \text{&ldquo;his&rdquo;}, \text{&ldquo;hers&rdquo;} ]\) and \(C = \text{&ldquo;ushers&rdquo;}\). The output of the algorithm should show that \(\text{&ldquo;he&rdquo;}\) occurs once, \(\text{&ldquo;she&rdquo;}\) occurs once, \(\text{&ldquo;hers&rdquo;}\) occurs once and \(\text{&ldquo;his&rdquo;}\) occurs zero times.</p>

@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Tue, 14 Jan 2020 17:46:00 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jan 2020 17:46:00 +1100</lastBuildDate>
     
 	<atom:link href="https://banay.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>machine-learning</title>
       <link>https://banay.me/tags/machine-learning/</link>
-      <pubDate>Tue, 14 Jan 2020 17:46:00 +0100</pubDate>
+      <pubDate>Tue, 14 Jan 2020 17:46:00 +1100</pubDate>
       
       <guid>https://banay.me/tags/machine-learning/</guid>
       <description></description>

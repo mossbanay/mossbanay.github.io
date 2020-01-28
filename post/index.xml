@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Tue, 14 Jan 2020 17:46:00 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jan 2020 17:46:00 +1100</lastBuildDate>
     
 	<atom:link href="https://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,7 +15,7 @@
     <item>
       <title>Let&#39;s write a Neural Arithmetic Logic Unit</title>
       <link>https://banay.me/nalu/</link>
-      <pubDate>Tue, 14 Jan 2020 17:46:00 +0100</pubDate>
+      <pubDate>Tue, 14 Jan 2020 17:46:00 +1100</pubDate>
       
       <guid>https://banay.me/nalu/</guid>
       <description>Introduction A few months ago I read this paper from DeepMind that addressed a simple choice of architecture to encourage sensible weights in neural networks when solving problems that at the core are simple arithmetic. Despite the continued hype surrounding neural networks and deep learning in general, some simple problems like this are difficult to generalise past the regions used in a training set.
@@ -28,7 +28,7 @@ XOR was a famously difficult problem that stunted developments in perceptrons (t
       <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
       
       <guid>https://banay.me/tic-tac-toe-minimax/</guid>
-      <description>Introduction In this article we will explain the minimax algorithm. We&#39;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&#39;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
+      <description>Introduction In this article we will explain the minimax algorithm. We&amp;rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&amp;rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
 Game trees For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out.</description>
     </item>
     
@@ -38,7 +38,7 @@ Game trees For games with perfect information, we can model the entire play-spac
       <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
       
       <guid>https://banay.me/auto-regressive-time-series-in-r/</guid>
-      <description>Introduction In this post we&#39;ll go over auto-regressive time series. What they are, what they look like and some properties they exhibit. Throughout the post we&#39;ll use small snippets of R to plot processes and visualisations.
+      <description>Introduction In this post we&amp;rsquo;ll go over auto-regressive time series. What they are, what they look like and some properties they exhibit. Throughout the post we&amp;rsquo;ll use small snippets of R to plot processes and visualisations.
 What are autoregressive time series? An auto-regressive time series is a stochastic process in which future values are modelled by a linear combination of some number of previous values of the same process. In other words, a series which is regressed on itself in order to find coefficients that relate its past values to its future values.</description>
     </item>
     
@@ -57,8 +57,8 @@ What are autoregressive time series? An auto-regressive time series is a stochas
       <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
       
       <guid>https://banay.me/aho-corasick/</guid>
-      <description>Introduction In this post we&#39;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
-Statement of problem To begin, let&#39;s define the keyword searching problem.
+      <description>Introduction In this post we&amp;rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
+Statement of problem To begin, let&amp;rsquo;s define the keyword searching problem.
 Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
 Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
     </item>

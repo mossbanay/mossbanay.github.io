@@ -7,7 +7,7 @@
         <meta name="description" content="Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.62.2" />
+        <meta name="generator" content="Hugo 0.63.1" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -138,7 +138,7 @@ if (!doNotTrack) {
 <p>The next iteration on this idea is using $k$-fold cross-validation. We split the training data set \((X, y)\) into \(k\) disjoint subsets \((X^{(1)}, y^{(1)}), (X^{(2)}, y^{(2)}), \ldots, (X^{(k)}, y^{(k)})\), and then loop \(k\) times, each time using one of the \(k\) subsets as a holdout set and training on the remaining \(k-1\) subsets. We then are left with \(k\) test scores, which are commonly summarised by their median or mean.</p>
 <p>Often one run of cross-validation is completed and we compare the mean score with that from a baseline model. In this article we will explore an extension of this moving from comparison of two point estimates of performance to using T-tests to quantify how statistically significant the improvement is. Testing hypotheses about the relative performance of different parameterisations of the same model allows us to also tune hyperparameters using the same ideas.</p>
 <h2 id="using-k-fold-cross-validation">Using $k$-fold cross-validation</h2>
-<p>Let's use a simple example to demonstrate these techniques. We will use numpy to generate a simple non-linear function that we try to fit for the rest of this article.</p>
+<p>Let&rsquo;s use a simple example to demonstrate these techniques. We will use numpy to generate a simple non-linear function that we try to fit for the rest of this article.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">TRAIN_SIZE <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
 TEST_SIZE  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
 SEED <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
@@ -163,7 +163,7 @@ y_test <span style="color:#f92672">=</span> add_noise(f(X_test))
     <img src="./f.png"/> 
 </figure>
 
-<p>Now we will use a decision tree to try to fit this function. Let's try all the values for <code>max_depth</code> from 2 to 15, with 5-fold cross-validation to choose the best parameterisation.</p>
+<p>Now we will use a decision tree to try to fit this function. Let&rsquo;s try all the values for <code>max_depth</code> from 2 to 15, with 5-fold cross-validation to choose the best parameterisation.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tree_params <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">max_depth</span><span style="color:#e6db74">&#39;</span>: range(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">16</span>)}
 k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
 
@@ -183,7 +183,7 @@ tree_gs<span style="color:#f92672">.</span>fit(X_train, y_train)
 <blockquote>
 <p>We note here that since scikit-learn always tries to maximise a function, the loss function used here is <strong>negative</strong> mean squared error.</p>
 </blockquote>
-<p>In this example it looks like the best value for <code>max_depth</code> is somewhere between 6 and 8. Since this is a relatively smooth maxima we may choose to average the predictions from trees with a max depth of 6, 7 and 8. It looks like depths greater than 8 offer no further improvement in fit, so generally we'll prefer to take less complex models and avoid depths above 8.</p>
+<p>In this example it looks like the best value for <code>max_depth</code> is somewhere between 6 and 8. Since this is a relatively smooth maxima we may choose to average the predictions from trees with a max depth of 6, 7 and 8. It looks like depths greater than 8 offer no further improvement in fit, so generally we&rsquo;ll prefer to take less complex models and avoid depths above 8.</p>
 <h2 id="using-t-tests">Using T-tests</h2>
 <p>When using $k$-fold cross-validation we get an average over \(k\) scores from different training and test sets. We can think of the average as a draw from some distribution of test scores conditional on the model that we fit to the training data. Among all models we generally want to pick the model that has the distribution of test scores with the highest possible mean. If we assume that the distribution of average test score for a model are normally distributed (by <a href="https://en.wikipedia.org/wiki/Central%5Flimit%5Ftheorem">CLT</a>) with some unknown variance, we can use hypothesis testing to compare the draws from different distributions to see if there is a meaningful increase in the performance when moving from one model to another.</p>
 <p>Concretely, suppose we have two models \(\mathcal{M}_A\) and \(\mathcal{M}_B\). \(\mathcal{M}_A\) is a model we use as a benchmark and \(\mathcal{M}_B\) is a model we hope outperforms the benchmark. Assume that the average test score for \(\mathcal{M}_A\) and \(\mathcal{M}_B\) are distributed as \(\mathcal{N}(\mu_A, \sigma^2_A)\) and \(\mathcal{N}(\mu_B, \sigma^2_B)\) respectively. Then we are interested in testing the hypotheses</p>
@@ -216,7 +216,7 @@ benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark
 
     <span style="color:#66d9ef">return</span> t_stats
 </code></pre></div><blockquote>
-<p>It's important to note that we are conducting a paired T-test here, since we are looking at the mean difference between the average test scores.</p>
+<p>It&rsquo;s important to note that we are conducting a paired T-test here, since we are looking at the mean difference between the average test scores.</p>
 </blockquote>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models <span style="color:#f92672">=</span> [DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
           <span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">max_depth</span><span style="color:#e6db74">&#39;</span>]]
@@ -226,8 +226,8 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
     <img src="./t-stat-curve.png"/> 
 </figure>
 
-<p>It looks like the best choice for max depth as judged by the T-statistics is slightly lower in the range from 4 to 6 compared to 6 to 8 for cross-validation. It's worth noting also that the T-statistics for all choices of the hyperparameter are positive, meaning that the mean for the alternative distributions are believed to be higher than the mean of the benchmark distribution.</p>
-<p>A test statistic of about 7 corresponds to a p-value of about 0.001, so it's very clear these models outperform the decision tree with a max depth of 1.</p>
+<p>It looks like the best choice for max depth as judged by the T-statistics is slightly lower in the range from 4 to 6 compared to 6 to 8 for cross-validation. It&rsquo;s worth noting also that the T-statistics for all choices of the hyperparameter are positive, meaning that the mean for the alternative distributions are believed to be higher than the mean of the benchmark distribution.</p>
+<p>A test statistic of about 7 corresponds to a p-value of about 0.001, so it&rsquo;s very clear these models outperform the decision tree with a max depth of 1.</p>
 <p>Finally we can sneak a look at performance on the test set to see what value for <code>max_depth</code> actually maximised performance.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">neg_mse <span style="color:#f92672">=</span> []
 
@@ -242,7 +242,7 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
 
 <p>We see the best value for <code>max_depth</code> was just between the estimates given by T-testing and cross-validation at around 5. It seems that cross-validation slightly overfit and T-testing was around the right area.</p>
 <h2 id="model-selection-extension">Model selection extension</h2>
-<p>Of course we never specified in our hypothesis test that the alternative model is the same model as the benchmark. Let's investigate if a simple linear regression model with a variable number of polynomial features would outperform the best decision tree we've found so far.</p>
+<p>Of course we never specified in our hypothesis test that the alternative model is the same model as the benchmark. Let&rsquo;s investigate if a simple linear regression model with a variable number of polynomial features would outperform the best decision tree we&rsquo;ve found so far.</p>
 <p>As before we will generate our benchmark draws</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">benchmark_model <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
 benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark_model, X_train, y_train, k)

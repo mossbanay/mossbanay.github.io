@@ -8,7 +8,7 @@
 XOR was a famously difficult problem that stunted developments in perceptrons (the predecessors to what has become neural networks) until Marvin Minsky and Seymour Papert addressed it by applying composition to the model.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.62.2" />
+        <meta name="generator" content="Hugo 0.63.1" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -126,7 +126,7 @@ if (!doNotTrack) {
     </p>
     
         <p class="post-reading post-line">
-            <span>Estimated reading time: 12 min</span>
+            <span>Estimated reading time: 13 min</span>
         </p>
     
 </header>
@@ -144,7 +144,7 @@ like this are difficult to generalise past the regions used in a training set.</
 (the predecessors to what has become neural networks) until Marvin Minsky and
 Seymour Papert addressed it by applying composition to the model. In a similar
 vein to the NALU paper, the value added is the proposition of a new architecture
-since single-layer perceptrons are inherently linear, there's no way to solve
+since single-layer perceptrons are inherently linear, there&rsquo;s no way to solve
 XOR without a multiple layers.</p>
 <p>To ensure that we can rely upon neural networks (which are being increasingly
 used in critical applications) to act sensibly in non-trivial difficult
@@ -155,7 +155,7 @@ network through architecting it in a way that exploits that aspect for early
 approaches.</p>
 <p>In summary, the direct goals of this article are to:</p>
 <ul>
-<li>Introduce DeepMind's NALU architecture</li>
+<li>Introduce DeepMind&rsquo;s NALU architecture</li>
 <li>Outline an implementation (using PyTorch)</li>
 <li>Address some of the drawbacks of the approach</li>
 </ul>
@@ -172,7 +172,7 @@ initialisation</a>). Also during the training process, we might use some form of
 regularisation to encourage the weights to stay small and prevent us from
 falling into solutions that fit our data but clearly are not solutions to the
 underlying problem.</p>
-<p>Recall that when we do matrix multiplication, we're taking a linear combination
+<p>Recall that when we do matrix multiplication, we&rsquo;re taking a linear combination
 of the elements in the input vector with coefficients according to each row in
 \(\mathbf{W}\). If we know that the values in the output vector are just sums or
 differences of elements in the input vector (i.e. if we know the problem is just
@@ -237,10 +237,10 @@ linear layer.</p>
 <p>\[ \log (a \times b) = \log a + \log b \]</p>
 <p>Although it was much before my time, this used to be heavily exploited for
 any kind of multiplication and division prior to computers reaching the masses
-by using <a href="https://www.hpmuseum.org/sliderul.htm">slide rules</a>. NALU's exploit this exact same identity. We've established
+by using <a href="https://www.hpmuseum.org/sliderul.htm">slide rules</a>. NALU&rsquo;s exploit this exact same identity. We&rsquo;ve established
 a method for addition and subtraction, so now we repeat this process just in the
 log-space.</p>
-<p>We'll call the output of the regular NAC \(a\) and the output of the NAC that
+<p>We&rsquo;ll call the output of the regular NAC \(a\) and the output of the NAC that
 operates in log-space \(m\). From before, \(a\) is the simple product</p>
 <p>\[ a = \mathbf{W} x \]</p>
 <p>where \(\mathbf{W}\) is the same weight matrix as discussed before. For \(m\), we
@@ -248,7 +248,7 @@ take the log of our input vector, multiply by the weight matrix and take the
 exponent to return to level-space.</p>
 <p>\[ \tilde{m} = \exp ( \mathbf{W} \log (x) ) \]</p>
 <p>One issue we quickly find is that since we have no bounds on the elements of
-\(x\), we can't guarantee they are positive values. Therefore instead of
+\(x\), we can&rsquo;t guarantee they are positive values. Therefore instead of
 \(\tilde{m}\) we use,</p>
 <p>\[ m = \exp ( \mathbf{W} \log (|x| + \epsilon) ) \]</p>
 <p>where \(|x|\) is the vector containing the absolute value of each element of \(x\)
@@ -268,10 +268,10 @@ from the layer might include some elements that are produced from
 addition/subtraction and some that are produced from multiplication/division.</p>
 </blockquote>
 <h2 id="how-do-we-implement-the-layers">How do we implement the layers?</h2>
-<p>Now that we've established the structure of the network, the implementation is
-relatively straightforward. We'll use PyTorch in this example but TensorFlow or
-any other similar library will work just fine. We'll start with a NAC. First
-let's look at the code and walk through it afterwards.</p>
+<p>Now that we&rsquo;ve established the structure of the network, the implementation is
+relatively straightforward. We&rsquo;ll use PyTorch in this example but TensorFlow or
+any other similar library will work just fine. We&rsquo;ll start with a NAC. First
+let&rsquo;s look at the code and walk through it afterwards.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> torch
 <span style="color:#f92672">import</span> torch.nn <span style="color:#f92672">as</span> nn
 
@@ -294,10 +294,10 @@ and when evaluating an input we compute the matrix \(\mathbf{W}\) using the
 formula discussed previously and compute the matrix product with the input
 vector \(x\). Note that the <code>@</code> operator in python is syntactic sugar for matrix
 multiplication in common libraries (PyTorch, Numpy, TensorFlow, etc).</p>
-<p>That's really all there is. PyTorch makes it quite easy to compose layers
+<p>That&rsquo;s really all there is. PyTorch makes it quite easy to compose layers
 together, so we construct the NALU by building on from the NAC.</p>
 <p>In this instance we deviate slightly from the design of the NALU in the original
-paper. Here we'll create two separate NAC's: one for the level space and one for
+paper. Here we&rsquo;ll create two separate NAC&rsquo;s: one for the level space and one for
 the log space. In contrast, the original paper depicts the weights for each
 space as being shared.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NeuralArithmeticLogicUnit</span>(torch<span style="color:#f92672">.</span>nn<span style="color:#f92672">.</span>Module):
@@ -316,21 +316,21 @@ space as being shared.</p>
         g <span style="color:#f92672">=</span> x <span style="color:#960050;background-color:#1e0010">@</span> self<span style="color:#f92672">.</span>G
         <span style="color:#66d9ef">return</span> g <span style="color:#f92672">*</span> a <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> g) <span style="color:#f92672">*</span> m
 </code></pre></div><p>Again this is already very close to just writing the formulas from the previous
-sections. In this case we've chosen to set \(\epsilon=10^{-7}\). This is arbitrary
-and shouldn't matter too much (any sufficiently small number will do just fine).</p>
+sections. In this case we&rsquo;ve chosen to set \(\epsilon=10^{-7}\). This is arbitrary
+and shouldn&rsquo;t matter too much (any sufficiently small number will do just fine).</p>
 <p>One section that should be examined closer is the calculation of the weighted
 product between \(a\) and \(m\).</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">        <span style="color:#66d9ef">return</span> g <span style="color:#f92672">*</span> a <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> g) <span style="color:#f92672">*</span> m
 </code></pre></div><p>Suppose the output dimension is 5. Then the shape of \(g\) is <code>torch.Size([5])</code>
 while the shape of \(a\) and \(m\) are <code>torch.Size([?, 5])</code>. Commonly we use <code>?</code> to
 denote the mini-batch dimension. Therefore we cannot take the elementwise
-product since \(g\) doesn't match the shape of either \(a\) nor \(m\). What is
+product since \(g\) doesn&rsquo;t match the shape of either \(a\) nor \(m\). What is
 happening here is we are <em>broadcasting</em> the product across the first dimension.
 That is we take the element-wise product along each step in first dimension.</p>
 <h2 id="mystery-arithmetic-problem">Mystery arithmetic problem</h2>
 <p>To do complete a further investigation, we need a test problem to apply the
-network to. We'll use something similar to one of the examples in the paper
-which we'll call the &ldquo;mystery arithmetic problem&rdquo;.</p>
+network to. We&rsquo;ll use something similar to one of the examples in the paper
+which we&rsquo;ll call the &ldquo;mystery arithmetic problem&rdquo;.</p>
 <p>In this problem suppose we have \(n\) inputs and \(m\) outputs. Each output is
 randomly associated with two of the inputs and one of the four binary arithmetic
 operators. For example one instance of the problem might be described as the
@@ -376,8 +376,12 @@ input vector given a configuration.</p>
         configuration<span style="color:#f92672">.</span>append((i, j, o))
 
     <span style="color:#66d9ef">return</span> configuration
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_minibatch_solution</span>(minibatch, configuration):
+</code></pre></div><p>As a small note, we will omit division problems from the training and test sets
+used in the rest of the article to stablise some of the training (since we use
+the same interval that includes numbers very close to zero). In the paper they
+test each of these operations separately but here we generate a combination of
+them in a single instance of the problem.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_minibatch_solution</span>(minibatch, configuration):
     <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
 </span><span style="color:#e6db74"></span><span style="color:#e6db74">    Given a configuration and minibatch (as a (batch_size, in_dim) shaped numpy</span><span style="color:#e6db74">
 </span><span style="color:#e6db74"></span><span style="color:#e6db74">    array) inefficiently computes the solution to the mystery arithmetic problem.</span><span style="color:#e6db74">
@@ -410,20 +414,21 @@ problem using the true configuration is not intended to be at all efficient or
 fast. There is likely a better way to represent the configuration that would
 allow for vectorisation.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">in_dimension <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
-out_dimension <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+out_dimension <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
 
-training_set_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
-test_set_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2000</span>
+training_set_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+test_set_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
 
 conf <span style="color:#f92672">=</span> generate_configuration(in_dimension, out_dimension)
 
 X_train <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, (training_set_size, in_dimension))
 y_train <span style="color:#f92672">=</span> compute_minibatch_solution(X_train, conf)
-
-X_test <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, (test_set_size, in_dimension))
+</code></pre></div><p>We will use a wider range for the values of the test set, the interval \([-50, 50]\)
+in order to expose any networks that have overfit the smaller interval.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">X_test <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>, (test_set_size, in_dimension))
 y_test <span style="color:#f92672">=</span> compute_minibatch_solution(X_test, conf)
 </code></pre></div><h2 id="performance-evaluation">Performance evaluation</h2>
-<p>Let's compare the performance against a vanilla dense network with ReLU
+<p>Let&rsquo;s compare the performance against a vanilla dense network with ReLU
 activation.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#f92672">as</span> F
 
@@ -434,54 +439,98 @@ activation.</p>
 
     <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
         <span style="color:#66d9ef">return</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc(x))
-</code></pre></div><p>We'll now train using the following methodology:</p>
+</code></pre></div><p>We&rsquo;ll now train using the following methodology:</p>
 <ul>
-<li>250 epochs with a batchs size of 32</li>
+<li>250 epochs with a batch size of 32</li>
 <li>Adam with a learning rate of 0.001</li>
 <li>MSE loss</li>
 </ul>
+<!-- raw HTML omitted -->
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> pandas <span style="color:#f92672">as</span> pd
 <span style="color:#f92672">from</span> torch.optim <span style="color:#f92672">import</span> Adam
 <span style="color:#f92672">from</span> torch.utils.data <span style="color:#f92672">import</span> TensorDataset, DataLoader
 
 n_epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">250</span>
 lr <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.001</span>
-batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">32</span>
+batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>
 
 train_dataset <span style="color:#f92672">=</span> TensorDataset(torch<span style="color:#f92672">.</span>from_numpy(X_train)<span style="color:#f92672">.</span>float(), torch<span style="color:#f92672">.</span>from_numpy(y_train)<span style="color:#f92672">.</span>float())
 train_loader <span style="color:#f92672">=</span> DataLoader(dataset<span style="color:#f92672">=</span>train_dataset, batch_size<span style="color:#f92672">=</span>batch_size)
+
+test_dataset <span style="color:#f92672">=</span> TensorDataset(torch<span style="color:#f92672">.</span>from_numpy(X_test)<span style="color:#f92672">.</span>float(), torch<span style="color:#f92672">.</span>from_numpy(y_test)<span style="color:#f92672">.</span>float())
+test_loader <span style="color:#f92672">=</span> DataLoader(dataset<span style="color:#f92672">=</span>test_dataset, batch_size<span style="color:#f92672">=</span>batch_size)
 
 networks <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">vanilla</span><span style="color:#e6db74">&#39;</span>: VanillaNetwork(in_dimension, out_dimension),
             <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">nac</span><span style="color:#e6db74">&#39;</span>: NeuralAccumulator(in_dimension, out_dimension),
             <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">nalu</span><span style="color:#e6db74">&#39;</span>: NeuralArithmeticLogicUnit(in_dimension, out_dimension)}
 
-all_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
+training_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
+test_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
 
 <span style="color:#66d9ef">for</span> net_name, net <span style="color:#f92672">in</span> networks<span style="color:#f92672">.</span>items():
     <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Beginning training for {net_name}</span><span style="color:#e6db74">&#39;</span>)
     optimizer <span style="color:#f92672">=</span> Adam(net<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span>lr)
-    loss_history <span style="color:#f92672">=</span> []
+    train_loss_history <span style="color:#f92672">=</span> []
+    test_loss_history <span style="color:#f92672">=</span> []
 
     <span style="color:#66d9ef">for</span> n_epoch <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, n_epochs<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>):
+        train_losses <span style="color:#f92672">=</span> []
+        test_losses <span style="color:#f92672">=</span> []
+
         <span style="color:#66d9ef">for</span> x_batch, y_batch <span style="color:#f92672">in</span> train_loader:
             loss <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>mse_loss(net(x_batch), y_batch)
             optimizer<span style="color:#f92672">.</span>zero_grad()
             loss<span style="color:#f92672">.</span>backward()
             optimizer<span style="color:#f92672">.</span>step()
+            train_losses<span style="color:#f92672">.</span>append(loss<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>item())
+
+        <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+            <span style="color:#66d9ef">for</span> x_batch, y_batch <span style="color:#f92672">in</span> test_loader:
+                loss <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>mse_loss(net(x_batch), y_batch)
+                test_losses<span style="color:#f92672">.</span>append(loss<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>item())
 
         <span style="color:#66d9ef">if</span> n_epoch <span style="color:#f92672">%</span> <span style="color:#ae81ff">50</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Epoch {n_epoch} MSE = {loss.detach():.4f}</span><span style="color:#e6db74">&#39;</span>)
-        loss_history<span style="color:#f92672">.</span>append(loss<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>item())
+            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Epoch {n_epoch}, MSE = {loss.detach():.4f}</span><span style="color:#e6db74">&#39;</span>)
 
-    all_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([all_loss, pd<span style="color:#f92672">.</span>DataFrame({net_name: loss_history})], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+        train_loss_history<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_losses))
+        test_loss_history<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_losses))
 
-all_loss[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
-</code></pre></div><p>And we can look at the results of the training.</p>
-<figure>
-    <img src="./loss-history.png"/> 
+    training_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([training_loss, pd<span style="color:#f92672">.</span>DataFrame({net_name: train_loss_history})], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+    test_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([test_loss, pd<span style="color:#f92672">.</span>DataFrame({net_name: test_loss_history})], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+
+training_loss[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+test_loss[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</code></pre></div><p>And we can look at loss curve for the training set.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
+
+melted_loss <span style="color:#f92672">=</span> training_loss<span style="color:#f92672">.</span>melt(id_vars<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>,
+                                 value_name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">MSE Loss</span><span style="color:#e6db74">&#39;</span>,
+                                 var_name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Architecture</span><span style="color:#e6db74">&#39;</span>)
+
+sns<span style="color:#f92672">.</span>relplot(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">MSE Loss</span><span style="color:#e6db74">&#39;</span>,
+            hue<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Architecture</span><span style="color:#e6db74">&#39;</span>, kind<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">line</span><span style="color:#e6db74">&#39;</span>,
+            height<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, aspect<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span><span style="color:#f92672">/</span><span style="color:#ae81ff">5</span>,
+            data<span style="color:#f92672">=</span>melted_loss);
+</code></pre></div><figure>
+    <img src="./train_loss_hist.png"/> 
 </figure>
 
-<p>We can see that the NALU dominates both the Vanilla and NAC networks, as expected.</p>
+<p>We can see that the NALU dominates both the Vanilla and NAC networks, as
+expected. The NAC befores better than the Vanilla architecture (since it is able
+to solve both the addition and subtraction cases perfectly) but cannot fit the
+multiplication and division cases.</p>
+<p>Let&rsquo;s also check the test loss curve to ensure we have not overfit or had any
+strange abberations in our training loss.</p>
+<figure>
+    <img src="./test_loss_hist.png"/> 
+</figure>
+
+<p>We see no significant change for the performance of the NALU. It indeed looks to
+have come close to the exact solution (but it not quite as we will see in the
+next section). In contrast, the NAC and Vanilla networks have swapped places,
+with the NAC appearing to have overfit slightly. If we looked closer we might
+expect to see most of this loss coming from the parts of the vector that are
+products rather than addition or subtraction.</p>
 <h2 id="caveats">Caveats</h2>
 <p>When we compute the sum/difference in the log space, we are forced to throw away
 the sign of the elements in the vector in order to take the log. This restricts
@@ -505,6 +554,25 @@ Neural arithmetic logic units. In Advances in Neural Information Processing
 Systems (pp. 8035-8044).</p>
 <p>Xavier and He Normal (He-et-al) Initialization, mc.ai retrieved on January
 5th 2020.</p>
+<h2 id="changelog">Changelog</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>January 14th 2020</td>
+<td>Published original version</td>
+</tr>
+<tr>
+<td>January 28th 2020</td>
+<td>Cleaned up training and test loss graphs</td>
+</tr>
+</tbody>
+</table>
 
 </div>
 

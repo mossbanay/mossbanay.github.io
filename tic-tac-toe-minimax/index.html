@@ -4,11 +4,11 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Playing Tic-tac-toe with minimax in Python &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction In this article we will explain the minimax algorithm. We&#39;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&#39;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
+        <meta name="description" content="Introduction In this article we will explain the minimax algorithm. We&rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
 Game trees For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.62.2" />
+        <meta name="generator" content="Hugo 0.63.1" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -135,10 +135,10 @@ if (!doNotTrack) {
     
 
     <h2 id="introduction">Introduction</h2>
-<p>In this article we will explain the minimax algorithm. We'll cover game trees, the minimax algorithm itself and a simple implementation in Python. We'll also review some popular extensions that speed up or improve upon the actions taken by minimax.</p>
+<p>In this article we will explain the minimax algorithm. We&rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.</p>
 <h2 id="game-trees">Game trees</h2>
 <p>For games with perfect information, we can model the entire play-space using a directed graph called <em>game tree</em>. A game tree simply illustrates all possible ways in which a game may play out. Each node described a particular state in the game, and it has one child node for each possible action that might occur from that state. To generate a game tree, we need only the rules of the game as inputs.</p>
-<p>Let's use the game of tic-tac-toe as an example. We have two players O and X. For the sake of explanation let us say that player O goes first. The initial state of the game then looks like this.</p>
+<p>Let&rsquo;s use the game of tic-tac-toe as an example. We have two players O and X. For the sake of explanation let us say that player O goes first. The initial state of the game then looks like this.</p>
 <figure>
     <img src="./game_tree_example.png"/> 
 </figure>
@@ -172,8 +172,8 @@ if (!doNotTrack) {
     <img src="./GT_III.png"/> 
 </figure>
 
-<p>We can generalise this process as an alternation between <strong>maximising</strong> (turns that the Hero plays) and <strong>minimising</strong> (turns that the Villian plays). Under the assumption that the outcomes for the Hero and Villian are negated, we can simplify the tree to just show the Hero's outcome at the root.</p>
-<p>Here's the above game with the simplified tree.</p>
+<p>We can generalise this process as an alternation between <strong>maximising</strong> (turns that the Hero plays) and <strong>minimising</strong> (turns that the Villian plays). Under the assumption that the outcomes for the Hero and Villian are negated, we can simplify the tree to just show the Hero&rsquo;s outcome at the root.</p>
+<p>Here&rsquo;s the above game with the simplified tree.</p>
 <figure>
     <img src="./GT_IV.png"/> 
 </figure>
@@ -301,7 +301,7 @@ if (!doNotTrack) {
 
 <p>After looking at the path of the hero playing &ldquo;Right&rdquo; and the villian playing &ldquo;Left&rdquo; we find that the outcome was 1. Now we can see that the villian can score 1 and since it acts as a minimiser, the minimax value for that state will be less than or equal to 1. Therefore it is always less than the 5 in the other villian node reached when the hero plays &ldquo;Left&rdquo;. Therefore we do not need to traverse the subtree for when both players play &ldquo;Right&rdquo; since we know the hero will never play &ldquo;Right&rdquo;.</p>
 <p>More detail on alpha-beta pruning can be found in the <a href="https://inst.eecs.berkeley.edu/~cs188/fa18/">CS188 slides</a>.</p>
-<p>Recall that so far we have restricted our discussion of minimax to games in which the hero and villian are in direct opposition (i.e. the reward for one is the loss for the other). Suppose instead instead that this is not the case, and the opponent's reward may be completely unrelated to the hero's reward. Instead we model the decision of the villian as a discrete probability distribution over the actions avaliable to them in a particular state. Note that for the adverserial games discussed above the discrete probability distribution places all the probability mass on a single option (since we model the villian as playing optimally). In this generalisation called <em>expectimax</em> we choose the option that maximises the <em>expected reward</em> for the hero, rather than the worst reward.</p>
+<p>Recall that so far we have restricted our discussion of minimax to games in which the hero and villian are in direct opposition (i.e. the reward for one is the loss for the other). Suppose instead instead that this is not the case, and the opponent&rsquo;s reward may be completely unrelated to the hero&rsquo;s reward. Instead we model the decision of the villian as a discrete probability distribution over the actions avaliable to them in a particular state. Note that for the adverserial games discussed above the discrete probability distribution places all the probability mass on a single option (since we model the villian as playing optimally). In this generalisation called <em>expectimax</em> we choose the option that maximises the <em>expected reward</em> for the hero, rather than the worst reward.</p>
 <p>Concretely suppose that the hero has a set of actions available to them \(\mathcal{A}_H = \{a_h^1, \ldots, a_h^k\}\). For each action \(a_h^i\) the hero makes, the villians response is modelled by the random variable \(\mathcal{A}_V^i = \{a_V^{i,1}, \ldots, a_V^{i,n}\}\) and let \(V\) be a function that gives the value of the villians response.</p>
 <p>\[ \pi(S) = \underset{a_h^i \in \mathcal{A}_H}{\text{arg max}} ,, \mathbb{E}[V(\mathcal{A}_V^i)] \]</p>
 <p>With an example, suppose we have the following game tree.</p>

@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Tue, 14 Jan 2020 17:46:00 +1100</lastBuildDate>
+    <lastBuildDate>Sat, 14 Mar 2020 18:18:00 +0100</lastBuildDate>
     
 	<atom:link href="https://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Websockets with Elm using ports</title>
+      <link>https://banay.me/websockets-in-elm/</link>
+      <pubDate>Sat, 14 Mar 2020 18:18:00 +0100</pubDate>
+      
+      <guid>https://banay.me/websockets-in-elm/</guid>
+      <description>Introduction Recently I came across the need for an easy UI to display information coming from a websocket. A niche option but one I&amp;rsquo;ve had a pleasant experience with previously is Elm, a functional language designed specifically for web applications.
+Previously, the standard approach for connecting to a websocket was through the elm/websocket package, has been recently broken after some of the recent changes to the Elm language. In the mean time while the package and others are being updated, there&amp;rsquo;s a simple workaround by using another Elm feature called ports which allow for interop with JavaScript code.</description>
+    </item>
     
     <item>
       <title>Let&#39;s write a Neural Arithmetic Logic Unit</title>
@@ -45,7 +55,7 @@ What are autoregressive time series? An auto-regressive time series is a stochas
     <item>
       <title>Hyperparameter selection with T-tests</title>
       <link>https://banay.me/hyperparameter-t-test/</link>
-      <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
+      <pubDate>Sun, 11 Nov 2018 19:14:00 +0100</pubDate>
       
       <guid>https://banay.me/hyperparameter-t-test/</guid>
       <description>Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.</description>

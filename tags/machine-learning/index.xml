@@ -35,7 +35,7 @@ Game trees For games with perfect information, we can model the entire play-spac
     <item>
       <title>Hyperparameter selection with T-tests</title>
       <link>https://banay.me/hyperparameter-t-test/</link>
-      <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
+      <pubDate>Sun, 11 Nov 2018 19:14:00 +0100</pubDate>
       
       <guid>https://banay.me/hyperparameter-t-test/</guid>
       <description>Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.</description>

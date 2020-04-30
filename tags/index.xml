@@ -7,10 +7,37 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Sat, 14 Mar 2020 18:18:00 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 30 Apr 2020 16:36:00 +1000</lastBuildDate>
     
 	<atom:link href="https://banay.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>machine-learning</title>
+      <link>https://banay.me/tags/machine-learning/</link>
+      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
+      
+      <guid>https://banay.me/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://banay.me/tags/r/</link>
+      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
+      
+      <guid>https://banay.me/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reinforcement-learning</title>
+      <link>https://banay.me/tags/reinforcement-learning/</link>
+      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
+      
+      <guid>https://banay.me/tags/reinforcement-learning/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>elm</title>
@@ -18,15 +45,6 @@
       <pubDate>Sat, 14 Mar 2020 18:18:00 +0100</pubDate>
       
       <guid>https://banay.me/tags/elm/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>machine-learning</title>
-      <link>https://banay.me/tags/machine-learning/</link>
-      <pubDate>Tue, 14 Jan 2020 17:46:00 +1100</pubDate>
-      
-      <guid>https://banay.me/tags/machine-learning/</guid>
       <description></description>
     </item>
     
@@ -45,15 +63,6 @@
       <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
       
       <guid>https://banay.me/tags/econometrics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>https://banay.me/tags/r/</link>
-      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
-      
-      <guid>https://banay.me/tags/r/</guid>
       <description></description>
     </item>
     

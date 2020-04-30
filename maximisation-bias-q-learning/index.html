@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>(Double) Q-learning and maximisation bias &middot; Moss Ebeling</title>
+        <meta name="description" content="Introduction In this article we&rsquo;ll review Q-learning and walk through a subtle improvement that leads to Double Q-learning and better policies. We&rsquo;ll then look at this in action, and compare the two methods on a toy problem.
+Reinforcement learning refresher In this article I assume a familiarity with reinforcement learning and the standard Q-learning algorithm. In this section I&rsquo;ll provide a brief review of the basic terminology, which you can feel free to skip if you&rsquo;re comfortable in doing so.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.69.2" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script>
+  (function() {
+      var script = document.createElement('script');
+      window.counter = 'https://banay_me.goatcounter.com/count'
+      script.async = 1;
+      script.src = '//gc.zgo.at/count.js';
+
+      var ins = document.getElementsByTagName('script')[0];
+      ins.parentNode.insertBefore(script, ins)
+  })();
+</script>
+
+
+        
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-110997704-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">(Double) Q-learning and maximisation bias</h1>
+    
+    <p class="post-date">
+        <span>Published <time datetime="2020-04-30" itemprop="datePublished">Thu, Apr 30, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">[Mossimo Ebeling]</a>
+            </span>
+        </span>
+    </p>
+    
+        <p class="post-reading post-line">
+            <span>Estimated reading time: 8 min</span>
+        </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>In this article we&rsquo;ll review Q-learning and walk through a subtle improvement
+that leads to Double Q-learning and better policies. We&rsquo;ll then look at this in
+action, and compare the two methods on a toy problem.</p>
+<h2 id="reinforcement-learning-refresher">Reinforcement learning refresher</h2>
+<p>In this article I assume a familiarity with reinforcement learning and the
+standard Q-learning algorithm. In this section I&rsquo;ll provide a brief review of
+the basic terminology, which you can feel free to skip if you&rsquo;re comfortable in
+doing so.</p>
+<p>Reinforcement learning is a field of machine learning that has risen in
+popularity particularly over the last 10 years riding on the achivements in
+areas like computer Go and computational chemistry. There are a few core
+elements in the field.</p>
+<p>The <strong>environment</strong> is a model or representation of the current state of the
+world. In this article you can assume it is discrete and fully observable
+(although in partial information games like poker, this is not the case). The
+<strong>agent</strong> follows a <strong>policy</strong> which maps each state to an action the agent makes
+when interacting with the environment. This action then produces a new
+observation representing the new state of the environment and a scalar <strong>reward</strong>.</p>
+<p>The goal of reinforcement learning is to find a policy for the agent that
+maximises the cumulative rewards emitted from the environment. <strong>Q-learning</strong> is
+one particular approach that estimates a policy without requiring perfect
+knowledge of the dynamics of the environment (e.g. the probability transition
+matrix of an <a href="https://en.wikipedia.org/wiki/Markov%5Fdecision%5Fprocess">MDP</a>).</p>
+<h2 id="q-learning-algorithm-refresher">Q-learning algorithm refresher</h2>
+<p>Q-learning generates a policy using a table of bootstrapped &ldquo;q-values&rdquo; that
+correspond to the <em>quality</em> of an action. Concretely, they are a mapping from a
+state \(s\) and action \(a\) to a scalar. If \(S\) is the set of states and \(A\) the
+set of actions then,</p>
+<p>\[ Q : S \times A \to \mathbb{R} \]</p>
+<p>The <em>optimal</em> q-value function, denoted \(Q^*\), satisfies something called the
+<a href="https://en.wikipedia.org/wiki/Bellman%5Fequation">Bellman equation</a> and implies that \(Q^*(s,a)\) is equal to the expected future
+rewards if the agent plays \(a\) in \(s\). If we know \(Q^*\) then the trivial policy
+derived from it is to choose \(a\) that maximises \(Q(s,a)\) given our current state
+\(s\). We commonly denote a policy with \(\pi\).</p>
+<p>\[ \pi^* : S \to A \]
+\[ \pi^*(s) = \underset{a}{\text{arg max }} Q^*(s, a) \]</p>
+<p>If we assume there are a finite number of states and a finite number of actions
+then \(S\) and \(A\) are finite sets. This means we can think of \(Q\) as a lookup
+table. The issue now is that we don&rsquo;t know \(Q^*\) and have to estimate it over
+time as we observe rewards and transitions between states as the agent makes
+actions. At time \(t\) the estimated q-value function is denoted \(Q_t\) and the
+corresponding policy \(\pi_t\).</p>
+<p>Q-learning iteratively improves \(Q_t\) using the following update equation
+applied with a new transition from \(s\) to \(s^{\prime}\) after the agent took an action
+\(a\) leading to a reward of \(r\).</p>
+<p>\[ Q_{t+1}(s, a) := Q_t(s, a) + \alpha \left ( r + \gamma \thinspace \underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime}) - Q_t(s, a) \right ) \]</p>
+<p>Where \(\alpha \in (0, 1]\) is a scalar learning rate and \(\gamma \in [0,1]\) is a
+scalar discount factor (you don&rsquo;t need to worry too much about either of these).
+This looks a little scary but really it&rsquo;s just linear interpolation between our
+old estimate \(Q_t(s, a)\) and our new estimate \(r + \gamma \thinspace
+\underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime})\). We can
+rewrite the update equation like so,</p>
+<p>\[ Q_{t+1}(s, a) := (1 - \alpha) \thinspace Q_t(s, a) + \alpha \left ( r + \gamma \thinspace \underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime}) \right) \]</p>
+<p>to illustrate this point. The greater \(\alpha\) is, the more weight we put on our
+new estimate of the q-value. It is shown by <!-- raw HTML omitted -->(Jaakkola et al., 1994)<!-- raw HTML omitted --> that if
+we allow \(\alpha\) to vary over time and approach 0 then \(Q_t\) will converge to
+\(Q^*\) (great!).</p>
+<h2 id="a-closer-look-at-our-estimator">A closer look at our estimator</h2>
+<p>Until now we&rsquo;ve looked at the problem from a specific and applied point of view.
+Let&rsquo;s now take a step back and look at a particular part of the update equation
+and see if we can improve upon it.</p>
+<p>We&rsquo;ve already stated that our current estimate with the new transition is given
+by</p>
+<p>\[ r + \gamma \thinspace \underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime}) \]</p>
+<p>This expression tells us that we&rsquo;re moving \(Q_{t+1}(s, a)\) towards the reward we
+just received \(r\) plus the expected cumulative rewards in the future. It&rsquo;s
+important to distinguish between the estimator and the parameter of the latter
+part. The value we&rsquo;re trying to estimate is</p>
+<p>\[ \underset{a^{\prime}}{\text{max }} Q^*(s^{\prime}, a^{\prime}) \]</p>
+<p>and the estimator we&rsquo;re using is</p>
+<p>\[ \underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime}) \]</p>
+<p>A more general formulation of this problem is given a set of \(k\) random
+variables \(X = \{X_1, \ldots, X_n\}\) find the maximum expected value of the
+random variables. The issue here is that the <em>choice of the estimator</em> used in
+Q-learning is <em>tied to the value</em> of the estimator. Estimators with unusually
+large values at time \(t\) are chosen more frequently, and this leads to an
+exaggeration of the true value of the next state. Therefore we end up being
+optimistic, which we&rsquo;ll later see can lead to worse policies before convergence
+to \(Q^*\). This issue is called <strong>maximisation bias</strong>.</p>
+<p>A key contribution by <!-- raw HTML omitted -->(Hasselt, 2010)<!-- raw HTML omitted --> seeks to address this issue by
+decoupling the estimator from its value. Instead of maintaining a single
+estimate of \(Q_t(s, a)\) we separate the samples we collect into two distinct
+subsets and use them to produce two different estimators (tables of q-values).
+To estimate the future value of a state, we choose the best action (just as with
+regular Q-learning) using one of the tables, but instead we use the
+corresponding q-value <em>in the other table</em>. This approach is called <strong>Double
+Q-learning</strong>, for obvious reasons. For example suppose our q-value estimates for
+a particular state \(s\) are given as follows.</p>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>\(Q_t^1(s, a)\)</th>
+<th>\(Q_t^2(s, a)\)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\(a_1\)</td>
+<td>-4.9</td>
+<td>-2.3</td>
+</tr>
+<tr>
+<td>\(a_2\)</td>
+<td>2.3</td>
+<td>4.3</td>
+</tr>
+<tr>
+<td>\(a_3\)</td>
+<td>4.0</td>
+<td>3.5</td>
+</tr>
+</tbody>
+</table>
+<p>With regular Q-learning we choose the action with the highest q-value and use
+that q-value as the estimate of the value. Here if we use \(Q_t^1(s, a)\) that
+gives us \(a_3\) for an estimated value of 4.0. With Double Q-learning we still
+select \(a_3\) but we use the value from \(Q_t^2(s, a)\) giving us an estimate of
+3.5.</p>
+<p>It can be shown that this is <em>also</em> a biased estimator, but with a negative
+bias rather than a positive bias as with regular Q-learning.</p>
+<h2 id="illustration-of-maximisation-bias">Illustration of maximisation bias</h2>
+<p>We will use the example given in <!-- raw HTML omitted -->(Sutton &amp; Barto, 2018)<!-- raw HTML omitted --> under section 6.7.
+Suppose we have a MDP like the following.</p>
+<figure>
+    <img src="./bandits_graph.png" width="500px"/> 
+</figure>
+
+<p>When we start the game we have two options avaliable to us. If we play <code>Right</code>
+the game immediately ends and we receive a reward of 0. If we play <code>Left</code> we
+move to another state <code>Gamble</code> and receive a reward of 0. From <code>Gamble</code> we can
+choose one of \(k\) different actions. Upon selecting one of these actions the
+game ends and we receive a random reward drawn from a \(\mathcal{N}(-0.1, 1)\)
+distribution.</p>
+<p>It&rsquo;s important to remember that we learn our policy without knowing the
+structure of this MDP (otherwise we already know to always choose <code>Right</code>).</p>
+<p>Let&rsquo;s compare the policies learnt with Q-learning and Double Q-learning when
+playing in this environment. Below we post the percentage of time the algorithm
+chooses to take <code>Left</code> from the initial state. The optimal policy plays <code>Left</code>
+5% of the time due to detail in our training process <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. The curve
+is created by repeating the training process from scratch many times to smooth
+it out. Below is the graph for \(k=4\).</p>
+<figure>
+    <img src="./qlearn_behaviour.png" width="500px"/> 
+</figure>
+
+<p>Given our initial estimates of the q-values we are indifferent to either <code>Left</code>
+or <code>Right</code> so we take <code>Left</code> about half the time. Soon after, Q-learning begins
+to take <code>Left</code> much more frequently. This is usually caused by being lucky on
+one of the \(k\) actions from the <code>Gamble</code> state, causing our q-value to be
+positive and therefore greater than the value of taking <code>Right</code>. Over time as we
+collect more samples our estimate gradually begins to reflect the actual reward
+distribution which has a mean of -0.1.</p>
+<p>In contrast, we see that Double Q-learning very quickly adjusts and is not
+affected by any lucky draws from actions taken in the <code>Gamble</code> state. Double
+Q-learning performs much better in this game, and empirically this has been the
+recurring theme across many games. Even though both methods converge to \(Q^*\)
+the policies <em>in the meantime</em> tend to be better in most games when being
+pessimistic. This is particularly remarkable since when Double Q-learning splits
+the samples into two groups, the variance of the estimators grows. This means it
+has lower sample efficiency, but despite this, removing the optimism from
+Q-learning still usually outweighs this disadvantage.</p>
+<h2 id="review">Review</h2>
+<p>We have reviewed the basic Q-learning algorithm as an approach to reinforcement
+learning. We saw that you can view the update equation as simple linear
+interpolation between the existing estimate and a new observation of the
+q-value. We looked at how you can improve the forward looking estimate of future
+cumulative reward, and how the estimator chosen for this quantity is tied to its
+value. This is addressed by Double Q-learning which we saw in the dummy problem
+tends to exhibit much better policies whilst maintaing the same convergence
+property towards the optimal q-value function \(Q^*\).</p>
+<h1 id="bibliography">Bibliography</h1>
+<p><!-- raw HTML omitted -->Jaakkola, T., Jordan, M. I., &amp; Singh, S. P., <em>Convergence of stochastic iterative dynamic programming algorithms</em>, In , Advances in neural information processing systems (pp. 703–710) (1994). : .<!-- raw HTML omitted --> <a href="#72f94ec385958aebe492937ba8824c54">↩</a></p>
+<p><!-- raw HTML omitted -->Hasselt, H. V., <em>Double q-learning</em>, In , Advances in neural information processing systems (pp. 2613–2621) (2010). : .<!-- raw HTML omitted --> <a href="#be0a72882f9620317f121403cf9c3438">↩</a></p>
+<p><!-- raw HTML omitted -->Sutton, R. S., &amp; Barto, A. G., <em>Reinforcement learning: an introduction</em> (2018), : MIT press.<!-- raw HTML omitted --> <a href="#62ea68c58cd19b9f34f70e09ca364abb">↩</a></p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>We use epsilon-greedy exploration while training for both algorithms with epsilon fixed at 90%. Therefore optimally <code>Right</code> is always choosen in the greedy step, and since <code>Left</code> is chosen 50% of the time in the explore step, an optimal policy plays <code>Left</code> 5% of the time. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/reinforcement-learning/">reinforcement-learning</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
+        <script src="https://banay.me/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="../../../../highlight.pack.js"></script>
+        
+        
+        <script src="https://banay.me/js/scripts.js"></script>
+    </body>
+</html>
+

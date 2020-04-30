@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Sat, 14 Mar 2020 18:18:00 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 30 Apr 2020 16:36:00 +1000</lastBuildDate>
     
 	<atom:link href="https://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>(Double) Q-learning and maximisation bias</title>
+      <link>https://banay.me/maximisation-bias-q-learning/</link>
+      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
+      
+      <guid>https://banay.me/maximisation-bias-q-learning/</guid>
+      <description>Introduction In this article we&amp;rsquo;ll review Q-learning and walk through a subtle improvement that leads to Double Q-learning and better policies. We&amp;rsquo;ll then look at this in action, and compare the two methods on a toy problem.
+Reinforcement learning refresher In this article I assume a familiarity with reinforcement learning and the standard Q-learning algorithm. In this section I&amp;rsquo;ll provide a brief review of the basic terminology, which you can feel free to skip if you&amp;rsquo;re comfortable in doing so.</description>
+    </item>
     
     <item>
       <title>Websockets with Elm using ports</title>

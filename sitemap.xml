@@ -3,22 +3,42 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://banay.me/tags/elm/</loc>
-    <lastmod>2020-03-14T18:18:00+01:00</lastmod>
+    <loc>https://banay.me/maximisation-bias-q-learning/</loc>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/machine-learning/</loc>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://banay.me/</loc>
-    <lastmod>2020-03-14T18:18:00+01:00</lastmod>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://banay.me/post/</loc>
-    <lastmod>2020-03-14T18:18:00+01:00</lastmod>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/r/</loc>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/reinforcement-learning/</loc>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://banay.me/tags/</loc>
+    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/elm/</loc>
     <lastmod>2020-03-14T18:18:00+01:00</lastmod>
   </url>
   
@@ -29,11 +49,6 @@
   
   <url>
     <loc>https://banay.me/nalu/</loc>
-    <lastmod>2020-01-14T17:46:00+11:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://banay.me/tags/machine-learning/</loc>
     <lastmod>2020-01-14T17:46:00+11:00</lastmod>
   </url>
   
@@ -54,11 +69,6 @@
   
   <url>
     <loc>https://banay.me/tags/econometrics/</loc>
-    <lastmod>2019-02-26T11:48:00+11:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://banay.me/tags/r/</loc>
     <lastmod>2019-02-26T11:48:00+11:00</lastmod>
   </url>
   

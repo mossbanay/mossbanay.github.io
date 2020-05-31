@@ -3,12 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://banay.me/tags/crypto/</loc>
+    <lastmod>2020-05-31T19:51:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/finance/</loc>
+    <lastmod>2020-05-31T19:51:00+10:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://banay.me/</loc>
     <lastmod>2020-05-31T19:51:00+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://banay.me/post/</loc>
+    <lastmod>2020-05-31T19:51:00+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://banay.me/tags/</loc>
     <lastmod>2020-05-31T19:51:00+10:00</lastmod>
   </url>
   
@@ -29,11 +44,6 @@
   
   <url>
     <loc>https://banay.me/tags/reinforcement-learning/</loc>
-    <lastmod>2020-04-30T16:36:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://banay.me/tags/</loc>
     <lastmod>2020-04-30T16:36:00+10:00</lastmod>
   </url>
   

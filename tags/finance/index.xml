@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>finance on Moss&#39; blog</title>
+    <link>https://banay.me/tags/finance/</link>
+    <description>Recent content in finance on Moss&#39; blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Moss Ebeling</copyright>
+    <lastBuildDate>Sun, 31 May 2020 19:51:00 +1000</lastBuildDate>
+    
+	<atom:link href="https://banay.me/tags/finance/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Visualising XBTUSD orderbooks</title>
+      <link>https://banay.me/xbtusd-orderbook-vis/</link>
+      <pubDate>Sun, 31 May 2020 19:51:00 +1000</pubDate>
+      
+      <guid>https://banay.me/xbtusd-orderbook-vis/</guid>
+      <description>Introduction Orderbooks are tables that show the immediate and public supply and demand of instruments that trade on financial exchanges. They collate orders that specify the direction, price and volume at which a party wants to trade an instrument.
+I have collected several months of orderbook snapshots from the perpetual XBTUSD contract on the cryptocurrency derivatives exchange BitMEX. Here I want to show some simple visualisations that give more detail into the drivers of particular changes in price that are not observable with more common candlestick charts.</description>
+    </item>
+    
+  </channel>
+</rss>

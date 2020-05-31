@@ -8,7 +8,7 @@
 XOR was a famously difficult problem that stunted developments in perceptrons (the predecessors to what has become neural networks) until Marvin Minsky and Seymour Papert addressed it by applying composition to the model.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.69.2" />
+        <meta name="generator" content="Hugo 0.64.0" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -357,10 +357,10 @@ input vector given a configuration.</p>
     DIVIDE <span style="color:#f92672">=</span> auto()
 
 <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_configuration</span>(in_dim, out_dim):
-    <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">    Returns a list of length `out_dim` containing tuples in the form of (i, j, o)
-</span><span style="color:#e6db74">    where i and j are indices and o is an operation.
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Returns a list of length `out_dim` containing tuples in the form of (i, j, o)</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    where i and j are indices and o is an operation.</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    </span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 
     indices <span style="color:#f92672">=</span> range(in_dim)
     operations <span style="color:#f92672">=</span> [Operation<span style="color:#f92672">.</span>ADD,
@@ -382,10 +382,10 @@ the same interval that includes numbers very close to zero). In the paper they
 test each of these operations separately but here we generate a combination of
 them in a single instance of the problem.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_minibatch_solution</span>(minibatch, configuration):
-    <span style="color:#e6db74">&#34;&#34;&#34;
-</span><span style="color:#e6db74">    Given a configuration and minibatch (as a (batch_size, in_dim) shaped numpy
-</span><span style="color:#e6db74">    array) inefficiently computes the solution to the mystery arithmetic problem.
-</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    <span style="color:#e6db74"></span><span style="color:#e6db74">&#34;&#34;&#34;</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    Given a configuration and minibatch (as a (batch_size, in_dim) shaped numpy</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    array) inefficiently computes the solution to the mystery arithmetic problem.</span><span style="color:#e6db74">
+</span><span style="color:#e6db74"></span><span style="color:#e6db74">    </span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 
     minibatch_solution <span style="color:#f92672">=</span> []
 
@@ -402,7 +402,7 @@ them in a single instance of the problem.</p>
             <span style="color:#66d9ef">elif</span> o <span style="color:#f92672">==</span> Operation<span style="color:#f92672">.</span>DIVIDE:
                 x_soln<span style="color:#f92672">.</span>append(x[i] <span style="color:#f92672">/</span> x[j])
             <span style="color:#66d9ef">else</span>:
-                <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">TypeError</span>(f<span style="color:#e6db74">&#39;Unknown operation {o}&#39;</span>)
+                <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">TypeError</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Unknown operation {o}</span><span style="color:#e6db74">&#39;</span>)
 
         minibatch_solution<span style="color:#f92672">.</span>append(x_soln)
 
@@ -460,15 +460,15 @@ train_loader <span style="color:#f92672">=</span> DataLoader(dataset<span style=
 test_dataset <span style="color:#f92672">=</span> TensorDataset(torch<span style="color:#f92672">.</span>from_numpy(X_test)<span style="color:#f92672">.</span>float(), torch<span style="color:#f92672">.</span>from_numpy(y_test)<span style="color:#f92672">.</span>float())
 test_loader <span style="color:#f92672">=</span> DataLoader(dataset<span style="color:#f92672">=</span>test_dataset, batch_size<span style="color:#f92672">=</span>batch_size)
 
-networks <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;vanilla&#39;</span>: VanillaNetwork(in_dimension, out_dimension),
-            <span style="color:#e6db74">&#39;nac&#39;</span>: NeuralAccumulator(in_dimension, out_dimension),
-            <span style="color:#e6db74">&#39;nalu&#39;</span>: NeuralArithmeticLogicUnit(in_dimension, out_dimension)}
+networks <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">vanilla</span><span style="color:#e6db74">&#39;</span>: VanillaNetwork(in_dimension, out_dimension),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">nac</span><span style="color:#e6db74">&#39;</span>: NeuralAccumulator(in_dimension, out_dimension),
+            <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">nalu</span><span style="color:#e6db74">&#39;</span>: NeuralArithmeticLogicUnit(in_dimension, out_dimension)}
 
 training_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
 test_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame()
 
 <span style="color:#66d9ef">for</span> net_name, net <span style="color:#f92672">in</span> networks<span style="color:#f92672">.</span>items():
-    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Beginning training for {net_name}&#39;</span>)
+    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Beginning training for {net_name}</span><span style="color:#e6db74">&#39;</span>)
     optimizer <span style="color:#f92672">=</span> Adam(net<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span>lr)
     train_loss_history <span style="color:#f92672">=</span> []
     test_loss_history <span style="color:#f92672">=</span> []
@@ -490,7 +490,7 @@ test_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</
                 test_losses<span style="color:#f92672">.</span>append(loss<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>item())
 
         <span style="color:#66d9ef">if</span> n_epoch <span style="color:#f92672">%</span> <span style="color:#ae81ff">50</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
-            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Epoch {n_epoch}, MSE = {loss.detach():.4f}&#39;</span>)
+            <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Epoch {n_epoch}, MSE = {loss.detach():.4f}</span><span style="color:#e6db74">&#39;</span>)
 
         train_loss_history<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(train_losses))
         test_loss_history<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>mean(test_losses))
@@ -498,17 +498,17 @@ test_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</
     training_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([training_loss, pd<span style="color:#f92672">.</span>DataFrame({net_name: train_loss_history})], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
     test_loss <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>concat([test_loss, pd<span style="color:#f92672">.</span>DataFrame({net_name: test_loss_history})], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
 
-training_loss[<span style="color:#e6db74">&#39;epoch&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
-test_loss[<span style="color:#e6db74">&#39;epoch&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+training_loss[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+test_loss[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>arange(n_epochs) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
 </code></pre></div><p>And we can look at loss curve for the training set.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> seaborn <span style="color:#f92672">as</span> sns
 
-melted_loss <span style="color:#f92672">=</span> training_loss<span style="color:#f92672">.</span>melt(id_vars<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;epoch&#39;</span>,
-                                 value_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;MSE Loss&#39;</span>,
-                                 var_name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Architecture&#39;</span>)
+melted_loss <span style="color:#f92672">=</span> training_loss<span style="color:#f92672">.</span>melt(id_vars<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>,
+                                 value_name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">MSE Loss</span><span style="color:#e6db74">&#39;</span>,
+                                 var_name<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Architecture</span><span style="color:#e6db74">&#39;</span>)
 
-sns<span style="color:#f92672">.</span>relplot(x<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;epoch&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;MSE Loss&#39;</span>,
-            hue<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Architecture&#39;</span>, kind<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;line&#39;</span>,
+sns<span style="color:#f92672">.</span>relplot(x<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">epoch</span><span style="color:#e6db74">&#39;</span>, y<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">MSE Loss</span><span style="color:#e6db74">&#39;</span>,
+            hue<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">Architecture</span><span style="color:#e6db74">&#39;</span>, kind<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">line</span><span style="color:#e6db74">&#39;</span>,
             height<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, aspect<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span><span style="color:#f92672">/</span><span style="color:#ae81ff">5</span>,
             data<span style="color:#f92672">=</span>melted_loss);
 </code></pre></div><figure>

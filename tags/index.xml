@@ -22,15 +22,6 @@
     </item>
     
     <item>
-      <title>R</title>
-      <link>https://banay.me/tags/r/</link>
-      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
-      
-      <guid>https://banay.me/tags/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>reinforcement-learning</title>
       <link>https://banay.me/tags/reinforcement-learning/</link>
       <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
@@ -63,6 +54,15 @@
       <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
       
       <guid>https://banay.me/tags/econometrics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>R</title>
+      <link>https://banay.me/tags/r/</link>
+      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      
+      <guid>https://banay.me/tags/r/</guid>
       <description></description>
     </item>
     

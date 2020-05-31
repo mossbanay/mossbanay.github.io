@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Thu, 30 Apr 2020 16:36:00 +1000</lastBuildDate>
+    <lastBuildDate>Sun, 31 May 2020 19:51:00 +1000</lastBuildDate>
     
 	<atom:link href="https://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Visualising XBTUSD orderbooks</title>
+      <link>https://banay.me/xbtusd-orderbook-vis/</link>
+      <pubDate>Sun, 31 May 2020 19:51:00 +1000</pubDate>
+      
+      <guid>https://banay.me/xbtusd-orderbook-vis/</guid>
+      <description>Introduction Orderbooks are tables that show the immediate and public supply and demand of instruments that trade on financial exchanges. They collate orders that specify the direction, price and volume at which a party wants to trade an instrument.
+I have collected several months of orderbook snapshots from the perpetual XBTUSD contract on the cryptocurrency derivatives exchange BitMEX. Here I want to show some simple visualisations that give more detail into the drivers of particular changes in price that are not observable with more common candlestick charts.</description>
+    </item>
     
     <item>
       <title>(Double) Q-learning and maximisation bias</title>

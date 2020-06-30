@@ -7,33 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Sun, 31 May 2020 19:51:00 +1000</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2020 21:01:00 +1000</lastBuildDate>
     
 	<atom:link href="https://banay.me/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>crypto</title>
-      <link>https://banay.me/tags/crypto/</link>
-      <pubDate>Sun, 31 May 2020 19:51:00 +1000</pubDate>
+      <title>gans</title>
+      <link>https://banay.me/tags/gans/</link>
+      <pubDate>Tue, 30 Jun 2020 21:01:00 +1000</pubDate>
       
-      <guid>https://banay.me/tags/crypto/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>finance</title>
-      <link>https://banay.me/tags/finance/</link>
-      <pubDate>Sun, 31 May 2020 19:51:00 +1000</pubDate>
-      
-      <guid>https://banay.me/tags/finance/</guid>
+      <guid>https://banay.me/tags/gans/</guid>
       <description></description>
     </item>
     
     <item>
       <title>machine-learning</title>
       <link>https://banay.me/tags/machine-learning/</link>
-      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
+      <pubDate>Tue, 30 Jun 2020 21:01:00 +1000</pubDate>
       
       <guid>https://banay.me/tags/machine-learning/</guid>
       <description></description>

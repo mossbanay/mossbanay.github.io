@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gans on Moss&#39; blog</title>
+    <link>https://banay.me/tags/gans/</link>
+    <description>Recent content in gans on Moss&#39; blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Moss Ebeling</copyright>
+    <lastBuildDate>Tue, 30 Jun 2020 21:01:00 +1000</lastBuildDate>
+    
+	<atom:link href="https://banay.me/tags/gans/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Debugging some GANs</title>
+      <link>https://banay.me/debugging-a-gan/</link>
+      <pubDate>Tue, 30 Jun 2020 21:01:00 +1000</pubDate>
+      
+      <guid>https://banay.me/debugging-a-gan/</guid>
+      <description>Introduction Recently I&amp;rsquo;ve been motivated to investigate generative models, of which the most popular is currently GANs. The best way I could think of learning about GANs in deeper detail (since I&amp;rsquo;m interested in tweaking them later in some applied cases) is to implement them myself, and solve the bugs and issues that arise in practice myself.
+In this article I&amp;rsquo;ll use PyTorch and a framework that helps simplify training called PyTorch Lightning (Falcon, 2019).</description>
+    </item>
+    
+  </channel>
+</rss>

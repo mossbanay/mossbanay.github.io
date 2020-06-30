@@ -8,7 +8,7 @@
 Reinforcement learning refresher In this article I assume a familiarity with reinforcement learning and the standard Q-learning algorithm. In this section I&rsquo;ll provide a brief review of the basic terminology, which you can feel free to skip if you&rsquo;re comfortable in doing so.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.64.0" />
+        <meta name="generator" content="Hugo 0.73.0" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -189,7 +189,7 @@ old estimate \(Q_t(s, a)\) and our new estimate \(r + \gamma \thinspace
 rewrite the update equation like so,</p>
 <p>\[ Q_{t+1}(s, a) := (1 - \alpha) \thinspace Q_t(s, a) + \alpha \left ( r + \gamma \thinspace \underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime}) \right) \]</p>
 <p>to illustrate this point. The greater \(\alpha\) is, the more weight we put on our
-new estimate of the q-value. It is shown by <!-- raw HTML omitted -->(Jaakkola et al., 1994)<!-- raw HTML omitted --> that if
+new estimate of the q-value. It is shown by <a id="72f94ec385958aebe492937ba8824c54" href="#jaakkola1994convergence">(Jaakkola et al., 1994)</a> that if
 we allow \(\alpha\) to vary over time and approach 0 then \(Q_t\) will converge to
 \(Q^*\) (great!).</p>
 <h2 id="a-closer-look-at-our-estimator">A closer look at our estimator</h2>
@@ -214,7 +214,7 @@ large values at time \(t\) are chosen more frequently, and this leads to an
 exaggeration of the true value of the next state. Therefore we end up being
 optimistic, which we&rsquo;ll later see can lead to worse policies before convergence
 to \(Q^*\). This issue is called <strong>maximisation bias</strong>.</p>
-<p>A key contribution by <!-- raw HTML omitted -->(Hasselt, 2010)<!-- raw HTML omitted --> seeks to address this issue by
+<p>A key contribution by <a id="be0a72882f9620317f121403cf9c3438" href="#hasselt2010double">(Hasselt, 2010)</a> seeks to address this issue by
 decoupling the estimator from its value. Instead of maintaining a single
 estimate of \(Q_t(s, a)\) we separate the samples we collect into two distinct
 subsets and use them to produce two different estimators (tables of q-values).
@@ -257,7 +257,7 @@ select \(a_3\) but we use the value from \(Q_t^2(s, a)\) giving us an estimate o
 <p>It can be shown that this is <em>also</em> a biased estimator, but with a negative
 bias rather than a positive bias as with regular Q-learning.</p>
 <h2 id="illustration-of-maximisation-bias">Illustration of maximisation bias</h2>
-<p>We will use the example given in <!-- raw HTML omitted -->(Sutton &amp; Barto, 2018)<!-- raw HTML omitted --> under section 6.7.
+<p>We will use the example given in <a id="62ea68c58cd19b9f34f70e09ca364abb" href="#sutton2018reinforcement">(Sutton &amp; Barto, 2018)</a> under section 6.7.
 Suppose we have a MDP like the following.</p>
 <figure>
     <img src="./bandits_graph.png" width="500px"/> 
@@ -307,9 +307,9 @@ value. This is addressed by Double Q-learning which we saw in the dummy problem
 tends to exhibit much better policies whilst maintaing the same convergence
 property towards the optimal q-value function \(Q^*\).</p>
 <h1 id="bibliography">Bibliography</h1>
-<p><!-- raw HTML omitted -->Jaakkola, T., Jordan, M. I., &amp; Singh, S. P., <em>Convergence of stochastic iterative dynamic programming algorithms</em>, In , Advances in neural information processing systems (pp. 703–710) (1994). : .<!-- raw HTML omitted --> <a href="#72f94ec385958aebe492937ba8824c54">↩</a></p>
-<p><!-- raw HTML omitted -->Hasselt, H. V., <em>Double q-learning</em>, In , Advances in neural information processing systems (pp. 2613–2621) (2010). : .<!-- raw HTML omitted --> <a href="#be0a72882f9620317f121403cf9c3438">↩</a></p>
-<p><!-- raw HTML omitted -->Sutton, R. S., &amp; Barto, A. G., <em>Reinforcement learning: an introduction</em> (2018), : MIT press.<!-- raw HTML omitted --> <a href="#62ea68c58cd19b9f34f70e09ca364abb">↩</a></p>
+<p><a id="jaakkola1994convergence" target="_blank">Jaakkola, T., Jordan, M. I., &amp; Singh, S. P., <em>Convergence of stochastic iterative dynamic programming algorithms</em>, In , Advances in neural information processing systems (pp. 703–710) (1994). : .</a> <a href="#72f94ec385958aebe492937ba8824c54">↩</a></p>
+<p><a id="hasselt2010double" target="_blank">Hasselt, H. V., <em>Double q-learning</em>, In , Advances in neural information processing systems (pp. 2613–2621) (2010). : .</a> <a href="#be0a72882f9620317f121403cf9c3438">↩</a></p>
+<p><a id="sutton2018reinforcement" target="_blank">Sutton, R. S., &amp; Barto, A. G., <em>Reinforcement learning: an introduction</em> (2018), : MIT press.</a> <a href="#62ea68c58cd19b9f34f70e09ca364abb">↩</a></p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>

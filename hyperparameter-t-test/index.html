@@ -7,7 +7,7 @@
         <meta name="description" content="Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.64.0" />
+        <meta name="generator" content="Hugo 0.73.0" />
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
@@ -164,11 +164,11 @@ y_test <span style="color:#f92672">=</span> add_noise(f(X_test))
 </figure>
 
 <p>Now we will use a decision tree to try to fit this function. Let&rsquo;s try all the values for <code>max_depth</code> from 2 to 15, with 5-fold cross-validation to choose the best parameterisation.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tree_params <span style="color:#f92672">=</span> {<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">max_depth</span><span style="color:#e6db74">&#39;</span>: range(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">16</span>)}
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tree_params <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;max_depth&#39;</span>: range(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">16</span>)}
 k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
 
 tree_gs <span style="color:#f92672">=</span> GridSearchCV(DecisionTreeRegressor(), tree_params,
-                       cv<span style="color:#f92672">=</span>k, scoring<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">neg_mean_squared_error</span><span style="color:#e6db74">&#39;</span>)
+                       cv<span style="color:#f92672">=</span>k, scoring<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;neg_mean_squared_error&#39;</span>)
 
 tree_gs<span style="color:#f92672">.</span>fit(X_train, y_train)
 </code></pre></div><figure>
@@ -198,7 +198,7 @@ H_1 &amp;:&amp; \mu_A &lt; \mu_B \\\<br>
     <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(cv_runs):
         skf <span style="color:#f92672">=</span> KFold(n_splits<span style="color:#f92672">=</span>k, random_state<span style="color:#f92672">=</span>SEED<span style="color:#f92672">+</span>i, shuffle<span style="color:#f92672">=</span>True)
         cv_draw <span style="color:#f92672">=</span> cross_val_score(estimator, X, y,
-                                  cv<span style="color:#f92672">=</span>skf, scoring<span style="color:#f92672">=</span><span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">neg_mean_squared_error</span><span style="color:#e6db74">&#39;</span>)
+                                  cv<span style="color:#f92672">=</span>skf, scoring<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;neg_mean_squared_error&#39;</span>)
         draws<span style="color:#f92672">.</span>append(cv_draw<span style="color:#f92672">.</span>mean())
 
     <span style="color:#66d9ef">return</span> draws
@@ -219,7 +219,7 @@ benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark
 <p>It&rsquo;s important to note that we are conducting a paired T-test here, since we are looking at the mean difference between the average test scores.</p>
 </blockquote>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models <span style="color:#f92672">=</span> [DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
-          <span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">max_depth</span><span style="color:#e6db74">&#39;</span>]]
+          <span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74">&#39;max_depth&#39;</span>]]
 t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_train, benchmark_draws)
 </code></pre></div><p>Plotting the curve of the T-statistics, we see an interesting result.</p>
 <figure>
@@ -231,7 +231,7 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
 <p>Finally we can sneak a look at performance on the test set to see what value for <code>max_depth</code> actually maximised performance.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">neg_mse <span style="color:#f92672">=</span> []
 
-<span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">max_depth</span><span style="color:#e6db74">&#39;</span>]:
+<span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74">&#39;max_depth&#39;</span>]:
     tree <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
     tree<span style="color:#f92672">.</span>fit(X_train, y_train)
     pred <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>predict(X_test)
@@ -248,11 +248,11 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
 benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark_model, X_train, y_train, k)
 </code></pre></div><p>Then generate the candidate draws</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">model_params <span style="color:#f92672">=</span> {
-    <span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">degree</span><span style="color:#e6db74">&#39;</span>:range(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">16</span>)
+    <span style="color:#e6db74">&#39;degree&#39;</span>:range(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">16</span>)
 }
 
 models <span style="color:#f92672">=</span> [make_pipeline(PolynomialFeatures(degree<span style="color:#f92672">=</span>degree), LinearRegression())
-          <span style="color:#66d9ef">for</span> degree <span style="color:#f92672">in</span> model_params[<span style="color:#e6db74"></span><span style="color:#e6db74">&#39;</span><span style="color:#e6db74">degree</span><span style="color:#e6db74">&#39;</span>]]
+          <span style="color:#66d9ef">for</span> degree <span style="color:#f92672">in</span> model_params[<span style="color:#e6db74">&#39;degree&#39;</span>]]
 
 t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_train, benchmark_draws)
 </code></pre></div><figure>

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Debugging some GANs &middot; Moss Ebeling</title>
+        <meta name="description" content="Introduction Recently I&rsquo;ve been motivated to investigate generative models, of which the most popular is currently GANs. The best way I could think of learning about GANs in deeper detail (since I&rsquo;m interested in tweaking them later in some applied cases) is to implement them myself, and solve the bugs and issues that arise in practice myself.
+In this article I&rsquo;ll use PyTorch and a framework that helps simplify training called PyTorch Lightning (Falcon, 2019).">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.73.0" />
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\\[','\\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+  });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script>
+  (function() {
+      var script = document.createElement('script');
+      window.counter = 'https://banay_me.goatcounter.com/count'
+      script.async = 1;
+      script.src = '//gc.zgo.at/count.js';
+
+      var ins = document.getElementsByTagName('script')[0];
+      ins.parentNode.insertBefore(script, ins)
+  })();
+</script>
+
+
+        
+    </head>
+    <body>
+        
+<script type="application/javascript">
+var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+var doNotTrack = (dnt == "1" || dnt == "yes");
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-110997704-1', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+}
+</script>
+
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                            </h1>
+                        
+                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Debugging some GANs</h1>
+    
+    <p class="post-date">
+        <span>Published <time datetime="2020-06-30" itemprop="datePublished">Tue, Jun 30, 2020</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">[Mossimo Ebeling]</a>
+            </span>
+        </span>
+    </p>
+    
+        <p class="post-reading post-line">
+            <span>Estimated reading time: 13 min</span>
+        </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <h2 id="introduction">Introduction</h2>
+<p>Recently I&rsquo;ve been motivated to investigate generative models, of which the
+most popular is currently GANs. The best way I could think of learning about
+GANs in deeper detail (since I&rsquo;m interested in tweaking them later in some
+applied cases) is to implement them myself, and solve the bugs and issues that
+arise in practice myself.</p>
+<p>In this article I&rsquo;ll use PyTorch and a framework that helps simplify training
+called PyTorch Lightning <a id="1b127bdb06f58fe19bfdbc02e3a99923" href="#falcon2019pytorch">(Falcon, 2019)</a>. PyTorch Lightning allow
+separation of training code from network architecture code. It also exposes
+useful callback methods to quickly add different logging or debugging which can
+be useful when training GANs, which is often a non-trivial process.</p>
+<p>Hence I want to provide a short reiteration of my path through implementing
+common GAN architectures and some of the issues I faced. You can look at the
+history of the code in <a href="https://github.com/mossbanay/debugging-a-gan">this repo</a>. I&rsquo;d encourage you to try follow along if so
+inclined, the examples could even be run on a CPU with some patience. In the
+case you don&rsquo;t have patience you could also use Google Collab which gives you a
+free GPU (or TPU) to use.</p>
+<h2 id="starting-with-a-mlp-gan">Starting with a MLP GAN</h2>
+<p>Let&rsquo;s start with the most basic realisation of a GAN: two fully connected neural
+networks each trying to trip the other up. Just fully linear layers with ReLU
+and binary cross entropy loss. Some might just call this a vanilla GAN. For the
+target distribution we will use something that we know should work based on
+literature and endless stream of blog posts, MNIST.</p>
+<p>I have a basic implementation here you can run (I encourage you to follow along
+yourself and make the corresponding changes to the code discussed throughout the
+post). Let&rsquo;s generate one of those oh so famous plots showing a few vectors of
+noise put through the generator over time. We&rsquo;ll go for 100 epochs here.</p>
+<center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/1.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>Hm, that doesn&rsquo;t look good. Although there are vague circular outlines towards
+the end of the video, it&rsquo;s almost entirely noise. As a reminder, the target
+distribution, MNIST, looks like this.</p>
+<center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/2.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>So okay, all our matrices are the right shapes but clearly there&rsquo;s some poor
+conditioning here and we&rsquo;re not converging to any sort of meaningful result.</p>
+<p>The first thing we could try is actually read the original research and compare
+our network with what&rsquo;s described in <a id="47f0fa1194a7fd04da0aea385e98910b" href="#goodfellow2014generative">(Goodfellow et al., 2014)</a>. The blocks
+I&rsquo;m using at the moment include</p>
+<ol>
+<li>A linear layer</li>
+<li>ReLU activation</li>
+<li>Batch norm</li>
+</ol>
+<p>and we run through three blocks before resizing to the dimensionality of the
+image or squishing down to a probability (using tanh or sigmoid as the final
+output respectively). <a id="47f0fa1194a7fd04da0aea385e98910b" href="#goodfellow2014generative">(Goodfellow et al., 2014)</a> mentions using Dropout for
+normalisation as their paper actually came out a year before <a id="27bd822024c5f6d2b86381bf4d8f1dac" href="#ioffe2015batch">(Ioffe &amp; Szegedy, 2015)</a>
+where batch norm was introduced. So we could try changing our blocks to look
+like</p>
+<ol>
+<li>A linear layer</li>
+<li>ReLU activation</li>
+<li>Dropout</li>
+</ol>
+<p>This change was made in <a href="https://github.com/mossbanay/debugging-a-gan/commit/ba00ce3852a05e5281f6012652b79a86852555c6">ba00ce3</a>. Let&rsquo;s run another 100 epochs with this style of
+block for both the generator and the discriminator.</p>
+<center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/3.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>Wow this is looking great now! The samples drawn definitely resemble digits. We
+can see it&rsquo;s learnt that the background is mostly black and the foreground
+should have a white digit-like figure. It definitely looks like dropout is the
+better choice here. However, we can still see some noisy white spots fringing
+around the digits. The internal dimension for the generator here is set to 512,
+which is just an eighth of the dimension of the output image (our MNIST images
+are preprocessed 64x64) so it might be expected that there&rsquo;s still some noisy in
+the mapping.</p>
+<p>So now we&rsquo;ve got one model that seems to converge well, and one that totally
+failed. PyTorch Lightning gives us Tensorboard logging for free, so let&rsquo;s take
+advantage of that and use this as a learning experience and compare the loss and
+gradients for these networks.</p>
+<p>First the loss. The blue line here the network using batch norm and the pink
+line is the network using dropout.</p>
+<figure>
+    <img src="./mlp_loss.png"/> 
+</figure>
+
+<p>We can see that for the batch norm network the losses converged straight to \(\ln
+2\) which is the stable loss value for GANs when viewing the training process as
+convergence to a Nash equilibrium. On the other hand, we see that the dropout
+network actually saw the discriminator take the lead and the generator had to
+play catch up. We could posit that perhaps the generator in the dropout network
+was able to qualitatively improve due to discriminator being more accurate,
+which means in turn the generator has a better signal for how to improve its
+fakes. Once the batch norm network hit its equilibrium loss for the two
+networks, it might have struggled to move the weights significantly from that
+minima.</p>
+<p>Now, let&rsquo;s have a look at the gradient logging added in <a href="https://github.com/mossbanay/debugging-a-gan/commit/14a042803f9d12b71754196055e0247fc761b16f">14a0428</a>. Here we&rsquo;ll look
+at the gradients of the last weight layer in the discriminator. Browsing through
+the histograms for each of the layers one that stood out to me was the weights
+in the last layer of the discriminator. These are the weights in the linear
+layer that projects the discriminator network activations to scalars, which are
+in turn mapped to \([0,1]\) with a sigmoid activation.</p>
+<figure>
+    <img src="./mlp_grads_d_ll.png"/> 
+</figure>
+
+<p>Here we can see that the gradients in the batch norm network shrunk towards
+zero, over time. This makes the updates to the weights very small, and causes
+the network to freeze up. This partially explains why you may have thought the
+video of the samples drawn from the batch norm network wasn&rsquo;t moving (I was
+worried my ffmpeg line hadn&rsquo;t worked at first). The bimodal distribution and
+magnitude of the gradients (look at the x-axis!) in the dropout network clearly
+signal that the network is not succumbing to vanishing gradients.</p>
+<p>I&rsquo;m happy with this result for a simple fully connected GAN, on a simple dataset.</p>
+<h2 id="pokemon">Pokemon!</h2>
+<p>Let&rsquo;s next try our simple fully connected architecture on a dataset with more
+than one channel - pokemon sprites. This dataset was also explored in
+<a id="fab968d5a64be9ae17a3b483ef0a1750" href="#weng2017gan">(Weng, 2017)</a> which also provides a fantastic review of the history of GANs
+including better commentary on theoretical changes.</p>
+<p>I added a small data loader to scrape images off a website in <a href="https://github.com/mossbanay/debugging-a-gan/commit/eca30629c444f9d7391c0150a43dce0f75a7d3ee">eca3062</a>. To train
+on the pokemon dataset is as simple as running.</p>
+<pre><code class="language-src" data-lang="src">python src/main.py --gpus -1 --dataset pokemon
+</code></pre><center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/gan_pokemon.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/real_pokemon.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>Ehhh that&rsquo;s not too great of a result. We can see it&rsquo;s roughly learnt there
+should be a dark background and a figure in the middle, but not much more than
+that. We can also see a lot of noisy pixels over the entire image. Let&rsquo;s move
+onto a more complicated architecture and continue with this dataset for testing
+as the limitation here is likely the capacity of the model, rather than anything
+training related (I tested this by increasing the latent dimension and image
+size, with results almost identical to what&rsquo;s shown here).</p>
+<h2 id="using-convolutions-with-dcgan">Using convolutions with DCGAN</h2>
+<p>The next architecture we&rsquo;ll look at is DCGAN (DC here stands for deep
+convolutional). <a id="805c5b1c59c8b715371105f03da08b13" href="#radford2015unsupervised">(Radford et al., 2015)</a> extend the basic idea of a GAN by
+adapting the network architecture to follow the immensely popular CNNs that had
+just begun to take over ImageNet at the time. There&rsquo;s no change to the
+fundamental training regime (we still have a generator and a discriminator) we
+just use (de)convolutional layers in place of fully connected layers.</p>
+<p>Before going back to basics with the original GAN above, I had a stab at
+implementing a DCGAN. I&rsquo;ve copied the code over in <a href="https://github.com/mossbanay/debugging-a-gan/commit/82e372de186865a4270447daa793fd572f59082e">82e372d</a> and we&rsquo;ll work
+through cleaning it up and making sure everything works.</p>
+<pre><code class="language-src" data-lang="src">python src/main.py --gpus -1 --network dcgan --dataset pokemon --max-epochs 50
+</code></pre><center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/dcgan_pokemon.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>Great this looks like an improvement on the fully connected GAN. Note that the
+noise around the figures is greatly reduced now. We have still learnt that there
+should be a figure in the middle, but the network doesn&rsquo;t seem to be able to
+decide on the hue of it.</p>
+<p>In <a href="https://github.com/mossbanay/debugging-a-gan/commit/d646c6f97d7703ce0b068026ef5ae0c40c98a0b6">d646c6f</a> I do some refactoring to standardise the structure of blocks in the
+generator and discriminator and also make the number of filters and blocks
+configurable. What we can do now is compare the samples from networks with
+varying capacity, to see if that&rsquo;s the limitation at hand. Let&rsquo;s try moving from
+16 filters and 3 blocks to 32 filters and 5 blocks as well as increasing the
+size of the images to 128x128.</p>
+<pre><code class="language-src" data-lang="src">python src/main.py ... --img-size 128 --n-filters 32 --n-blocks 5
+</code></pre><pre><code class="language-nil" data-lang="nil">RuntimeError: size mismatch, m1: [32 x 2048], m2: [8192 x 1] at /pytorch/aten/src/THC/generic/THCTensorMathBlas.cu:283
+Exception ignored in: &lt;function tqdm.__del__ at 0x7fd2be9102f0&gt;
+</code></pre><p>Whoops, a quick scan back through the code and it looks like the linear layer of
+the discriminator wasn&rsquo;t adjusted to change size with the number of blocks we
+use. A quick fix in <a href="https://github.com/mossbanay/debugging-a-gan/commit/eb73ef11850e725fd459714b1c7edd52dca22448">eb73ef1</a> and making the filters and blocks configurable in
+<a href="https://github.com/mossbanay/debugging-a-gan/commit/83907cd2c4d404df5f75900aa6f839b4ca44db17">83907cd</a> yields the following</p>
+<center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/dcgan_large_pokemon.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>This seems to be only a marginal improvement from the last DCGAN. We see very
+fine detail now (in fact some of the lines are very thin) and the blobs are
+centralised with little fringing. There is some heterogeneity in the blob size,
+but the hue of each of the figures is approximately the same.</p>
+<h2 id="transposed-convolutions">Transposed convolutions</h2>
+<p>If you look at my code you&rsquo;ll see up to this point I have used <code>nn.Upsample</code> in
+the generator followed by a convolutional layer with a kernel size of 3, stride
+of 1 and padding of 1. The key point to note here is the unsampling actually
+uses nearest neighbouring interpolation by default. Another option is to use
+<em>transposed convolutions</em> or <em>fractionally strided convolutions</em>. This takes
+advantage of the fact that a kernel produces two matrices: one from a big
+image to a small image (roughly speaking) and another that does the reverse.
+Since we&rsquo;re upsampling, if we transpose the matrix generated from the kernel, we
+can learn the weights used in the interpolation, rather than just falling back
+on nearest neighbours. I suggest <a id="e68919ded924da6ee90ba9512d7f68ae" href="#dumoulin2016guide">(Dumoulin &amp; Visin, 2016)</a> for a more detailed walk
+through of the arithmetic used here. I swap to this alternative method of
+upsampling in <a href="https://github.com/mossbanay/debugging-a-gan/commit/429209ebc1cac9ba1a36215c352b63e825d05044">429209e</a>. Let&rsquo;s have a look at a run using the same settings as the
+above to see if there&rsquo;s much of a difference.</p>
+<center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/dcgan_transposed_pokemon.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>You can see that the picture is totally grainy, compared to the last DCGAN sample
+video and this makes sense when you think about the change how interpolation
+works. With the last video the initially small image projected from the random
+vector is repeatedly upsampled using nearest neighbour interpolation. That means
+that pixels are blended together, causing the psychedelic-esque patterns at the
+start of the video. Conversely, for transposed convolutions the weights are
+random initially, causing the graininess seen above.</p>
+<p>Overall we see it failed to converge over 50 epochs. As I was watching
+the network train I noted that the discriminator got way ahead of the generator
+here. Let&rsquo;s look at the loss curves.</p>
+<figure>
+    <img src="./transpose_loss.png" width="500px"/> 
+</figure>
+
+<p>Not great. We&rsquo;ve added a lot of capacity to the generator by freeing up the
+interpolation which is good in theory as in means we should be able to produce a
+wider variety of images, but not if the discriminator dominates the generator
+first (as we lose meaningful gradients). Let&rsquo;s try updating the generator 5
+times for each time we update the discriminator to see if that helps. Added in
+<a href="https://github.com/mossbanay/debugging-a-gan/commit/5c182ec1efe79f165ad403af857e907b4d7f9129">5c182ec</a>.</p>
+<figure>
+    <img src="./transpose_loss2.png" width="500px"/> 
+</figure>
+
+<p>Well at least that failed slower? The samples are omitted as they are similar to
+before.</p>
+<p>We might have to try another approach.</p>
+<h2 id="swapping-out-the-loss-with-wgans">Swapping out the loss with WGANs</h2>
+<p><a id="246e392887f3b8ab9996ae669db27c6a" href="#arjovsky2017wasserstein">(Arjovsky et al., 2017)</a> propose the usage of the Wasserstein distance
+function as an alternative to binary cross entropy loss. They illustrate that in
+many cases the KL divergence and JS divergence (not covered here) between high
+dimensional distributions is undefined, making it extremely difficult to
+optimise for. This is the reason a popular approach is to add Gaussian noise to
+real samples to expand the support of the distribution, making KL and JS
+tamable. Wasserstein distance is a simpler approach, and often leads to less
+complicated and more stable training.</p>
+<p>In <a href="https://github.com/mossbanay/debugging-a-gan/commit/4132ad18bd362bd223e74fb361221ead430a9df8">4132ad1</a> I add an implementation using the same generator and discriminator
+(now called a critic) as in the DCGAN. Let&rsquo;s look at an example runs on the
+Pokemon and MNIST datasets.</p>
+<center>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/wgan_mnist.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<video width="266" height="266" controls autoplay="true" loop="true">
+  <source src="./vids/wgan_pokemon.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+</center>
+<p>The first thing to note is that some of the training is starting to chug along
+here. The Pokemon clip is actually played back 2.5x faster than the other
+samples up to this point (even when training at a learning rate of 1e-4).
+However, we see a lot of diversity in the samples from both clips, with
+reasonable quality.</p>
+<p>If we look at the loss curves for the Pokemon run, we can see some strange
+results.</p>
+<figure>
+    <img src="./wgan_pokemon_loss.png"/> 
+</figure>
+
+<p>In the implementation so far, I&rsquo;ve chosen to follow what many open source
+implementations do in replacing the sigmoid activation of the critic with an
+unbounded linear activation. This leads to the huge loss we see above. Note as
+well the default here is to train using gradient penalty
+<a id="9f3a2f4bd53dc95d4bba704752741e35" href="#gulrajani2017improved">(Gulrajani et al., 2017)</a>, with \(\lambda=10\). This means that the loss from our
+average scores from the critic far outweighs the gradient penalty, potentially
+causing the instability after the first third of training. At this level, the
+optimiser might as well ignore the gradient penalty term altogether, since it&rsquo;s
+such an insignificant part of the overall loss.</p>
+<h2 id="where-from-here">Where from here?</h2>
+<p>There&rsquo;s lots of directions you could take from here. Here&rsquo;s a short list.</p>
+<h4 id="use-a-bigger-dataset">Use a bigger dataset</h4>
+<p>It&rsquo;s quite possible that due to the pokemon dataset being relatively small (just
+a few hundred images) the GANs above are simply don&rsquo;t have the sample efficiency
+to reasonably fit the distribution of the images. A common choice in literature
+is the LSUN bedrooms dataset but there&rsquo;s many other classes you could use as well.</p>
+<h4 id="use-a-better-generator-and-critic">Use a better generator and critic</h4>
+<p>There&rsquo;s been a lot of success with using deeper and larger resnet architectures.
+Why not try and replace the standard convolutional layers with skip connections?</p>
+<h4 id="try-out-different-non-linearities-and-hyperparameter-choices">Try out different non-linearities and hyperparameter choices</h4>
+<p>PyTorch lightning makes it easy to plug and play with a variety of logging
+libraries that make it easier to compare which hyperparameter choices are
+effective. Try using test-tube, wandb or just regular TensorBoard.</p>
+<h1 id="bibliography">Bibliography</h1>
+<p><a id="falcon2019pytorch" target="_blank">Falcon, W., <em>Pytorch Lightning</em>, GitHub. Note: <a href="https://github.com/PyTorchLightning/pytorch-lightning">https://github.com/PyTorchLightning/pytorch-lightning</a> Cited by, <em>3()</em>,  (2019). </a> <a href="#1b127bdb06f58fe19bfdbc02e3a99923">↩</a></p>
+<p><a id="goodfellow2014generative" target="_blank">Goodfellow, I., Pouget-Abadie, J., Mirza, M., Xu, B., Warde-Farley, D., Ozair, S., Courville, A., …, <em>Generative adversarial nets</em>, In , Advances in neural information processing systems (pp. 2672–2680) (2014). : .</a> <a href="#47f0fa1194a7fd04da0aea385e98910b">↩</a></p>
+<p><a id="ioffe2015batch" target="_blank">Ioffe, S., &amp; Szegedy, C., <em>Batch normalization: accelerating deep network training by reducing internal covariate shift</em>, arXiv preprint arXiv:1502.03167, <em>()</em>,  (2015). </a> <a href="#27bd822024c5f6d2b86381bf4d8f1dac">↩</a></p>
+<p><a id="weng2017gan" target="_blank">Weng, L., <em>From gan to wgan</em>, lilianweng.github.io/lil-log, <em>()</em>,  (2017). </a> <a href="#fab968d5a64be9ae17a3b483ef0a1750">↩</a></p>
+<p><a id="radford2015unsupervised" target="_blank">Radford, A., Metz, L., &amp; Chintala, S., <em>Unsupervised representation learning with deep convolutional generative adversarial networks</em>, arXiv preprint arXiv:1511.06434, <em>()</em>,  (2015). </a> <a href="#805c5b1c59c8b715371105f03da08b13">↩</a></p>
+<p><a id="dumoulin2016guide" target="_blank">Dumoulin, V., &amp; Visin, F., <em>A guide to convolution arithmetic for deep learning</em>, arXiv preprint arXiv:1603.07285, <em>()</em>,  (2016). </a> <a href="#e68919ded924da6ee90ba9512d7f68ae">↩</a></p>
+<p><a id="arjovsky2017wasserstein" target="_blank">Arjovsky, M., Chintala, S., &amp; Bottou, L'eon, <em>Wasserstein gan</em>, arXiv preprint arXiv:1701.07875, <em>()</em>,  (2017). </a> <a href="#246e392887f3b8ab9996ae669db27c6a">↩</a></p>
+<p><a id="gulrajani2017improved" target="_blank">Gulrajani, I., Ahmed, F., Arjovsky, M., Dumoulin, V., &amp; Courville, A. C., <em>Improved training of wasserstein gans</em>, In , Advances in neural information processing systems (pp. 5767–5777) (2017). : .</a> <a href="#9f3a2f4bd53dc95d4bba704752741e35">↩</a></p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+    
+        <p class="post-tags">
+            <span>Tagged:</span>
+            
+            
+                <a href="/tags/machine-learning/">machine-learning</a>, 
+            
+                <a href="/tags/gans/">gans</a>
+            
+        </p>
+    
+
+    <div class="share">
+        
+
+        
+
+        
+        
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#">
+                        <i class="fa fa-angle-up"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
+        <script src="https://banay.me/js/jquery.fitvids.js"></script>
+        
+        
+            <script src="../../../../highlight.pack.js"></script>
+        
+        
+        <script src="https://banay.me/js/scripts.js"></script>
+    </body>
+</html>
+

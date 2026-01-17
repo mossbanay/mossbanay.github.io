@@ -3,79 +3,30 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Playing Tic-tac-toe with minimax in Python &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction In this article we will explain the minimax algorithm. We&rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
-Game trees For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out.">
+        <title>Playing Tic-tac-toe with minimax in Python &middot; </title>
+        <meta name="description" content="Introduction
+In this article we will explain the minimax algorithm. We&rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
+Game trees
+For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out. Each node described a particular state in the game, and it has one child node for each possible action that might occur from that state. To generate a game tree, we need only the rules of the game as inputs.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.73.0" />
+        <meta name="generator" content="Hugo 0.139.3">
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://banay.me/dist/site.css">
+        <link rel="stylesheet" href="https://banay.me/dist/syntax.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
-        <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$'], ['\\[','\\]']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-<script>
-  (function() {
-      var script = document.createElement('script');
-      window.counter = 'https://banay_me.goatcounter.com/count'
-      script.async = 1;
-      script.src = '//gc.zgo.at/count.js';
-
-      var ins = document.getElementsByTagName('script')[0];
-      ins.parentNode.insertBefore(script, ins)
-  })();
-</script>
-
-
         
+        
+        
+        
+
     </head>
     <body>
         
-<script type="application/javascript">
-var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-var doNotTrack = (dnt == "1" || dnt == "yes");
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-110997704-1', 'auto');
-	ga('set', 'anonymizeIp', true);
-	ga('send', 'pageview');
-}
-</script>
-
 
         <div id="wrapper">
             <header class="site-header">
@@ -83,10 +34,9 @@ if (!doNotTrack) {
                     <div class="site-title-wrapper">
                         
                             <h1 class="site-title">
-                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                                <a href="https://banay.me/">Moss&#39; blog</a>
                             </h1>
                         
-                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
                         
                         
                         
@@ -95,14 +45,15 @@ if (!doNotTrack) {
                         
                         
                         
-                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
-                                <i class="fa fa-envelope"></i>
+                            <a class="button-square button-social hint--top" data-hint="Email" aria-label="Send an Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
                         
                     </div>
 
                     <ul class="site-nav">
                         
+
                     </ul>
                 </div>
             </header>
@@ -139,174 +90,164 @@ if (!doNotTrack) {
 <h2 id="game-trees">Game trees</h2>
 <p>For games with perfect information, we can model the entire play-space using a directed graph called <em>game tree</em>. A game tree simply illustrates all possible ways in which a game may play out. Each node described a particular state in the game, and it has one child node for each possible action that might occur from that state. To generate a game tree, we need only the rules of the game as inputs.</p>
 <p>Let&rsquo;s use the game of tic-tac-toe as an example. We have two players O and X. For the sake of explanation let us say that player O goes first. The initial state of the game then looks like this.</p>
-<figure>
-    <img src="./game_tree_example.png"/> 
+<figure><img src="./game_tree_example.png">
 </figure>
 
 <p>The children of each node represent all the possible actions that could be taken from that state. So for this node, all the possible actions correspond to Player O placing an O in one of the nine squares. We draw these states one level below the <em>root node</em> of the game tree and draw arrows representing a state transition between them.</p>
-<figure>
-    <img src="./game_tree_first_level.png"/> 
+<figure><img src="./game_tree_first_level.png">
 </figure>
 
 <p>This repeats all the way down the tree until we reach a <em>leaf node</em>, that is a state where the game has ended. Later, we will give these leaf nodes values that represent the outcome of the game. Notice that for games in which the player making a decision alternates each turn (like tic-tac-toe) the game tree follows an alternating pattern also. That is to say that the depth of a node in the game tree determines which player makes the action in that state. Here we see for even depths Player O makes the action and for odd depths Player X makes the action.</p>
 <p>The above visualisation looks a little cluttered since we explicitly show the state of the board. Often we will instead just write the action along the transition arrow between states.</p>
-<figure>
-    <img src="./simple_tree.png"/> 
+<figure><img src="./simple_tree.png">
 </figure>
 
 <h2 id="mini-max">Mini-max</h2>
 <p>We have looked at how to represent games using game trees, but how should we choose the actions that we take in each state? A simple approach would be to search through the tree using a traditional search algorithm (like depth-first search or breadth-first search) to look for a node with the maximum reward for the player (or hero). However, these simple approaches fail to account for modelling the actions of the opponent (or villian).</p>
 <p>We should expect our opponent to play rationally as we do, but how can we define a rational action? Well we know by intuition that players are trying to maximise their outcome. If we restrict the games of interest to those that are <em>adverserial</em> (i.e. for which the outcome for one player is the negation of the other) then our opponent (trying to maximise their own reward) inadvertently seeks to minimise our own reward. This allows us to actual construct paths to root states in the game tree.</p>
 <p>For example, take the above example. We can draw this as a game tree.</p>
-<figure>
-    <img src="./GT_I.png"/> 
+<figure><img src="./GT_I.png">
 </figure>
 
 <p>Since we know exactly how the game will play out from each of the Villian nodes, we can just assign an outcome to them.</p>
-<figure>
-    <img src="./GT_II.png"/> 
+<figure><img src="./GT_II.png">
 </figure>
 
 <p>Now since the Hero is a maximiser of their own reward, the choice here is clear and the Hero should choose to play the action &ldquo;Right&rdquo; which leads to an outcome of (-10, 10).</p>
-<figure>
-    <img src="./GT_III.png"/> 
+<figure><img src="./GT_III.png">
 </figure>
 
 <p>We can generalise this process as an alternation between <strong>maximising</strong> (turns that the Hero plays) and <strong>minimising</strong> (turns that the Villian plays). Under the assumption that the outcomes for the Hero and Villian are negated, we can simplify the tree to just show the Hero&rsquo;s outcome at the root.</p>
 <p>Here&rsquo;s the above game with the simplified tree.</p>
-<figure>
-    <img src="./GT_IV.png"/> 
+<figure><img src="./GT_IV.png">
 </figure>
 
 <p>We call the computed outcome values (shown in blue) at each node the <em>minimax values</em>.</p>
 <h2 id="pseudocode">Pseudocode</h2>
 <p>We can compute minimax values simply by making a post-order traversal through the tree. At a particular node, we compute the minimax values for each of the children, then take either the max or the min depending on whether we are at a maximising depth or minimising depth.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RootNode</span>:
-      <span style="color:#66d9ef">def</span> __init__(self):
-          self<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-
-      <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_minimax_value</span>(self, maximising <span style="color:#f92672">=</span> True):
-          <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>value
-
-
-  <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChoiceNode</span>:
-      <span style="color:#66d9ef">def</span> __init__(self):
-          self<span style="color:#f92672">.</span>children <span style="color:#f92672">=</span> []
-
-      <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_minimax_value</span>(self, maximising <span style="color:#f92672">=</span> True):
-          child_values <span style="color:#f92672">=</span> [child<span style="color:#f92672">.</span>get_minimax_value(maximising <span style="color:#f92672">=</span> <span style="color:#f92672">not</span> maximising)
-                          <span style="color:#66d9ef">for</span> child <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>children]
-
-          <span style="color:#66d9ef">if</span> maximising:
-              <span style="color:#66d9ef">return</span> max(child_values)
-          <span style="color:#66d9ef">else</span>:
-              <span style="color:#66d9ef">return</span> min(child_values)
-</code></pre></div><h2 id="tic-tac-toe-in-python">Tic Tac Toe in Python</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RootNode</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>value <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_minimax_value</span>(self, maximising <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>value
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChoiceNode</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>children <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_minimax_value</span>(self, maximising <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>):
+</span></span><span style="display:flex;"><span>        child_values <span style="color:#f92672">=</span> [child<span style="color:#f92672">.</span>get_minimax_value(maximising <span style="color:#f92672">=</span> <span style="color:#f92672">not</span> maximising)
+</span></span><span style="display:flex;"><span>                        <span style="color:#66d9ef">for</span> child <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>children]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> maximising:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> max(child_values)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> min(child_values)
+</span></span></code></pre></div><h2 id="tic-tac-toe-in-python">Tic Tac Toe in Python</h2>
 <p>We will implement a small tic-tac-toe node that records the current state in the game (i.e. the board position and the player that is next to move).</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  <span style="color:#f92672">from</span> copy <span style="color:#f92672">import</span> deepcopy
-
-  <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TicTacToeNode</span>:
-      <span style="color:#66d9ef">def</span> __init__(self, board <span style="color:#f92672">=</span> None, player <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;O&#34;</span>):
-          <span style="color:#66d9ef">if</span> board <span style="color:#f92672">is</span> None:
-              board <span style="color:#f92672">=</span> [[<span style="color:#e6db74">&#34; &#34;</span> <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)] <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)]
-          self<span style="color:#f92672">.</span>board <span style="color:#f92672">=</span> board
-          self<span style="color:#f92672">.</span>player <span style="color:#f92672">=</span> player
-
-      <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">children</span>(self):
-          <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>winner() <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-              <span style="color:#66d9ef">return</span>
-
-          <span style="color:#66d9ef">for</span> row_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
-              <span style="color:#66d9ef">for</span> col_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
-                  <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[row_num][col_num] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34; &#34;</span>:
-                      next_board <span style="color:#f92672">=</span> deepcopy(self<span style="color:#f92672">.</span>board)
-                      next_board[row_num][col_num] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>player
-                      next_player <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;O&#34;</span> <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>player <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;X&#34;</span> <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;X&#34;</span>
-                      <span style="color:#66d9ef">yield</span> TicTacToeNode(board <span style="color:#f92672">=</span> next_board, player <span style="color:#f92672">=</span> next_player)
-
-      <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">winner</span>(self):
-          <span style="color:#75715e"># Check for horizontal winners</span>
-          <span style="color:#66d9ef">for</span> row_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
-              <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
-                  <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">0</span>]
-
-          <span style="color:#75715e"># Check for vertical winners</span>
-          <span style="color:#66d9ef">for</span> col_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
-              <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][col_num] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][col_num] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">2</span>][col_num] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
-                  <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][col_num]
-
-          <span style="color:#75715e"># Check for diagonal winners</span>
-          <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">2</span>][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
-              <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>]
-
-          <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">2</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
-              <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>]
-
-          <span style="color:#75715e"># Check for draw</span>
-          <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join([<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(row) <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>board]):
-              <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;D&#39;</span>
-
-          <span style="color:#66d9ef">return</span> None
-
-      <span style="color:#66d9ef">def</span> __str__(self):
-          row_strings <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34; | &#34;</span><span style="color:#f92672">.</span>join(row) <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>board]
-          <span style="color:#66d9ef">return</span> (<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">9</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)<span style="color:#f92672">.</span>join(row_strings)
-</code></pre></div><p>Here we also implement a method <code>winner</code> which returns the character of the winning player (or D for a draw) if the game is over. We can apply minimax and search through the child states of the initial game state (i.e. an empty board with player O to move) and evaluate the minimax value.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  n <span style="color:#f92672">=</span> TicTacToeNode()
-
-  <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">minimax_value</span>(node):
-      <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>winner() <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> None:
-          <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>winner() <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;O&#39;</span> <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>winner() <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;D&#39;</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
-
-      child_values <span style="color:#f92672">=</span> [minimax_value(child) <span style="color:#66d9ef">for</span> child <span style="color:#f92672">in</span> node<span style="color:#f92672">.</span>children()]
-
-      <span style="color:#66d9ef">assert</span>(len(child_values) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
-
-      <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>player <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;O&#39;</span>:
-          <span style="color:#66d9ef">return</span> max(child_values)
-      <span style="color:#66d9ef">else</span>:
-          <span style="color:#66d9ef">return</span> min(child_values)
-
-  <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Minimax value for empty board is: {minimax_value(n)}&#39;</span>)
-  <span style="color:#66d9ef">print</span>(n)
-
-  <span style="color:#75715e"># Minimax value for empty board is: 0</span>
-  <span style="color:#75715e">#   |   |</span>
-  <span style="color:#75715e"># ---------</span>
-  <span style="color:#75715e">#   |   |</span>
-  <span style="color:#75715e"># ---------</span>
-  <span style="color:#75715e">#   |   |</span>
-</code></pre></div><p>Here we can see that for an empty board, optimal play from both sides will lead us to a draw! How about if we play out some moves?</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">  n <span style="color:#f92672">=</span> next(next(TicTacToeNode()<span style="color:#f92672">.</span>children())<span style="color:#f92672">.</span>children())
-  <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#39;Minimax value for non-empty board is: {minimax_value(n)}&#39;</span>)
-  <span style="color:#66d9ef">print</span>(n)
-
-  <span style="color:#75715e"># Minimax value for non-empty board is: 1</span>
-  <span style="color:#75715e"># O | X |</span>
-  <span style="color:#75715e"># ---------</span>
-  <span style="color:#75715e">#   |   |</span>
-  <span style="color:#75715e"># ---------</span>
-  <span style="color:#75715e">#   |   |</span>
-</code></pre></div><p>Now we see that from this state if we play optimally we will always be able to win! Note that in the previous case with the empty board, a minimax value of 0 does not mean that we cannot win, but that we can guarantee a score of <em>at least</em> 0. If the opponent plays sub-optimally (like in the moves shown above) then we may reach a state from which we can always win.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> copy <span style="color:#f92672">import</span> deepcopy
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TicTacToeNode</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, board <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>, player <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;O&#34;</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> board <span style="color:#f92672">is</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            board <span style="color:#f92672">=</span> [[<span style="color:#e6db74">&#34; &#34;</span> <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)] <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>)]
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>board <span style="color:#f92672">=</span> board
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>player <span style="color:#f92672">=</span> player
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">children</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>winner() <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> row_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> col_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[row_num][col_num] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34; &#34;</span>:
+</span></span><span style="display:flex;"><span>                    next_board <span style="color:#f92672">=</span> deepcopy(self<span style="color:#f92672">.</span>board)
+</span></span><span style="display:flex;"><span>                    next_board[row_num][col_num] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>player
+</span></span><span style="display:flex;"><span>                    next_player <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;O&#34;</span> <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>player <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;X&#34;</span> <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;X&#34;</span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">yield</span> TicTacToeNode(board <span style="color:#f92672">=</span> next_board, player <span style="color:#f92672">=</span> next_player)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">winner</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Check for horizontal winners</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> row_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[row_num][<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Check for vertical winners</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> col_num <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][col_num] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][col_num] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">2</span>][col_num] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][col_num]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Check for diagonal winners</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">2</span>][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">2</span>][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">0</span>][<span style="color:#ae81ff">2</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34; &#34;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>board[<span style="color:#ae81ff">1</span>][<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Check for draw</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join([<span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">.</span>join(row) <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>board]):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;D&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __str__(self):
+</span></span><span style="display:flex;"><span>        row_strings <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34; | &#34;</span><span style="color:#f92672">.</span>join(row) <span style="color:#66d9ef">for</span> row <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>board]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;-&#39;</span><span style="color:#f92672">*</span><span style="color:#ae81ff">9</span> <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>)<span style="color:#f92672">.</span>join(row_strings)
+</span></span></code></pre></div><p>Here we also implement a method <code>winner</code> which returns the character of the winning player (or D for a draw) if the game is over. We can apply minimax and search through the child states of the initial game state (i.e. an empty board with player O to move) and evaluate the minimax value.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>n <span style="color:#f92672">=</span> TicTacToeNode()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">minimax_value</span>(node):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>winner() <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>winner() <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;O&#39;</span> <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>winner() <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;D&#39;</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    child_values <span style="color:#f92672">=</span> [minimax_value(child) <span style="color:#66d9ef">for</span> child <span style="color:#f92672">in</span> node<span style="color:#f92672">.</span>children()]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span>(len(child_values) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> node<span style="color:#f92672">.</span>player <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;O&#39;</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> max(child_values)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> min(child_values)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Minimax value for empty board is: </span><span style="color:#e6db74">{</span>minimax_value(n)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>print(n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Minimax value for empty board is: 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   |   |</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   |   |</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   |   |</span>
+</span></span></code></pre></div><p>Here we can see that for an empty board, optimal play from both sides will lead us to a draw! How about if we play out some moves?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>n <span style="color:#f92672">=</span> next(next(TicTacToeNode()<span style="color:#f92672">.</span>children())<span style="color:#f92672">.</span>children())
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Minimax value for non-empty board is: </span><span style="color:#e6db74">{</span>minimax_value(n)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>print(n)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Minimax value for non-empty board is: 1</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># O | X |</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   |   |</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ---------</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   |   |</span>
+</span></span></code></pre></div><p>Now we see that from this state if we play optimally we will always be able to win! Note that in the previous case with the empty board, a minimax value of 0 does not mean that we cannot win, but that we can guarantee a score of <em>at least</em> 0. If the opponent plays sub-optimally (like in the moves shown above) then we may reach a state from which we can always win.</p>
 <h2 id="extensions-to-mini-max">Extensions to mini-max</h2>
 <p>The most popular extension of mini-max is a method of computing the minimax values faster called <em>alpha-beta pruning</em>. This method takes advantage of the fact that there is no need to traverse some subtrees in the game tree where a better option for a player already exists. For example</p>
-<figure>
-    <img src="./AB_pruning_I.png"/> 
+<figure><img src="./AB_pruning_I.png">
 </figure>
 
 <p>Here we have fully traversed the subtree for when the hero plays &ldquo;Left&rdquo; and arrived at a minimax value of 5. This means that the hero can score at least a 5 when playing this game, and hopes to find a better option when traversing the subtree for the &ldquo;Right&rdquo; action.</p>
-<figure>
-    <img src="./AB_pruning_II.png"/> 
+<figure><img src="./AB_pruning_II.png">
 </figure>
 
 <p>After looking at the path of the hero playing &ldquo;Right&rdquo; and the villian playing &ldquo;Left&rdquo; we find that the outcome was 1. Now we can see that the villian can score 1 and since it acts as a minimiser, the minimax value for that state will be less than or equal to 1. Therefore it is always less than the 5 in the other villian node reached when the hero plays &ldquo;Left&rdquo;. Therefore we do not need to traverse the subtree for when both players play &ldquo;Right&rdquo; since we know the hero will never play &ldquo;Right&rdquo;.</p>
 <p>More detail on alpha-beta pruning can be found in the <a href="https://inst.eecs.berkeley.edu/~cs188/fa18/">CS188 slides</a>.</p>
 <p>Recall that so far we have restricted our discussion of minimax to games in which the hero and villian are in direct opposition (i.e. the reward for one is the loss for the other). Suppose instead instead that this is not the case, and the opponent&rsquo;s reward may be completely unrelated to the hero&rsquo;s reward. Instead we model the decision of the villian as a discrete probability distribution over the actions avaliable to them in a particular state. Note that for the adverserial games discussed above the discrete probability distribution places all the probability mass on a single option (since we model the villian as playing optimally). In this generalisation called <em>expectimax</em> we choose the option that maximises the <em>expected reward</em> for the hero, rather than the worst reward.</p>
 <p>Concretely suppose that the hero has a set of actions available to them \(\mathcal{A}_H = \{a_h^1, \ldots, a_h^k\}\). For each action \(a_h^i\) the hero makes, the villians response is modelled by the random variable \(\mathcal{A}_V^i = \{a_V^{i,1}, \ldots, a_V^{i,n}\}\) and let \(V\) be a function that gives the value of the villians response.</p>
-<p>\[ \pi(S) = \underset{a_h^i \in \mathcal{A}_H}{\text{arg max}} ,, \mathbb{E}[V(\mathcal{A}_V^i)] \]</p>
+<p>\[ \pi(S) = \underset{a_h^i \in \mathcal{A}_H}{\text{arg max}} \,\, \mathbb{E}[V(\mathcal{A}_V^i)] \]</p>
 <p>With an example, suppose we have the following game tree.</p>
-<figure>
-    <img src="./expectimax_tree.png"/> 
+<figure><img src="./expectimax_tree.png">
 </figure>
 
 <p>The minimax solution to this game is for the hero to play &ldquo;Right&rdquo; with the goal of preventing themselves from scoring the -5, however when we look at the expectations of each move, on average playing &ldquo;Right&rdquo; yields 2.5 (\(1*0.4 + 4*0.6 = 2.8\)) buy playing &ldquo;Left&rdquo; yields 7.5 (\(20*0.5 + (-5)*0.5 = 7.5\)). Therefore the expectimax solution is to play &ldquo;Left&rdquo; in this game. The drawback with this approach is that we require a model of the exact probability distribution of the villians moves in each state.</p>
@@ -316,25 +257,12 @@ if (!doNotTrack) {
 </div>
 
         <footer class="post-footer clearfix">
-    
         <p class="post-tags">
             <span>Tagged:</span>
-            
-            
                 <a href="/tags/machine-learning/">machine-learning</a>, 
-            
                 <a href="/tags/games/">games</a>
-            
         </p>
-    
-
     <div class="share">
-        
-
-        
-
-        
-        
     </div>
 </footer>
 
@@ -349,15 +277,15 @@ if (!doNotTrack) {
             <div class="container">
                 <div class="site-title-wrapper">
                     <h1 class="site-title">
-                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                        <a href="https://banay.me/">Moss&#39; blog</a>
                     </h1>
-                    <a class="button-square button-jump-top js-jump-top" href="#">
-                        <i class="fa fa-angle-up"></i>
+                    <a class="button-square button-jump-top js-jump-top" href="#" aria-label="Back to Top">
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
                     </a>
                 </div>
 
                 <p class="footer-copyright">
-                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                    <span>&copy; 2026 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
                 </p>
                 <p class="footer-copyright">
                     <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
@@ -368,12 +296,8 @@ if (!doNotTrack) {
 
         <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
         <script src="https://banay.me/js/jquery.fitvids.js"></script>
-        
-        
-            <script src="../../../../highlight.pack.js"></script>
-        
-        
         <script src="https://banay.me/js/scripts.js"></script>
+        
     </body>
 </html>
 

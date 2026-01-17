@@ -3,79 +3,35 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>(Double) Q-learning and maximisation bias &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction In this article we&rsquo;ll review Q-learning and walk through a subtle improvement that leads to Double Q-learning and better policies. We&rsquo;ll then look at this in action, and compare the two methods on a toy problem.
-Reinforcement learning refresher In this article I assume a familiarity with reinforcement learning and the standard Q-learning algorithm. In this section I&rsquo;ll provide a brief review of the basic terminology, which you can feel free to skip if you&rsquo;re comfortable in doing so.">
+        <title>(Double) Q-learning and maximisation bias &middot; </title>
+        <meta name="description" content="Introduction
+In this article we&rsquo;ll review Q-learning and walk through a subtle improvement
+that leads to Double Q-learning and better policies. We&rsquo;ll then look at this in
+action, and compare the two methods on a toy problem.
+Reinforcement learning refresher
+In this article I assume a familiarity with reinforcement learning and the
+standard Q-learning algorithm. In this section I&rsquo;ll provide a brief review of
+the basic terminology, which you can feel free to skip if you&rsquo;re comfortable in
+doing so.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.73.0" />
+        <meta name="generator" content="Hugo 0.139.3">
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://banay.me/dist/site.css">
+        <link rel="stylesheet" href="https://banay.me/dist/syntax.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
-        <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$'], ['\\[','\\]']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-<script>
-  (function() {
-      var script = document.createElement('script');
-      window.counter = 'https://banay_me.goatcounter.com/count'
-      script.async = 1;
-      script.src = '//gc.zgo.at/count.js';
-
-      var ins = document.getElementsByTagName('script')[0];
-      ins.parentNode.insertBefore(script, ins)
-  })();
-</script>
-
-
         
+        
+        
+        
+
     </head>
     <body>
         
-<script type="application/javascript">
-var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-var doNotTrack = (dnt == "1" || dnt == "yes");
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-110997704-1', 'auto');
-	ga('set', 'anonymizeIp', true);
-	ga('send', 'pageview');
-}
-</script>
-
 
         <div id="wrapper">
             <header class="site-header">
@@ -83,10 +39,9 @@ if (!doNotTrack) {
                     <div class="site-title-wrapper">
                         
                             <h1 class="site-title">
-                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                                <a href="https://banay.me/">Moss&#39; blog</a>
                             </h1>
                         
-                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
                         
                         
                         
@@ -95,14 +50,15 @@ if (!doNotTrack) {
                         
                         
                         
-                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
-                                <i class="fa fa-envelope"></i>
+                            <a class="button-square button-social hint--top" data-hint="Email" aria-label="Send an Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
                         
                     </div>
 
                     <ul class="site-nav">
                         
+
                     </ul>
                 </div>
             </header>
@@ -157,7 +113,7 @@ observation representing the new state of the environment and a scalar <strong>r
 maximises the cumulative rewards emitted from the environment. <strong>Q-learning</strong> is
 one particular approach that estimates a policy without requiring perfect
 knowledge of the dynamics of the environment (e.g. the probability transition
-matrix of an <a href="https://en.wikipedia.org/wiki/Markov%5Fdecision%5Fprocess">MDP</a>).</p>
+matrix of an <a href="https://en.wikipedia.org/wiki/Markov_decision_process">MDP</a>).</p>
 <h2 id="q-learning-algorithm-refresher">Q-learning algorithm refresher</h2>
 <p>Q-learning generates a policy using a table of bootstrapped &ldquo;q-values&rdquo; that
 correspond to the <em>quality</em> of an action. Concretely, they are a mapping from a
@@ -165,7 +121,7 @@ state \(s\) and action \(a\) to a scalar. If \(S\) is the set of states and \(A\
 set of actions then,</p>
 <p>\[ Q : S \times A \to \mathbb{R} \]</p>
 <p>The <em>optimal</em> q-value function, denoted \(Q^*\), satisfies something called the
-<a href="https://en.wikipedia.org/wiki/Bellman%5Fequation">Bellman equation</a> and implies that \(Q^*(s,a)\) is equal to the expected future
+<a href="https://en.wikipedia.org/wiki/Bellman_equation">Bellman equation</a> and implies that \(Q^*(s,a)\) is equal to the expected future
 rewards if the agent plays \(a\) in \(s\). If we know \(Q^*\) then the trivial policy
 derived from it is to choose \(a\) that maximises \(Q(s,a)\) given our current state
 \(s\). We commonly denote a policy with \(\pi\).</p>
@@ -189,7 +145,7 @@ old estimate \(Q_t(s, a)\) and our new estimate \(r + \gamma \thinspace
 rewrite the update equation like so,</p>
 <p>\[ Q_{t+1}(s, a) := (1 - \alpha) \thinspace Q_t(s, a) + \alpha \left ( r + \gamma \thinspace \underset{a^{\prime}}{\text{max }} Q_t(s^{\prime}, a^{\prime}) \right) \]</p>
 <p>to illustrate this point. The greater \(\alpha\) is, the more weight we put on our
-new estimate of the q-value. It is shown by <a id="72f94ec385958aebe492937ba8824c54" href="#jaakkola1994convergence">(Jaakkola et al., 1994)</a> that if
+new estimate of the q-value. It is shown by <jaakkola1994convergence> that if
 we allow \(\alpha\) to vary over time and approach 0 then \(Q_t\) will converge to
 \(Q^*\) (great!).</p>
 <h2 id="a-closer-look-at-our-estimator">A closer look at our estimator</h2>
@@ -214,7 +170,7 @@ large values at time \(t\) are chosen more frequently, and this leads to an
 exaggeration of the true value of the next state. Therefore we end up being
 optimistic, which we&rsquo;ll later see can lead to worse policies before convergence
 to \(Q^*\). This issue is called <strong>maximisation bias</strong>.</p>
-<p>A key contribution by <a id="be0a72882f9620317f121403cf9c3438" href="#hasselt2010double">(Hasselt, 2010)</a> seeks to address this issue by
+<p>A key contribution by <hasselt2010double> seeks to address this issue by
 decoupling the estimator from its value. Instead of maintaining a single
 estimate of \(Q_t(s, a)\) we separate the samples we collect into two distinct
 subsets and use them to produce two different estimators (tables of q-values).
@@ -224,30 +180,30 @@ corresponding q-value <em>in the other table</em>. This approach is called <stro
 Q-learning</strong>, for obvious reasons. For example suppose our q-value estimates for
 a particular state \(s\) are given as follows.</p>
 <table>
-<thead>
-<tr>
-<th>Action</th>
-<th>\(Q_t^1(s, a)\)</th>
-<th>\(Q_t^2(s, a)\)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>\(a_1\)</td>
-<td>-4.9</td>
-<td>-2.3</td>
-</tr>
-<tr>
-<td>\(a_2\)</td>
-<td>2.3</td>
-<td>4.3</td>
-</tr>
-<tr>
-<td>\(a_3\)</td>
-<td>4.0</td>
-<td>3.5</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Action</th>
+          <th>\(Q_t^1(s, a)\)</th>
+          <th>\(Q_t^2(s, a)\)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>\(a_1\)</td>
+          <td>-4.9</td>
+          <td>-2.3</td>
+      </tr>
+      <tr>
+          <td>\(a_2\)</td>
+          <td>2.3</td>
+          <td>4.3</td>
+      </tr>
+      <tr>
+          <td>\(a_3\)</td>
+          <td>4.0</td>
+          <td>3.5</td>
+      </tr>
+  </tbody>
 </table>
 <p>With regular Q-learning we choose the action with the highest q-value and use
 that q-value as the estimate of the value. Here if we use \(Q_t^1(s, a)\) that
@@ -257,10 +213,9 @@ select \(a_3\) but we use the value from \(Q_t^2(s, a)\) giving us an estimate o
 <p>It can be shown that this is <em>also</em> a biased estimator, but with a negative
 bias rather than a positive bias as with regular Q-learning.</p>
 <h2 id="illustration-of-maximisation-bias">Illustration of maximisation bias</h2>
-<p>We will use the example given in <a id="62ea68c58cd19b9f34f70e09ca364abb" href="#sutton2018reinforcement">(Sutton &amp; Barto, 2018)</a> under section 6.7.
+<p>We will use the example given in <sutton2018reinforcement> under section 6.7.
 Suppose we have a MDP like the following.</p>
-<figure>
-    <img src="./bandits_graph.png" width="500px"/> 
+<figure><img src="./bandits_graph.png" width="500px">
 </figure>
 
 <p>When we start the game we have two options avaliable to us. If we play <code>Right</code>
@@ -277,8 +232,7 @@ chooses to take <code>Left</code> from the initial state. The optimal policy pla
 5% of the time due to detail in our training process <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>. The curve
 is created by repeating the training process from scratch many times to smooth
 it out. Below is the graph for \(k=4\).</p>
-<figure>
-    <img src="./qlearn_behaviour.png" width="500px"/> 
+<figure><img src="./qlearn_behaviour.png" width="500px">
 </figure>
 
 <p>Given our initial estimates of the q-values we are indifferent to either <code>Left</code>
@@ -306,41 +260,28 @@ cumulative reward, and how the estimator chosen for this quantity is tied to its
 value. This is addressed by Double Q-learning which we saw in the dummy problem
 tends to exhibit much better policies whilst maintaing the same convergence
 property towards the optimal q-value function \(Q^*\).</p>
-<h1 id="bibliography">Bibliography</h1>
-<p><a id="jaakkola1994convergence" target="_blank">Jaakkola, T., Jordan, M. I., &amp; Singh, S. P., <em>Convergence of stochastic iterative dynamic programming algorithms</em>, In , Advances in neural information processing systems (pp. 703–710) (1994). : .</a> <a href="#72f94ec385958aebe492937ba8824c54">↩</a></p>
-<p><a id="hasselt2010double" target="_blank">Hasselt, H. V., <em>Double q-learning</em>, In , Advances in neural information processing systems (pp. 2613–2621) (2010). : .</a> <a href="#be0a72882f9620317f121403cf9c3438">↩</a></p>
-<p><a id="sutton2018reinforcement" target="_blank">Sutton, R. S., &amp; Barto, A. G., <em>Reinforcement learning: an introduction</em> (2018), : MIT press.</a> <a href="#62ea68c58cd19b9f34f70e09ca364abb">↩</a></p>
-<section class="footnotes" role="doc-endnotes">
+<p>&lt;~/org/braindump/roam/bibliography/papers.bib&gt;</p>
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p>We use epsilon-greedy exploration while training for both algorithms with epsilon fixed at 90%. Therefore optimally <code>Right</code> is always choosen in the greedy step, and since <code>Left</code> is chosen 50% of the time in the explore step, an optimal policy plays <code>Left</code> 5% of the time. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p>We use epsilon-greedy exploration while training for both
+algorithms with epsilon fixed at 90%. Therefore optimally <code>Right</code> is
+always choosen in the greedy step, and since <code>Left</code> is chosen 50% of the time in
+the explore step, an optimal policy plays <code>Left</code> 5% of the time.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 </div>
 
         <footer class="post-footer clearfix">
-    
         <p class="post-tags">
             <span>Tagged:</span>
-            
-            
                 <a href="/tags/machine-learning/">machine-learning</a>, 
-            
                 <a href="/tags/reinforcement-learning/">reinforcement-learning</a>
-            
         </p>
-    
-
     <div class="share">
-        
-
-        
-
-        
-        
     </div>
 </footer>
 
@@ -355,15 +296,15 @@ property towards the optimal q-value function \(Q^*\).</p>
             <div class="container">
                 <div class="site-title-wrapper">
                     <h1 class="site-title">
-                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                        <a href="https://banay.me/">Moss&#39; blog</a>
                     </h1>
-                    <a class="button-square button-jump-top js-jump-top" href="#">
-                        <i class="fa fa-angle-up"></i>
+                    <a class="button-square button-jump-top js-jump-top" href="#" aria-label="Back to Top">
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
                     </a>
                 </div>
 
                 <p class="footer-copyright">
-                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                    <span>&copy; 2026 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
                 </p>
                 <p class="footer-copyright">
                     <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
@@ -374,12 +315,8 @@ property towards the optimal q-value function \(Q^*\).</p>
 
         <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
         <script src="https://banay.me/js/jquery.fitvids.js"></script>
-        
-        
-            <script src="../../../../highlight.pack.js"></script>
-        
-        
         <script src="https://banay.me/js/scripts.js"></script>
+        
     </body>
 </html>
 

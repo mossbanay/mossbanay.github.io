@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>elm on Moss&#39; blog</title>
+    <title>Elm on Moss&#39; blog</title>
     <link>https://banay.me/tags/elm/</link>
-    <description>Recent content in elm on Moss&#39; blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Elm on Moss&#39; blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Sat, 14 Mar 2020 18:18:00 +0100</lastBuildDate>
-    
-	<atom:link href="https://banay.me/tags/elm/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sat, 14 Mar 2020 18:18:00 +1100</lastBuildDate>
+    <atom:link href="https://banay.me/tags/elm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Websockets with Elm using ports</title>
       <link>https://banay.me/websockets-in-elm/</link>
-      <pubDate>Sat, 14 Mar 2020 18:18:00 +0100</pubDate>
-      
+      <pubDate>Sat, 14 Mar 2020 18:18:00 +1100</pubDate>
       <guid>https://banay.me/websockets-in-elm/</guid>
-      <description>Introduction Recently I came across the need for an easy UI to display information coming from a websocket. A niche option but one I&amp;rsquo;ve had a pleasant experience with previously is Elm, a functional language designed specifically for web applications.
-Previously, the standard approach for connecting to a websocket was through the elm/websocket package, has been recently broken after some of the recent changes to the Elm language. In the mean time while the package and others are being updated, there&amp;rsquo;s a simple workaround by using another Elm feature called ports which allow for interop with JavaScript code.</description>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Recently I came across the need for an easy UI to display information coming&#xA;from a websocket. A niche option but one I&amp;rsquo;ve had a pleasant experience with&#xA;previously is Elm, a functional language designed specifically for web&#xA;applications.&lt;/p&gt;&#xA;&lt;p&gt;Previously, the standard approach for connecting to a websocket was through the&#xA;&lt;a href=&#34;https://package.elm-lang.org/packages/elm-lang/websocket/latest&#34;&gt;elm/websocket&lt;/a&gt; package, has been recently &lt;a href=&#34;https://github.com/elm-lang/websocket/issues/28#issuecomment-415831336&#34;&gt;broken&lt;/a&gt; after some of the recent changes&#xA;to the Elm language. In the mean time while the package and others are being&#xA;updated, there&amp;rsquo;s a simple workaround by using another Elm feature called &lt;strong&gt;ports&lt;/strong&gt;&#xA;which allow for interop with JavaScript code.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

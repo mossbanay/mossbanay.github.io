@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Don&#39;t waste your back pressure &middot; </title>
+        <meta name="description" content="Back pressure for agents
+You might notice a pattern in the most successful applications of agents over the last year. Projects that are able to
+setup structure around the agent itself, to provide it with automated feedback on quality and correctness, have been able
+to push them to work on longer horizon tasks.
+This back pressure helps the agent identify mistakes as it progresses and models are now good enough that this feedback
+can keep them aligned to a task for much longer. As an engineer, this means you can increase your leverage by delegating
+progressively more complex tasks to agents, while increasing trust that when completed they are at a satisfactory standard.">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="generator" content="Hugo 0.139.3">
+        <meta name="robots" content="index,follow">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link rel="stylesheet" href="https://banay.me/dist/site.css">
+        <link rel="stylesheet" href="https://banay.me/dist/syntax.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+        
+        
+        
+        
+        
+
+    </head>
+    <body>
+        
+
+        <div id="wrapper">
+            <header class="site-header">
+                <div class="container">
+                    <div class="site-title-wrapper">
+                        
+                            <h1 class="site-title">
+                                <a href="https://banay.me/">Moss&#39; blog</a>
+                            </h1>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                            <a class="button-square button-social hint--top" data-hint="Email" aria-label="Send an Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                            </a>
+                        
+                    </div>
+
+                    <ul class="site-nav">
+                        
+
+                    </ul>
+                </div>
+            </header>
+
+            <div id="container">
+
+
+<div class="container">
+    <article class="post-container" itemscope="" itemtype="http://schema.org/BlogPosting">
+        <header class="post-header">
+    <h1 class="post-title" itemprop="name headline">Don&#39;t waste your back pressure</h1>
+    
+    <p class="post-date">
+        <span>Published <time datetime="2026-01-17" itemprop="datePublished">Sat, Jan 17, 2026</time></span>
+        <span>by</span>
+        <span itemscope="" itemprop="author" itemtype="https://schema.org/Person">
+            <span itemprop="name">
+                <a href="#" itemprop="url" rel="author">[Mossimo Ebeling]</a>
+            </span>
+        </span>
+    </p>
+    
+        <p class="post-reading post-line">
+            <span>Estimated reading time: 4 min</span>
+        </p>
+    
+</header>
+
+        <div class="post-content clearfix" itemprop="articleBody">
+    
+
+    <h2 id="back-pressure-for-agents">Back pressure for agents</h2>
+<p>You might notice a pattern in the most successful applications of agents over the last year. Projects that are able to
+setup structure around the agent itself, to provide it with automated feedback on quality and correctness, have been able
+to push them to work on longer horizon tasks.</p>
+<p>This <strong>back pressure</strong> helps the agent identify mistakes as it progresses and models are now good enough that this feedback
+can keep them aligned to a task for much longer. As an engineer, this means you can increase your leverage by delegating
+progressively more complex tasks to agents, while increasing trust that when completed they are at a satisfactory standard.</p>
+<p>Imagine for a second if you only gave an agent tools that allow it to edit files. Without a way to interact with a build
+system the model relies on you for feedback about whether or not the change it made is sensible. This means you spend <strong>your</strong>
+back pressure (the time you spend giving feedback to agents) on typing a message telling the agent it missed an import. This
+scales poorly and limits you to working on simple problems.</p>
+<figure><img src="/ox-hugo/plot_0.png">
+</figure>
+
+<p>If you&rsquo;re directly responsible for checking each line of code produced is syntactically valid, then that&rsquo;s time taken away
+from thinking about the larger goals or problems in your software. You&rsquo;re going to struggle to derive more leverage out of
+agents because you are caught up in trivial changes. If instead you give the agent tools that allow it to run bash commands,
+it can run a build, read the feedback, and correct itself. You remove yourself from needing to be involved in those tasks
+and can instead focus on higher complexity tasks.</p>
+<figure><img src="/ox-hugo/plot_1.png">
+</figure>
+
+<p>Languages with expressive type systems have been
+<a href="https://github.blog/ai-and-ml/llms/why-ai-is-pushing-developers-toward-typed-languages/">growing in popularity</a> in part
+because of back pressure. Type systems allow you to describe better contracts in your program. They can let you avoid it
+from even being possible to represent invalid states in your program. They can help you to identify edge cases that you
+might not handle. Being able to lean on these features is another form of creating back pressure which you can direct as
+feedback on changes made by an agent.</p>
+<p>Bonus points go to languages that work to produce excellent error messages (think
+<a href="https://kobzol.github.io/rust/rustc/2025/05/16/evolution-of-rustc-errors.html">Rust</a>,
+<a href="https://elm-lang.org/news/compiler-errors-for-humans">Elm</a> and even
+<a href="https://peps.python.org/pep-0657/">Python</a>). These messages are fed directly back into the LLM so the more guidance or even
+suggested resolutions the better.</p>
+<figure><img src="/ox-hugo/plot_2.png">
+</figure>
+
+<p>Another example of back pressure is the rapid uptake in people giving agents a way to see rendered pages using MCP servers
+for Playwright or Chrome DevTools. In either case these tools give the agent a way to be able to make a change and compare
+an expectation of what it might see in the UI against a result. Attaching these tools mean you remove yourself from needing
+to keep telling the agent that you&rsquo;re not seeing a UI element load correctly or something isn&rsquo;t centered. Not working on a
+UI application? Use MCP servers that bridge to LSPs for lints or other feedback.</p>
+<figure><img src="/ox-hugo/plot_3.png">
+</figure>
+
+<p>Even outside of engineering tasks, proof assistants like Lean combined with AI (see recent work on the
+<a href="https://mathstodon.xyz/@tao/115855840223258103">Erdős Problems</a> which was solved by Kevin Barreto and Liam Price by using
+Aristotle to formalise a proof written by GPT-5.2 Pro into Lean), randomized fuzzing to evaluate correctness when
+<a href="https://crfm.stanford.edu/2025/05/28/fast-kernels.html">generating CUDA kernels</a> or logic programming with agents are all
+powerful combinations because they let you keep pulling the LLM slot machine lever until the result you have can be trusted.
+I think that the payoff of investing into higher quality testing is growing massively, and an increasing part of engineering
+will involve designing and building back pressure in order to scale the rate at which contributions from agents can be
+accepted.</p>
+<p>If you&rsquo;re doing spec-driven development and you want the agent to generate a specific API schema, setup automatic generation
+of documentation based on the OpenAPI schema from your application so the agent can compare the result it produced and what
+it intended on making. There are many more techniques you can apply similar to this once you recognize the pattern.</p>
+<figure><img src="/ox-hugo/plot_4.png">
+</figure>
+
+<p>In your projects you should think about how you can build back pressure into your workflow and once you have it, you can
+<a href="https://ghuntley.com/ralph/">loop agents</a> until they have stamped out all of the inconsistencies and issues for you.
+Without it, you&rsquo;re going to be stuck spending your time telling the agent about each mistake it makes yourself.</p>
+<p>So next time, think - <strong>are you wasting your back pressure?</strong></p>
+
+</div>
+
+        <footer class="post-footer clearfix">
+        <p class="post-tags">
+            <span>Tagged:</span>
+                <a href="/tags/ai/">ai</a>
+        </p>
+    <div class="share">
+    </div>
+</footer>
+
+        
+    </article>
+</div>
+
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="site-title-wrapper">
+                    <h1 class="site-title">
+                        <a href="https://banay.me/">Moss&#39; blog</a>
+                    </h1>
+                    <a class="button-square button-jump-top js-jump-top" href="#" aria-label="Back to Top">
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
+                    </a>
+                </div>
+
+                <p class="footer-copyright">
+                    <span>&copy; 2026 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                </p>
+                <p class="footer-copyright">
+                    <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
+                    <span>/ <a href="https://github.com/jbub/ghostwriter">Ported</a> to Hugo By <a href="https://github.com/jbub">jbub</a></span>
+                </p>
+            </div>
+        </footer>
+
+        <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
+        <script src="https://banay.me/js/jquery.fitvids.js"></script>
+        <script src="https://banay.me/js/scripts.js"></script>
+        
+    </body>
+</html>
+

@@ -3,78 +3,28 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Hyperparameter selection with T-tests &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.">
+        <title>Hyperparameter selection with T-tests &middot; </title>
+        <meta name="description" content="Introduction
+One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.73.0" />
+        <meta name="generator" content="Hugo 0.139.3">
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://banay.me/dist/site.css">
+        <link rel="stylesheet" href="https://banay.me/dist/syntax.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
-        <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$'], ['\\[','\\]']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-<script>
-  (function() {
-      var script = document.createElement('script');
-      window.counter = 'https://banay_me.goatcounter.com/count'
-      script.async = 1;
-      script.src = '//gc.zgo.at/count.js';
-
-      var ins = document.getElementsByTagName('script')[0];
-      ins.parentNode.insertBefore(script, ins)
-  })();
-</script>
-
-
         
+        
+        
+        
+
     </head>
     <body>
         
-<script type="application/javascript">
-var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-var doNotTrack = (dnt == "1" || dnt == "yes");
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-110997704-1', 'auto');
-	ga('set', 'anonymizeIp', true);
-	ga('send', 'pageview');
-}
-</script>
-
 
         <div id="wrapper">
             <header class="site-header">
@@ -82,10 +32,9 @@ if (!doNotTrack) {
                     <div class="site-title-wrapper">
                         
                             <h1 class="site-title">
-                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                                <a href="https://banay.me/">Moss&#39; blog</a>
                             </h1>
                         
-                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
                         
                         
                         
@@ -94,14 +43,15 @@ if (!doNotTrack) {
                         
                         
                         
-                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
-                                <i class="fa fa-envelope"></i>
+                            <a class="button-square button-social hint--top" data-hint="Email" aria-label="Send an Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
                         
                     </div>
 
                     <ul class="site-nav">
                         
+
                     </ul>
                 </div>
             </header>
@@ -139,45 +89,42 @@ if (!doNotTrack) {
 <p>Often one run of cross-validation is completed and we compare the mean score with that from a baseline model. In this article we will explore an extension of this moving from comparison of two point estimates of performance to using T-tests to quantify how statistically significant the improvement is. Testing hypotheses about the relative performance of different parameterisations of the same model allows us to also tune hyperparameters using the same ideas.</p>
 <h2 id="using-k-fold-cross-validation">Using $k$-fold cross-validation</h2>
 <p>Let&rsquo;s use a simple example to demonstrate these techniques. We will use numpy to generate a simple non-linear function that we try to fit for the rest of this article.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">TRAIN_SIZE <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
-TEST_SIZE  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
-SEED <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
-NOISE_VAR <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.25</span>
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f</span>(X):
-    y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(<span style="color:#ae81ff">4</span><span style="color:#f92672">*</span>X)
-    <span style="color:#66d9ef">return</span> y<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_noise</span>(y):
-    <span style="color:#66d9ef">return</span> y <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0</span>, NOISE_VAR, size<span style="color:#f92672">=</span>y<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>])<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
-
-<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_training_data</span>(size):
-    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>sort(np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(size)<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
-
-X_train <span style="color:#f92672">=</span> generate_training_data(TRAIN_SIZE)
-y_train <span style="color:#f92672">=</span> add_noise(f(X_train))
-
-X_test <span style="color:#f92672">=</span> generate_training_data(TEST_SIZE)
-y_test <span style="color:#f92672">=</span> add_noise(f(X_test))
-</code></pre></div><figure>
-    <img src="./f.png"/> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>TRAIN_SIZE <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>TEST_SIZE  <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>SEED <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>NOISE_VAR <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.25</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">f</span>(X):
+</span></span><span style="display:flex;"><span>    y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sin(<span style="color:#ae81ff">4</span><span style="color:#f92672">*</span>X)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> y<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">add_noise</span>(y):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> y <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0</span>, NOISE_VAR, size<span style="color:#f92672">=</span>y<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>])<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_training_data</span>(size):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>sort(np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(size)<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>X_train <span style="color:#f92672">=</span> generate_training_data(TRAIN_SIZE)
+</span></span><span style="display:flex;"><span>y_train <span style="color:#f92672">=</span> add_noise(f(X_train))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>X_test <span style="color:#f92672">=</span> generate_training_data(TEST_SIZE)
+</span></span><span style="display:flex;"><span>y_test <span style="color:#f92672">=</span> add_noise(f(X_test))
+</span></span></code></pre></div><figure><img src="./f.png">
 </figure>
 
 <p>Now we will use a decision tree to try to fit this function. Let&rsquo;s try all the values for <code>max_depth</code> from 2 to 15, with 5-fold cross-validation to choose the best parameterisation.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">tree_params <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;max_depth&#39;</span>: range(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">16</span>)}
-k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
-
-tree_gs <span style="color:#f92672">=</span> GridSearchCV(DecisionTreeRegressor(), tree_params,
-                       cv<span style="color:#f92672">=</span>k, scoring<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;neg_mean_squared_error&#39;</span>)
-
-tree_gs<span style="color:#f92672">.</span>fit(X_train, y_train)
-</code></pre></div><figure>
-    <img src="./k-fold-cv-fit.png"/> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>tree_params <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;max_depth&#39;</span>: range(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">16</span>)}
+</span></span><span style="display:flex;"><span>k <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tree_gs <span style="color:#f92672">=</span> GridSearchCV(DecisionTreeRegressor(), tree_params,
+</span></span><span style="display:flex;"><span>                       cv<span style="color:#f92672">=</span>k, scoring<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;neg_mean_squared_error&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tree_gs<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span></code></pre></div><figure><img src="./k-fold-cv-fit.png">
 </figure>
 
 <p>The choice of hyperparameter that give the highest average cross-validation score was a max depth of 7, for an average mean squared error of 0.94093 across the 5 folds. But how good is 0.94093? We can compare it with the other values of <code>max_depth</code> to see how much better the chosen value is, the type of maxima and judge how much changing this hyperparameter actually affects the mean squared error.</p>
-<figure>
-    <img src="./k-fold-cv-mse-curve.png"/> 
+<figure><img src="./k-fold-cv-mse-curve.png">
 </figure>
 
 <blockquote>
@@ -185,83 +132,79 @@ tree_gs<span style="color:#f92672">.</span>fit(X_train, y_train)
 </blockquote>
 <p>In this example it looks like the best value for <code>max_depth</code> is somewhere between 6 and 8. Since this is a relatively smooth maxima we may choose to average the predictions from trees with a max depth of 6, 7 and 8. It looks like depths greater than 8 offer no further improvement in fit, so generally we&rsquo;ll prefer to take less complex models and avoid depths above 8.</p>
 <h2 id="using-t-tests">Using T-tests</h2>
-<p>When using $k$-fold cross-validation we get an average over \(k\) scores from different training and test sets. We can think of the average as a draw from some distribution of test scores conditional on the model that we fit to the training data. Among all models we generally want to pick the model that has the distribution of test scores with the highest possible mean. If we assume that the distribution of average test score for a model are normally distributed (by <a href="https://en.wikipedia.org/wiki/Central%5Flimit%5Ftheorem">CLT</a>) with some unknown variance, we can use hypothesis testing to compare the draws from different distributions to see if there is a meaningful increase in the performance when moving from one model to another.</p>
+<p>When using $k$-fold cross-validation we get an average over \(k\) scores from different training and test sets. We can think of the average as a draw from some distribution of test scores conditional on the model that we fit to the training data. Among all models we generally want to pick the model that has the distribution of test scores with the highest possible mean. If we assume that the distribution of average test score for a model are normally distributed (by <a href="https://en.wikipedia.org/wiki/Central_limit_theorem">CLT</a>) with some unknown variance, we can use hypothesis testing to compare the draws from different distributions to see if there is a meaningful increase in the performance when moving from one model to another.</p>
 <p>Concretely, suppose we have two models \(\mathcal{M}_A\) and \(\mathcal{M}_B\). \(\mathcal{M}_A\) is a model we use as a benchmark and \(\mathcal{M}_B\) is a model we hope outperforms the benchmark. Assume that the average test score for \(\mathcal{M}_A\) and \(\mathcal{M}_B\) are distributed as \(\mathcal{N}(\mu_A, \sigma^2_A)\) and \(\mathcal{N}(\mu_B, \sigma^2_B)\) respectively. Then we are interested in testing the hypotheses</p>
 <p>\begin{array}{rcl}
-H_0 &amp;:&amp; \mu_A \geq \mu_B \\\<br>
-H_1 &amp;:&amp; \mu_A &lt; \mu_B \\\<br>
+H_0 &amp;:&amp; \mu_A \geq \mu_B \\
+H_1 &amp;:&amp; \mu_A &lt; \mu_B \\
 \end{array}</p>
 <p>Testing this hypotheses using the draws collected in from repeated iterations of $k$-fold cross-validation allows us to more accurately consider the uncertainty in the difference between models. We can apply this to the 5-fold cross-validation we completed above for the decision tree and look at the curve of the T-stats. For a benchmark, we will set the maximum depth for the tree to 1.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_cv_draws</span>(estimator, X, y, k<span style="color:#f92672">=</span>k, cv_runs<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>):
-    draws <span style="color:#f92672">=</span> []
-
-    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(cv_runs):
-        skf <span style="color:#f92672">=</span> KFold(n_splits<span style="color:#f92672">=</span>k, random_state<span style="color:#f92672">=</span>SEED<span style="color:#f92672">+</span>i, shuffle<span style="color:#f92672">=</span>True)
-        cv_draw <span style="color:#f92672">=</span> cross_val_score(estimator, X, y,
-                                  cv<span style="color:#f92672">=</span>skf, scoring<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;neg_mean_squared_error&#39;</span>)
-        draws<span style="color:#f92672">.</span>append(cv_draw<span style="color:#f92672">.</span>mean())
-
-    <span style="color:#66d9ef">return</span> draws
-</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">benchmark_model <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
-benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark_model, X_train, y_train, k)
-</code></pre></div><p>Now we have the draws from the distribution of average test scores for our benchmark model, we take draws for each possible value of max depth to calculate a T-statistic for the hypothesis test.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">t_test_grid_cv</span>(models, X, y, benchmark_draws):
-    t_stats <span style="color:#f92672">=</span> []
-
-    <span style="color:#66d9ef">for</span> model <span style="color:#f92672">in</span> models:
-        candidate_draws <span style="color:#f92672">=</span> generate_cv_draws(model, X, y)
-
-        t_stat, p_value <span style="color:#f92672">=</span> ttest_rel(candidate_draws, benchmark_draws)
-        t_stats<span style="color:#f92672">.</span>append(t_stat)
-
-    <span style="color:#66d9ef">return</span> t_stats
-</code></pre></div><blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_cv_draws</span>(estimator, X, y, k<span style="color:#f92672">=</span>k, cv_runs<span style="color:#f92672">=</span><span style="color:#ae81ff">15</span>):
+</span></span><span style="display:flex;"><span>    draws <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(cv_runs):
+</span></span><span style="display:flex;"><span>        skf <span style="color:#f92672">=</span> KFold(n_splits<span style="color:#f92672">=</span>k, random_state<span style="color:#f92672">=</span>SEED<span style="color:#f92672">+</span>i, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>        cv_draw <span style="color:#f92672">=</span> cross_val_score(estimator, X, y,
+</span></span><span style="display:flex;"><span>                                  cv<span style="color:#f92672">=</span>skf, scoring<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;neg_mean_squared_error&#39;</span>)
+</span></span><span style="display:flex;"><span>        draws<span style="color:#f92672">.</span>append(cv_draw<span style="color:#f92672">.</span>mean())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> draws
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>benchmark_model <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark_model, X_train, y_train, k)
+</span></span></code></pre></div><p>Now we have the draws from the distribution of average test scores for our benchmark model, we take draws for each possible value of max depth to calculate a T-statistic for the hypothesis test.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">t_test_grid_cv</span>(models, X, y, benchmark_draws):
+</span></span><span style="display:flex;"><span>    t_stats <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> model <span style="color:#f92672">in</span> models:
+</span></span><span style="display:flex;"><span>        candidate_draws <span style="color:#f92672">=</span> generate_cv_draws(model, X, y)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        t_stat, p_value <span style="color:#f92672">=</span> ttest_rel(candidate_draws, benchmark_draws)
+</span></span><span style="display:flex;"><span>        t_stats<span style="color:#f92672">.</span>append(t_stat)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> t_stats
+</span></span></code></pre></div><blockquote>
 <p>It&rsquo;s important to note that we are conducting a paired T-test here, since we are looking at the mean difference between the average test scores.</p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">models <span style="color:#f92672">=</span> [DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
-          <span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74">&#39;max_depth&#39;</span>]]
-t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_train, benchmark_draws)
-</code></pre></div><p>Plotting the curve of the T-statistics, we see an interesting result.</p>
-<figure>
-    <img src="./t-stat-curve.png"/> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>models <span style="color:#f92672">=</span> [DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74">&#39;max_depth&#39;</span>]]
+</span></span><span style="display:flex;"><span>t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_train, benchmark_draws)
+</span></span></code></pre></div><p>Plotting the curve of the T-statistics, we see an interesting result.</p>
+<figure><img src="./t-stat-curve.png">
 </figure>
 
 <p>It looks like the best choice for max depth as judged by the T-statistics is slightly lower in the range from 4 to 6 compared to 6 to 8 for cross-validation. It&rsquo;s worth noting also that the T-statistics for all choices of the hyperparameter are positive, meaning that the mean for the alternative distributions are believed to be higher than the mean of the benchmark distribution.</p>
 <p>A test statistic of about 7 corresponds to a p-value of about 0.001, so it&rsquo;s very clear these models outperform the decision tree with a max depth of 1.</p>
 <p>Finally we can sneak a look at performance on the test set to see what value for <code>max_depth</code> actually maximised performance.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">neg_mse <span style="color:#f92672">=</span> []
-
-<span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74">&#39;max_depth&#39;</span>]:
-    tree <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
-    tree<span style="color:#f92672">.</span>fit(X_train, y_train)
-    pred <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>predict(X_test)
-    neg_mse<span style="color:#f92672">.</span>append(<span style="color:#f92672">-</span>mean_squared_error(y_test, pred))
-</code></pre></div><figure>
-    <img src="./test-max_depth.png"/> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>neg_mse <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> max_depth <span style="color:#f92672">in</span> tree_params[<span style="color:#e6db74">&#39;max_depth&#39;</span>]:
+</span></span><span style="display:flex;"><span>    tree <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span>max_depth)
+</span></span><span style="display:flex;"><span>    tree<span style="color:#f92672">.</span>fit(X_train, y_train)
+</span></span><span style="display:flex;"><span>    pred <span style="color:#f92672">=</span> tree<span style="color:#f92672">.</span>predict(X_test)
+</span></span><span style="display:flex;"><span>    neg_mse<span style="color:#f92672">.</span>append(<span style="color:#f92672">-</span>mean_squared_error(y_test, pred))
+</span></span></code></pre></div><figure><img src="./test-max_depth.png">
 </figure>
 
 <p>We see the best value for <code>max_depth</code> was just between the estimates given by T-testing and cross-validation at around 5. It seems that cross-validation slightly overfit and T-testing was around the right area.</p>
 <h2 id="model-selection-extension">Model selection extension</h2>
 <p>Of course we never specified in our hypothesis test that the alternative model is the same model as the benchmark. Let&rsquo;s investigate if a simple linear regression model with a variable number of polynomial features would outperform the best decision tree we&rsquo;ve found so far.</p>
 <p>As before we will generate our benchmark draws</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">benchmark_model <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
-benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark_model, X_train, y_train, k)
-</code></pre></div><p>Then generate the candidate draws</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">model_params <span style="color:#f92672">=</span> {
-    <span style="color:#e6db74">&#39;degree&#39;</span>:range(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">16</span>)
-}
-
-models <span style="color:#f92672">=</span> [make_pipeline(PolynomialFeatures(degree<span style="color:#f92672">=</span>degree), LinearRegression())
-          <span style="color:#66d9ef">for</span> degree <span style="color:#f92672">in</span> model_params[<span style="color:#e6db74">&#39;degree&#39;</span>]]
-
-t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_train, benchmark_draws)
-</code></pre></div><figure>
-    <img src="./linear-regression-t-stat-curve.png"/> 
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>benchmark_model <span style="color:#f92672">=</span> DecisionTreeRegressor(max_depth<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>benchmark_draws <span style="color:#f92672">=</span> generate_cv_draws(benchmark_model, X_train, y_train, k)
+</span></span></code></pre></div><p>Then generate the candidate draws</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>model_params <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;degree&#39;</span>:range(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">16</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>models <span style="color:#f92672">=</span> [make_pipeline(PolynomialFeatures(degree<span style="color:#f92672">=</span>degree), LinearRegression())
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">for</span> degree <span style="color:#f92672">in</span> model_params[<span style="color:#e6db74">&#39;degree&#39;</span>]]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_train, benchmark_draws)
+</span></span></code></pre></div><figure><img src="./linear-regression-t-stat-curve.png">
 </figure>
 
 <p>It looks like linear regression with 9th order polynomial terms outperforms the decision tree with very low uncertainty. We can plot the final predictions over the true function \(f(x)\)</p>
-<figure>
-    <img src="./dt-lin-reg-predictions.png"/> 
+<figure><img src="./dt-lin-reg-predictions.png">
 </figure>
 
 <h2 id="references">References</h2>
@@ -271,25 +214,12 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
 </div>
 
         <footer class="post-footer clearfix">
-    
         <p class="post-tags">
             <span>Tagged:</span>
-            
-            
                 <a href="/tags/machine-learning/">machine-learning</a>, 
-            
                 <a href="/tags/statistics/">statistics</a>
-            
         </p>
-    
-
     <div class="share">
-        
-
-        
-
-        
-        
     </div>
 </footer>
 
@@ -304,15 +234,15 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
             <div class="container">
                 <div class="site-title-wrapper">
                     <h1 class="site-title">
-                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                        <a href="https://banay.me/">Moss&#39; blog</a>
                     </h1>
-                    <a class="button-square button-jump-top js-jump-top" href="#">
-                        <i class="fa fa-angle-up"></i>
+                    <a class="button-square button-jump-top js-jump-top" href="#" aria-label="Back to Top">
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
                     </a>
                 </div>
 
                 <p class="footer-copyright">
-                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                    <span>&copy; 2026 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
                 </p>
                 <p class="footer-copyright">
                     <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
@@ -323,12 +253,8 @@ t_stats <span style="color:#f92672">=</span> t_test_grid_cv(models, X_train, y_t
 
         <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
         <script src="https://banay.me/js/jquery.fitvids.js"></script>
-        
-        
-            <script src="../../../../highlight.pack.js"></script>
-        
-        
         <script src="https://banay.me/js/scripts.js"></script>
+        
     </body>
 </html>
 

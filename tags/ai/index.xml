@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ai on Moss&#39; blog</title>
+    <link>https://banay.me/tags/ai/</link>
+    <description>Recent content in Ai on Moss&#39; blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <copyright>Moss Ebeling</copyright>
+    <lastBuildDate>Sat, 17 Jan 2026 19:56:00 +1100</lastBuildDate>
+    <atom:link href="https://banay.me/tags/ai/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Don&#39;t waste your back pressure</title>
+      <link>https://banay.me/dont-waste-your-backpressure/</link>
+      <pubDate>Sat, 17 Jan 2026 19:56:00 +1100</pubDate>
+      <guid>https://banay.me/dont-waste-your-backpressure/</guid>
+      <description>&lt;h2 id=&#34;back-pressure-for-agents&#34;&gt;Back pressure for agents&lt;/h2&gt;&#xA;&lt;p&gt;You might notice a pattern in the most successful applications of agents over the last year. Projects that are able to&#xA;setup structure around the agent itself, to provide it with automated feedback on quality and correctness, have been able&#xA;to push them to work on longer horizon tasks.&lt;/p&gt;&#xA;&lt;p&gt;This &lt;strong&gt;back pressure&lt;/strong&gt; helps the agent identify mistakes as it progresses and models are now good enough that this feedback&#xA;can keep them aligned to a task for much longer. As an engineer, this means you can increase your leverage by delegating&#xA;progressively more complex tasks to agents, while increasing trust that when completed they are at a satisfactory standard.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

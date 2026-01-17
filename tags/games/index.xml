@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>games on Moss&#39; blog</title>
+    <title>Games on Moss&#39; blog</title>
     <link>https://banay.me/tags/games/</link>
-    <description>Recent content in games on Moss&#39; blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Games on Moss&#39; blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
     <lastBuildDate>Sun, 19 May 2019 14:36:00 +1000</lastBuildDate>
-    
-	<atom:link href="https://banay.me/tags/games/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://banay.me/tags/games/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Playing Tic-tac-toe with minimax in Python</title>
       <link>https://banay.me/tic-tac-toe-minimax/</link>
       <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
-      
       <guid>https://banay.me/tic-tac-toe-minimax/</guid>
-      <description>Introduction In this article we will explain the minimax algorithm. We&amp;rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&amp;rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.
-Game trees For games with perfect information, we can model the entire play-space using a directed graph called game tree. A game tree simply illustrates all possible ways in which a game may play out.</description>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this article we will explain the minimax algorithm. We&amp;rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&amp;rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.&lt;/p&gt;&#xA;&lt;h2 id=&#34;game-trees&#34;&gt;Game trees&lt;/h2&gt;&#xA;&lt;p&gt;For games with perfect information, we can model the entire play-space using a directed graph called &lt;em&gt;game tree&lt;/em&gt;. A game tree simply illustrates all possible ways in which a game may play out. Each node described a particular state in the game, and it has one child node for each possible action that might occur from that state. To generate a game tree, we need only the rules of the game as inputs.&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>

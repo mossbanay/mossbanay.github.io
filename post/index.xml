@@ -7,14 +7,84 @@
     <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
-    <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
+    <lastBuildDate>Sat, 17 Jan 2026 19:56:00 +1100</lastBuildDate>
     <atom:link href="https://banay.me/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Don&#39;t waste your back pressure</title>
+      <link>https://banay.me/dont-waste-your-backpressure/</link>
+      <pubDate>Sat, 17 Jan 2026 19:56:00 +1100</pubDate>
+      <guid>https://banay.me/dont-waste-your-backpressure/</guid>
+      <description>&lt;h2 id=&#34;back-pressure-for-agents&#34;&gt;Back pressure for agents&lt;/h2&gt;&#xA;&lt;p&gt;You might notice a pattern in the most successful applications of agents over the last year. Projects that are able to&#xA;setup structure around the agent itself, to provide it with automated feedback on quality and correctness, have been able&#xA;to push them to work on longer horizon tasks.&lt;/p&gt;&#xA;&lt;p&gt;This &lt;strong&gt;back pressure&lt;/strong&gt; helps the agent identify mistakes as it progresses and models are now good enough that this feedback&#xA;can keep them aligned to a task for much longer. As an engineer, this means you can increase your leverage by delegating&#xA;progressively more complex tasks to agents, while increasing trust that when completed they are at a satisfactory standard.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Debugging some GANs</title>
+      <link>https://banay.me/debugging-a-gan/</link>
+      <pubDate>Tue, 30 Jun 2020 21:01:00 +1000</pubDate>
+      <guid>https://banay.me/debugging-a-gan/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Recently I&amp;rsquo;ve been motivated to investigate generative models, of which the&#xA;most popular is currently GANs. The best way I could think of learning about&#xA;GANs in deeper detail (since I&amp;rsquo;m interested in tweaking them later in some&#xA;applied cases) is to implement them myself, and solve the bugs and issues that&#xA;arise in practice myself.&lt;/p&gt;&#xA;&lt;p&gt;In this article I&amp;rsquo;ll use PyTorch and a framework that helps simplify training&#xA;called PyTorch Lightning &lt;falcon2019pytorch&gt;. PyTorch Lightning allow&#xA;separation of training code from network architecture code. It also exposes&#xA;useful callback methods to quickly add different logging or debugging which can&#xA;be useful when training GANs, which is often a non-trivial process.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Visualising XBTUSD orderbooks</title>
+      <link>https://banay.me/xbtusd-orderbook-vis/</link>
+      <pubDate>Sun, 31 May 2020 19:51:00 +1000</pubDate>
+      <guid>https://banay.me/xbtusd-orderbook-vis/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Orderbooks are tables that show the immediate and public supply and demand of&#xA;instruments that trade on financial exchanges. They collate orders that specify&#xA;the direction, price and volume at which a party wants to trade an instrument.&lt;/p&gt;&#xA;&lt;p&gt;I have collected several months of orderbook snapshots from the perpetual XBTUSD&#xA;contract on the cryptocurrency derivatives exchange &lt;a href=&#34;https://www.bitmex.com/app/trade/XBTUSD&#34;&gt;BitMEX&lt;/a&gt;. Here I want to show&#xA;some simple visualisations that give more detail into the drivers of particular&#xA;changes in price that are not observable with more common candlestick charts.&#xA;Orderbook charts are not however a substitute for candlestick charts, but show&#xA;different information, in particular over shorter timespans.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>(Double) Q-learning and maximisation bias</title>
+      <link>https://banay.me/maximisation-bias-q-learning/</link>
+      <pubDate>Thu, 30 Apr 2020 16:36:00 +1000</pubDate>
+      <guid>https://banay.me/maximisation-bias-q-learning/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this article we&amp;rsquo;ll review Q-learning and walk through a subtle improvement&#xA;that leads to Double Q-learning and better policies. We&amp;rsquo;ll then look at this in&#xA;action, and compare the two methods on a toy problem.&lt;/p&gt;&#xA;&lt;h2 id=&#34;reinforcement-learning-refresher&#34;&gt;Reinforcement learning refresher&lt;/h2&gt;&#xA;&lt;p&gt;In this article I assume a familiarity with reinforcement learning and the&#xA;standard Q-learning algorithm. In this section I&amp;rsquo;ll provide a brief review of&#xA;the basic terminology, which you can feel free to skip if you&amp;rsquo;re comfortable in&#xA;doing so.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Websockets with Elm using ports</title>
+      <link>https://banay.me/websockets-in-elm/</link>
+      <pubDate>Sat, 14 Mar 2020 18:18:00 +1100</pubDate>
+      <guid>https://banay.me/websockets-in-elm/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;Recently I came across the need for an easy UI to display information coming&#xA;from a websocket. A niche option but one I&amp;rsquo;ve had a pleasant experience with&#xA;previously is Elm, a functional language designed specifically for web&#xA;applications.&lt;/p&gt;&#xA;&lt;p&gt;Previously, the standard approach for connecting to a websocket was through the&#xA;&lt;a href=&#34;https://package.elm-lang.org/packages/elm-lang/websocket/latest&#34;&gt;elm/websocket&lt;/a&gt; package, has been recently &lt;a href=&#34;https://github.com/elm-lang/websocket/issues/28#issuecomment-415831336&#34;&gt;broken&lt;/a&gt; after some of the recent changes&#xA;to the Elm language. In the mean time while the package and others are being&#xA;updated, there&amp;rsquo;s a simple workaround by using another Elm feature called &lt;strong&gt;ports&lt;/strong&gt;&#xA;which allow for interop with JavaScript code.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Let&#39;s write a Neural Arithmetic Logic Unit</title>
+      <link>https://banay.me/nalu/</link>
+      <pubDate>Tue, 14 Jan 2020 17:46:00 +1100</pubDate>
+      <guid>https://banay.me/nalu/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;A few months ago I read &lt;a href=&#34;https://arxiv.org/abs/1808.00508&#34;&gt;this paper&lt;/a&gt; from DeepMind that addressed a simple choice&#xA;of architecture to encourage sensible weights in neural networks when solving&#xA;problems that at the core are simple arithmetic. Despite the continued hype&#xA;surrounding neural networks and deep learning in general, some simple problems&#xA;like this are difficult to generalise past the regions used in a training set.&lt;/p&gt;&#xA;&lt;p&gt;XOR was a famously difficult problem that stunted developments in perceptrons&#xA;(the predecessors to what has become neural networks) until Marvin Minsky and&#xA;Seymour Papert addressed it by applying composition to the model. In a similar&#xA;vein to the NALU paper, the value added is the proposition of a new architecture&#xA;since single-layer perceptrons are inherently linear, there&amp;rsquo;s no way to solve&#xA;XOR without a multiple layers.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Playing Tic-tac-toe with minimax in Python</title>
+      <link>https://banay.me/tic-tac-toe-minimax/</link>
+      <pubDate>Sun, 19 May 2019 14:36:00 +1000</pubDate>
+      <guid>https://banay.me/tic-tac-toe-minimax/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this article we will explain the minimax algorithm. We&amp;rsquo;ll cover game trees, the minimax algorithm itself and a simple implementation in Python. We&amp;rsquo;ll also review some popular extensions that speed up or improve upon the actions taken by minimax.&lt;/p&gt;&#xA;&lt;h2 id=&#34;game-trees&#34;&gt;Game trees&lt;/h2&gt;&#xA;&lt;p&gt;For games with perfect information, we can model the entire play-space using a directed graph called &lt;em&gt;game tree&lt;/em&gt;. A game tree simply illustrates all possible ways in which a game may play out. Each node described a particular state in the game, and it has one child node for each possible action that might occur from that state. To generate a game tree, we need only the rules of the game as inputs.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Auto-regressive time series in R</title>
+      <link>https://banay.me/auto-regressive-time-series-in-r/</link>
+      <pubDate>Tue, 26 Feb 2019 11:48:00 +1100</pubDate>
+      <guid>https://banay.me/auto-regressive-time-series-in-r/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this post we&amp;rsquo;ll go over auto-regressive time series. What they are, what they&#xA;look like and some properties they exhibit. Throughout the post we&amp;rsquo;ll use small&#xA;snippets of R to plot processes and visualisations.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-are-autoregressive-time-series&#34;&gt;What are autoregressive time series?&lt;/h2&gt;&#xA;&lt;p&gt;An &lt;em&gt;auto-regressive&lt;/em&gt; time series is a stochastic process in which future values&#xA;are modelled by a linear combination of some number of previous values of the&#xA;same process. In other words, a series which is regressed on itself in order to&#xA;find coefficients that relate its past values to its future values. The &lt;em&gt;order&lt;/em&gt;&#xA;of an auto-regressive series is the number of lags used in the model. If the&#xA;previous four values of the process are used then we say the process is a fourth&#xA;order auto-regressive process, or \(AR(4)\) for short.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Hyperparameter selection with T-tests</title>
+      <link>https://banay.me/hyperparameter-t-test/</link>
+      <pubDate>Sun, 11 Nov 2018 19:14:00 +1100</pubDate>
+      <guid>https://banay.me/hyperparameter-t-test/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;One of the most important steps in developing a model for machine learning is tuning hyperparameters to ensure it generalises to unseen data. A model that fits the training set well but performs poorly on anything else is useless, so care should be taken in ensuring that in-sample performance characteristics of a model are representative of real world performance also. The most simple of these methods is of course using a holdout set, which allows for an easy way to estimate performance on out-sample data but when used as part of the model iteration process, is usually is also overfit to some degree.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Fast keyword matching with the Aho-Corasick algorithm</title>
       <link>https://banay.me/aho-corasick/</link>
       <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
       <guid>https://banay.me/aho-corasick/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this post we&amp;rsquo;ll look at the problem of &lt;em&gt;keyword matching&lt;/em&gt; including a number of approaches, applications and the Aho-Corasick algorithm.&lt;/p&gt;&#xA;&lt;h2 id=&#34;statement-of-problem&#34;&gt;Statement of problem&lt;/h2&gt;&#xA;&lt;p&gt;To begin, let&amp;rsquo;s define the keyword searching problem.&lt;/p&gt;&#xA;&lt;p&gt;Given a list of strings \(K = [s_1, \ldots, s_n]\) (called &lt;em&gt;keywords&lt;/em&gt;) and a (usually) much longer string \(C\) (called the &lt;em&gt;corpus&lt;/em&gt;) count the number of times each keyword appears in the corpus.&lt;/p&gt;&#xA;&lt;p&gt;Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Blog</title>
+      <link>https://banay.me/posts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://banay.me/posts/</guid>
+      <description>&lt;h2 id=&#34;computer-science&#34;&gt;Computer Science&lt;/h2&gt;&#xA;&lt;h3 id=&#34;aho-corasick&#34;&gt;&lt;span class=&#34;org-todo done DONE&#34;&gt;DONE&lt;/span&gt; Fast keyword matching with the Aho-Corasick algorithm &lt;span class=&#34;tag&#34;&gt;&lt;span class=&#34;string_algorithms&#34;&gt;string-algorithms&lt;/span&gt;&lt;span class=&#34;computer_science&#34;&gt;computer-science&lt;/span&gt;&lt;/span&gt;&lt;/h3&gt;&#xA;&lt;h4 id=&#34;introduction&#34;&gt;Introduction&lt;/h4&gt;&#xA;&lt;p&gt;In this post we&amp;rsquo;ll look at the problem of &lt;em&gt;keyword matching&lt;/em&gt; including a number of approaches, applications and the Aho-Corasick algorithm.&lt;/p&gt;&#xA;&lt;h4 id=&#34;statement-of-problem&#34;&gt;Statement of problem&lt;/h4&gt;&#xA;&lt;p&gt;To begin, let&amp;rsquo;s define the keyword searching problem.&lt;/p&gt;&#xA;&lt;p&gt;Given a list of strings \(K = [s_1, \ldots, s_n]\) (called &lt;em&gt;keywords&lt;/em&gt;) and a (usually) much longer string \(C\) (called the &lt;em&gt;corpus&lt;/em&gt;) count the number of times each keyword appears in the corpus.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

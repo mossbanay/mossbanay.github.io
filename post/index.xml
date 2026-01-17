@@ -79,12 +79,5 @@
       <guid>https://banay.me/aho-corasick/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this post we&amp;rsquo;ll look at the problem of &lt;em&gt;keyword matching&lt;/em&gt; including a number of approaches, applications and the Aho-Corasick algorithm.&lt;/p&gt;&#xA;&lt;h2 id=&#34;statement-of-problem&#34;&gt;Statement of problem&lt;/h2&gt;&#xA;&lt;p&gt;To begin, let&amp;rsquo;s define the keyword searching problem.&lt;/p&gt;&#xA;&lt;p&gt;Given a list of strings \(K = [s_1, \ldots, s_n]\) (called &lt;em&gt;keywords&lt;/em&gt;) and a (usually) much longer string \(C\) (called the &lt;em&gt;corpus&lt;/em&gt;) count the number of times each keyword appears in the corpus.&lt;/p&gt;&#xA;&lt;p&gt;Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).&lt;/p&gt;</description>
     </item>
-    <item>
-      <title>Blog</title>
-      <link>https://banay.me/posts/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://banay.me/posts/</guid>
-      <description>&lt;h2 id=&#34;computer-science&#34;&gt;Computer Science&lt;/h2&gt;&#xA;&lt;h3 id=&#34;aho-corasick&#34;&gt;&lt;span class=&#34;org-todo done DONE&#34;&gt;DONE&lt;/span&gt; Fast keyword matching with the Aho-Corasick algorithm &lt;span class=&#34;tag&#34;&gt;&lt;span class=&#34;string_algorithms&#34;&gt;string-algorithms&lt;/span&gt;&lt;span class=&#34;computer_science&#34;&gt;computer-science&lt;/span&gt;&lt;/span&gt;&lt;/h3&gt;&#xA;&lt;h4 id=&#34;introduction&#34;&gt;Introduction&lt;/h4&gt;&#xA;&lt;p&gt;In this post we&amp;rsquo;ll look at the problem of &lt;em&gt;keyword matching&lt;/em&gt; including a number of approaches, applications and the Aho-Corasick algorithm.&lt;/p&gt;&#xA;&lt;h4 id=&#34;statement-of-problem&#34;&gt;Statement of problem&lt;/h4&gt;&#xA;&lt;p&gt;To begin, let&amp;rsquo;s define the keyword searching problem.&lt;/p&gt;&#xA;&lt;p&gt;Given a list of strings \(K = [s_1, \ldots, s_n]\) (called &lt;em&gt;keywords&lt;/em&gt;) and a (usually) much longer string \(C\) (called the &lt;em&gt;corpus&lt;/em&gt;) count the number of times each keyword appears in the corpus.&lt;/p&gt;</description>
-    </item>
   </channel>
 </rss>

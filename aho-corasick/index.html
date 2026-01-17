@@ -3,81 +3,32 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Fast keyword matching with the Aho-Corasick algorithm &middot; Moss Ebeling</title>
-        <meta name="description" content="Introduction In this post we&rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
-Statement of problem To begin, let&rsquo;s define the keyword searching problem.
+        <title>Fast keyword matching with the Aho-Corasick algorithm &middot; </title>
+        <meta name="description" content="Introduction
+In this post we&rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
+Statement of problem
+To begin, let&rsquo;s define the keyword searching problem.
 Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
 Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).">
         <meta name="HandheldFriendly" content="True">
         <meta name="MobileOptimized" content="320">
-        <meta name="generator" content="Hugo 0.73.0" />
+        <meta name="generator" content="Hugo 0.139.3">
         <meta name="robots" content="index,follow">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
-        <link rel="stylesheet" href="https://banay.me/dist/styles.css">
+        <link rel="stylesheet" href="https://banay.me/dist/site.css">
+        <link rel="stylesheet" href="https://banay.me/dist/syntax.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300&subset=latin,cyrillic-ext,latin-ext,cyrillic">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         
-        <script type="text/javascript" async
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-  MathJax.Hub.Config({
-  tex2jax: {
-    inlineMath: [['$','$'], ['\\(','\\)']],
-    displayMath: [['$$','$$'], ['\\[','\\]']],
-    processEscapes: true,
-    processEnvironments: true,
-    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
-    TeX: { equationNumbers: { autoNumber: "AMS" },
-         extensions: ["AMSmath.js", "AMSsymbols.js"] }
-  }
-  });
-  MathJax.Hub.Queue(function() {
-    
-    
-    
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-
-  MathJax.Hub.Config({
-  
-  TeX: { equationNumbers: { autoNumber: "AMS" } }
-  });
-</script>
-
-<script>
-  (function() {
-      var script = document.createElement('script');
-      window.counter = 'https://banay_me.goatcounter.com/count'
-      script.async = 1;
-      script.src = '//gc.zgo.at/count.js';
-
-      var ins = document.getElementsByTagName('script')[0];
-      ins.parentNode.insertBefore(script, ins)
-  })();
-</script>
-
-
         
+        
+        
+        
+
     </head>
     <body>
         
-<script type="application/javascript">
-var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-var doNotTrack = (dnt == "1" || dnt == "yes");
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-110997704-1', 'auto');
-	ga('set', 'anonymizeIp', true);
-	ga('send', 'pageview');
-}
-</script>
-
 
         <div id="wrapper">
             <header class="site-header">
@@ -85,10 +36,9 @@ if (!doNotTrack) {
                     <div class="site-title-wrapper">
                         
                             <h1 class="site-title">
-                                <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                                <a href="https://banay.me/">Moss&#39; blog</a>
                             </h1>
                         
-                        <a class="button-square" href="https://banay.me/index.xml"><i class="fa fa-rss"></i></a>
                         
                         
                         
@@ -97,14 +47,15 @@ if (!doNotTrack) {
                         
                         
                         
-                            <a class="button-square button-social hint--top" data-hint="Email" title="Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
-                                <i class="fa fa-envelope"></i>
+                            <a class="button-square button-social hint--top" data-hint="Email" aria-label="Send an Email" href="mailto:blog%20%3cat%3e%20acc.banay.me">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
                             </a>
                         
                     </div>
 
                     <ul class="site-nav">
                         
+
                     </ul>
                 </div>
             </header>
@@ -149,8 +100,7 @@ if (!doNotTrack) {
 <p>If we think through this final solution, we should note that we can likely improve the speed of our solution by leveraging the fact that keywords often share a prefix or a suffix. For example, in the original example above, \(\text{&ldquo;he&rdquo;}\) and \(\text{&ldquo;she&rdquo;}\) share a suffix, \(\text{&ldquo;he&rdquo;}\) and \(\text{&ldquo;hers&rdquo;}\) share a prefix. Often pattern of prefix and suffix repetition occurs in practical applications since large lists of keywords that are in a language typically share linguistic roots.</p>
 <h2 id="revisiting-tries">Revisiting tries</h2>
 <p>A <a href="https://en.wikipedia.org/wiki/Trie">trie</a> is a popular search tree data structure used for auto-complete and substring search among other applications. Given a set of strings (possibly keywords or suffixes of a string) the tree is grown by adding edges down from node to node where edges represent letters in each of the strings being added.</p>
-<figure>
-    <img src="./aho-random-trie.png"/> 
+<figure><img src="./aho-random-trie.png">
 </figure>
 
 <p>For each string we start at the top of the trie and continue either following if a node exists for the edge corresponding to the current letter or adding new nodes until each of the strings is exhausted. Searching a new string for one of the keywords is now trivial, we follow the nodes down the trie node by node using the characters in the corpus string to navigate. While at first this may seem like this is an answer to our problem, this will only find keywords that <em>begin at the start of the corpus</em>. For example we would find &ldquo;race&rdquo; in &ldquo;racecar&rdquo;, but we would not find &ldquo;car&rdquo;.</p>
@@ -174,16 +124,14 @@ if (!doNotTrack) {
 <h2 id="building-the-functions">Building the functions</h2>
 <p>Initially, we generate a trie to form the basis of our state machine. The trie gives transitions between states for the available letters but does not guarantee there is an explicit transition from every state for each letter. For example in the above trie there is no transition from the &ldquo;to&rdquo; node for the letter e. In the terminology we used in the previous section, we have only defined the <code>goto</code> function and are now left to define the <code>fail</code> function.</p>
 <p>Suppose we were searching for the keywords \(\text{&ldquo;hers&rdquo;}\) and \(\text{&ldquo;shes&rdquo;}\). The trie we have constructed will look something like this</p>
-<figure>
-    <img src="./aho-trie-example.png"/> 
+<figure><img src="./aho-trie-example.png">
 </figure>
 
 <p>To consider what the transitions will look like for the <code>fail</code> function, suppose we have already read in &ldquo;she&rdquo; into our state machine, at which point we will be at state 7. If we read in an &ldquo;s&rdquo; the <code>goto</code> function correctly describes we should transition to state 8. However if we read in an &ldquo;e&rdquo; next, where should we transition? An obvious answer may be that we should return to the root, node 0, but this is not always the case. Suppose the next character read in was &ldquo;r&rdquo;. Instead, we would like to transition to state 3. Why is this? Well the last 4 characters we read in at this point are &ldquo;sher&rdquo;, and state 3 is the node we reach from tracing our &ldquo;her&rdquo;. However, since we already specify the transition from state 2 to state 3 (&ldquo;he&rdquo; \(\rightarrow\) &ldquo;her&rdquo;) we really are wanting <code>fail</code> to transition us from state 7 to state 2.</p>
 <p>This is since state 2 corresponds to the <em>longest proper suffix</em> of the pattern from state 0 to state 7 that exists in our graph. We are only throwing away the &ldquo;s&rdquo; out of the letters we have read in so far. Throwing away the <em>smallest</em> prefix possible ensures that we do not miss any keywords. If instead of reading in an &ldquo;r&rdquo; next we had read in a &ldquo;h&rdquo; to get &ldquo;sheh&rdquo;, we would fail from state 7 to state 2, then fail again from state 2 to state 1 and finally from state 1 to state 0 since none of states 7, 2 or 1 specify a <code>goto</code> transition with &ldquo;h&rdquo;. At that point once we have &ldquo;fallen back&rdquo; to state 0, we move forward and consume the &ldquo;h&rdquo; and move to state 1.</p>
 <p>We can construct the <code>fail</code> function iteratively using breadth first search to construct <code>fail</code> fully for each node starting at the children of the root and moving down the tree. The output function is also constructed in a similar way since each keyword may appear more than one nodes output set. For example, as we have seen &ldquo;he&rdquo; is a proper suffix of &ldquo;she&rdquo;, therefore if we reach state 7, not only have we read in &ldquo;she&rdquo; but also &ldquo;he&rdquo;!</p>
 <p>After completing all fail transitions, we arrive at the following state machine</p>
-<figure>
-    <img src="./aho-state-machine.png"/> 
+<figure><img src="./aho-state-machine.png">
 </figure>
 
 <p>which we could use to count the frequency of the strings \(\text{&ldquo;hers&rdquo;}\) and \(\text{&ldquo;shes&rdquo;}\) in strings.</p>
@@ -199,25 +147,12 @@ if (!doNotTrack) {
 </div>
 
         <footer class="post-footer clearfix">
-    
         <p class="post-tags">
             <span>Tagged:</span>
-            
-            
                 <a href="/tags/string-algorithms/">string-algorithms</a>, 
-            
                 <a href="/tags/computer-science/">computer-science</a>
-            
         </p>
-    
-
     <div class="share">
-        
-
-        
-
-        
-        
     </div>
 </footer>
 
@@ -232,15 +167,15 @@ if (!doNotTrack) {
             <div class="container">
                 <div class="site-title-wrapper">
                     <h1 class="site-title">
-                        <a title="Moss&#39; blog" href="https://banay.me/">Moss&#39; blog</a>
+                        <a href="https://banay.me/">Moss&#39; blog</a>
                     </h1>
-                    <a class="button-square button-jump-top js-jump-top" href="#">
-                        <i class="fa fa-angle-up"></i>
+                    <a class="button-square button-jump-top js-jump-top" href="#" aria-label="Back to Top">
+                        <i class="fa fa-angle-up" aria-hidden="true"></i>
                     </a>
                 </div>
 
                 <p class="footer-copyright">
-                    <span>&copy; 2020 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
+                    <span>&copy; 2018 / Powered by <a href="https://gohugo.io/">Hugo</a></span>
                 </p>
                 <p class="footer-copyright">
                     <span><a href="https://github.com/roryg/ghostwriter">Ghostwriter theme</a> By <a href="http://jollygoodthemes.com">JollyGoodThemes</a></span>
@@ -251,12 +186,8 @@ if (!doNotTrack) {
 
         <script src="https://banay.me/js/jquery-1.11.3.min.js"></script>
         <script src="https://banay.me/js/jquery.fitvids.js"></script>
-        
-        
-            <script src="../../../../highlight.pack.js"></script>
-        
-        
         <script src="https://banay.me/js/scripts.js"></script>
+        
     </body>
 </html>
 

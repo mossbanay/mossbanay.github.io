@@ -1,28 +1,20 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>computer-science on Moss&#39; blog</title>
+    <title>Computer-Science on Moss&#39; blog</title>
     <link>https://banay.me/tags/computer-science/</link>
-    <description>Recent content in computer-science on Moss&#39; blog</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Computer-Science on Moss&#39; blog</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <copyright>Moss Ebeling</copyright>
     <lastBuildDate>Wed, 22 Aug 2018 19:20:00 +1000</lastBuildDate>
-    
-	<atom:link href="https://banay.me/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <atom:link href="https://banay.me/tags/computer-science/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Fast keyword matching with the Aho-Corasick algorithm</title>
       <link>https://banay.me/aho-corasick/</link>
       <pubDate>Wed, 22 Aug 2018 19:20:00 +1000</pubDate>
-      
       <guid>https://banay.me/aho-corasick/</guid>
-      <description>Introduction In this post we&amp;rsquo;ll look at the problem of keyword matching including a number of approaches, applications and the Aho-Corasick algorithm.
-Statement of problem To begin, let&amp;rsquo;s define the keyword searching problem.
-Given a list of strings \(K = [s_1, \ldots, s_n]\) (called keywords) and a (usually) much longer string \(C\) (called the corpus) count the number of times each keyword appears in the corpus.
-Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).</description>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;&#xA;&lt;p&gt;In this post we&amp;rsquo;ll look at the problem of &lt;em&gt;keyword matching&lt;/em&gt; including a number of approaches, applications and the Aho-Corasick algorithm.&lt;/p&gt;&#xA;&lt;h2 id=&#34;statement-of-problem&#34;&gt;Statement of problem&lt;/h2&gt;&#xA;&lt;p&gt;To begin, let&amp;rsquo;s define the keyword searching problem.&lt;/p&gt;&#xA;&lt;p&gt;Given a list of strings \(K = [s_1, \ldots, s_n]\) (called &lt;em&gt;keywords&lt;/em&gt;) and a (usually) much longer string \(C\) (called the &lt;em&gt;corpus&lt;/em&gt;) count the number of times each keyword appears in the corpus.&lt;/p&gt;&#xA;&lt;p&gt;Let \(|s_i|\) be the length of the \(i\) - th keyword and let \(m\) be the length of the corpus \(C\).&lt;/p&gt;</description>
     </item>
-    
   </channel>
 </rss>
